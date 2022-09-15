@@ -1,0 +1,513 @@
+[2022-09-12T13:05:03.974030+0800]-[INFO] train_recursion.py-main-56: log_text: (debug)
+[2022-09-12T13:05:24.864222+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 0, loss-ave: 4.045440507313562, mAcc: 0.09909653226061473
+[2022-09-12T13:05:34.165488+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 1, loss-ave: 2.0805324883688066, mAcc: 0.2979129177946893
+[2022-09-12T13:05:43.873283+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 2, loss-ave: 1.5002244956909665, mAcc: 0.3912938620362963
+[2022-09-12T13:05:53.389825+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 3, loss-ave: 1.3912673999392797, mAcc: 0.4296618340507386
+[2022-09-12T13:06:02.992646+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 4, loss-ave: 1.2648026621530926, mAcc: 0.5068675762131101
+[2022-09-12T13:06:12.448746+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 5, loss-ave: 1.1614615008944558, mAcc: 0.5601511389490158
+[2022-09-12T13:06:12.449904+0800]-[INFO] recursion_trainer.py-train-81: [evaluate test-data]
+[2022-09-12T13:06:12.466149+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 0
+[2022-09-12T13:06:12.466237+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 镇海雅乐学校二年级的小朋友到一条小路的一边植树．小朋友们每隔[num0][rk0][int]米种一棵树（马路两头都种了树），最后发现一共种了[num1][rk1][int]棵，这条小路长多少米．
+[2022-09-12T13:06:12.466326+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '/', '[num2]'], expr_str='[num1]/[num2]')]
+[2022-09-12T13:06:12.466391+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '-', '[num2]'], expr_str='[num1]-[num2]'), OpList(arg0=5, expr_toks=['[num4]', '*', '[num0]'], expr_str='[num4]*[num0]')]
+[2022-09-12T13:06:12.466440+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 11
+[2022-09-12T13:06:12.466478+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 20
+[2022-09-12T13:06:12.493674+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 1
+[2022-09-12T13:06:12.493774+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个工程队挖土，第一天挖了[num0][rk2][int]方，从第二天开始每天都挖[num1][rk1][int]方，连续挖了[num2][rk0][int]天，这个工程队一周共挖土多少方？
+[2022-09-12T13:06:12.493852+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:06:12.493898+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '-', '[num3]'], expr_str='[num2]-[num3]'), OpList(arg0=6, expr_toks=['[num0]', '+', '[num1]', '*', '[num5]'], expr_str='[num0]+[num1]*[num5]')]
+[2022-09-12T13:06:12.493958+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 0.004347826086956521739130434783
+[2022-09-12T13:06:12.493997+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 1466
+[2022-09-12T13:06:12.522666+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 2
+[2022-09-12T13:06:12.522770+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本故事书，第一天看了全书的[num0][rk0][frac]，第二天看了[num1][rk4][int]页，第[num2][rk3][int]天看的页数是前两天看的总数的[num3][rk2][prec]，这时还有全书的[num4][rk1][frac]没有看，那么这本书一共多少页．
+[2022-09-12T13:06:12.522838+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '-', '[num0]'], expr_str='[num1]-[num0]'), OpList(arg0=8, expr_toks=['[num5]', '/', '[num3]'], expr_str='[num5]/[num3]')]
+[2022-09-12T13:06:12.522903+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '+', '[num1]', '*', '[num3]'], expr_str='[num1]+[num1]*[num3]'), OpList(arg0=8, expr_toks=['[num5]', '-', '[num0]', '-', '[num0]', '*', '[num3]', '-', '[num4]'], expr_str='[num5]-[num0]-[num0]*[num3]-[num4]'), OpList(arg0=9, expr_toks=['[num7]', '/', '[num8]'], expr_str='[num7]/[num8]')]
+[2022-09-12T13:06:12.522955+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 0.6666666666666666666666666667
+[2022-09-12T13:06:12.522994+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 179.9999999999999875099909730
+[2022-09-12T13:06:12.536709+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 3
+[2022-09-12T13:06:12.536806+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 从甲地到乙地，如果骑自行车每小时行驶[num0][rk2][int]千米，[num1][rk1][int]小时可以到达，如果乘汽车只需要[num2][rk0][int]小时，汽车每小时行驶多少千米？
+[2022-09-12T13:06:12.536895+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num2]'], expr_str='[num0]/[num2]')]
+[2022-09-12T13:06:12.536940+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:06:12.536998+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 8
+[2022-09-12T13:06:12.537036+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 32
+[2022-09-12T13:06:12.550499+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 4
+[2022-09-12T13:06:12.550595+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小刚的体重是[num0][rk1][float]千克，小强的体重是小刚的[num1][rk0][float]倍，小强的体重=多少千克？
+[2022-09-12T13:06:12.550676+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:06:12.550752+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]')]
+[2022-09-12T13:06:12.550792+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 20.28571428571428598617706726
+[2022-09-12T13:06:12.550829+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39.75999999999999548805362792
+[2022-09-12T13:06:12.563832+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 5
+[2022-09-12T13:06:12.563929+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk3][float]-[num1][rk0][float]与[num2][rk2][float]的积，所得的差除以[num3][rk1][float]，商=？
+[2022-09-12T13:06:12.564014+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]')]
+[2022-09-12T13:06:12.564076+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num3]'], expr_str='[num6]/[num3]')]
+[2022-09-12T13:06:12.564117+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 4.240000000000000093258734069
+[2022-09-12T13:06:12.564155+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 3.999999999999999603491776919
+[2022-09-12T13:06:12.591815+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 6
+[2022-09-12T13:06:12.591913+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 象山学校原有学生[num0][rk4][int]人，[num1][rk0][int]月份毕业[num2][rk2][int]人，[num3][rk1][int]月份招入新生[num4][rk3][int]人，这时象山学校的学生比原来增加百分之几？
+[2022-09-12T13:06:12.591989+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num4]', '+', '[num4]'], expr_str='[num4]+[num4]'), OpList(arg0=8, expr_toks=['[num0]', '/', '[num7]'], expr_str='[num0]/[num7]')]
+[2022-09-12T13:06:12.592033+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num4]', '-', '[num2]'], expr_str='[num4]-[num2]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num0]'], expr_str='[num7]/[num0]')]
+[2022-09-12T13:06:12.592089+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 1
+[2022-09-12T13:06:12.592132+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 0.1
+[2022-09-12T13:06:12.605031+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 7
+[2022-09-12T13:06:12.605127+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 买一套住房，售价[num0][rk1][int]万元，每年付[num1][rk0][int]万元，多少年后才能付清？
+[2022-09-12T13:06:12.605207+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:06:12.605283+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:06:12.605322+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 14
+[2022-09-12T13:06:12.605360+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 14
+[2022-09-12T13:06:12.633426+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 8
+[2022-09-12T13:06:12.633523+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 王叔叔开车从甲地去乙地，以[num0][rk2][int]千米/时的速度行了[num1][rk1][int]小时才到达．返回时由于有任务，加快了速度，只用了[num2][rk0][int]小时就回到了甲地，返回时的速度=？
+[2022-09-12T13:06:12.633614+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num5]', '/', '[num2]'], expr_str='[num5]/[num2]')]
+[2022-09-12T13:06:12.633676+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:06:12.633716+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 16
+[2022-09-12T13:06:12.633753+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 105
+[2022-09-12T13:06:12.647000+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 9
+[2022-09-12T13:06:12.647097+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个果园的李树棵数是桃树的[num0][rk1][frac]，桃树棵数是梨树的[num1][rk0][frac]．已知李树有[num2][rk2][int]棵，梨树有多少棵？
+[2022-09-12T13:06:12.647187+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '*', '[num1]'], expr_str='[num2]*[num1]')]
+[2022-09-12T13:06:12.647248+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '/', '[num0]', '/', '[num1]'], expr_str='[num2]/[num0]/[num1]')]
+[2022-09-12T13:06:12.647289+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 1400.000000000000062172489379
+[2022-09-12T13:06:12.647326+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 2303.999999999999897681846051
+[2022-09-12T13:06:12.674426+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 10
+[2022-09-12T13:06:12.674523+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一段长[num0][rk2][int]千米的路，第一天修了[num1][rk1][int]千米，第二天修了余下的[num2][rk0][frac]，还剩下多少千米没有修完？
+[2022-09-12T13:06:12.674600+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:06:12.674661+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num0]', '-', '[num5]', '*', '[num2]', '-', '[num1]'], expr_str='[num0]-[num5]*[num2]-[num1]')]
+[2022-09-12T13:06:12.674701+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 1.2
+[2022-09-12T13:06:12.674739+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 12.500
+[2022-09-12T13:06:12.703356+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 11
+[2022-09-12T13:06:12.703459+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一条长[num0][rk2][int]米的公路，原计划[num1][rk1][int]天完成，实际每天多修[num2][rk0][int]米．这样要多少天才能修完？
+[2022-09-12T13:06:12.703537+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num2]'], expr_str='[num0]/[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:06:12.703583+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num1]', '+', '[num2]'], expr_str='[num0]/[num1]+[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:06:12.703647+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 15
+[2022-09-12T13:06:12.703685+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39
+[2022-09-12T13:06:12.731889+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 12
+[2022-09-12T13:06:12.731986+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 甲乙两列火车同时从相距[num0][rk3][int]千米的两地相对开出，甲车每小行行[num1][rk2][int]千米，[num2][rk0][int]小时后两车还相距[num3][rk1][int]千米，乙车每小时行多少千米？
+[2022-09-12T13:06:12.732063+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]'], expr_str='[num0]-[num3]'), OpList(arg0=7, expr_toks=['[num1]', '/', '[num6]'], expr_str='[num1]/[num6]')]
+[2022-09-12T13:06:12.732108+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num3]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num2]'], expr_str='[num6]/[num2]')]
+[2022-09-12T13:06:12.732165+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 0.1058823529411764705882352941
+[2022-09-12T13:06:12.732203+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 40
+[2022-09-12T13:06:12.746795+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 13
+[2022-09-12T13:06:12.746892+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: （[num0][rk3][int]*[num1][rk2][int]-[num2][rk4][int]*[num3][rk0][int]）/[num4][rk1][int]=．
+[2022-09-12T13:06:12.746968+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num3]', '+', '[num2]'], expr_str='[num0]*[num3]+[num2]')]
+[2022-09-12T13:06:12.747014+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]', '*', '[num3]'], expr_str='[num0]*[num1]-[num2]*[num3]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num4]'], expr_str='[num7]/[num4]')]
+[2022-09-12T13:06:12.747071+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 1073
+[2022-09-12T13:06:12.747110+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 158
+[2022-09-12T13:06:12.760449+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 14
+[2022-09-12T13:06:12.760546+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk1][int]个小朋友捉迷藏，已经捉住了[num1][rk0][int]人，还有多少人没捉住．
+[2022-09-12T13:06:12.760631+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:06:12.760705+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:06:12.760745+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 11
+[2022-09-12T13:06:12.760782+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 11
+[2022-09-12T13:06:12.786036+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 15
+[2022-09-12T13:06:12.786136+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小红每小时跳绳[num0][rk2][int]下，小军每小时跳的下数比小红的[num1][rk0][int]倍多[num2][rk1][int]下，小军每小时跳多少下？
+[2022-09-12T13:06:12.786231+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]'), OpList(arg0=6, expr_toks=['[num2]'], expr_str='[num2]')]
+[2022-09-12T13:06:12.786293+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '+', '[num2]'], expr_str='[num0]*[num1]+[num2]')]
+[2022-09-12T13:06:12.786343+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 10
+[2022-09-12T13:06:12.786380+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 85
+[2022-09-12T13:06:12.799934+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 16
+[2022-09-12T13:06:12.800031+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 火箭每秒能飞行[num0][rk2][int]米，卫星每秒飞行的比火箭的[num1][rk0][int]倍少[num2][rk1][int]米．卫星每秒飞行多少米？
+[2022-09-12T13:06:12.800122+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num2]'], expr_str='[num0]*[num2]')]
+[2022-09-12T13:06:12.800183+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]'], expr_str='[num0]*[num1]-[num2]')]
+[2022-09-12T13:06:12.800223+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 4500000
+[2022-09-12T13:06:12.800267+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 8000
+[2022-09-12T13:06:12.827317+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 17
+[2022-09-12T13:06:12.827415+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本书，第一天看了全书的[num0][rk0][frac]，第二天比第一天多看[num1][rk2][int]页，剩下的[num2][rk3][int]页第[num3][rk1][int]天看完，这本书共有多少页？
+[2022-09-12T13:06:12.827492+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '-', '[num1]'], expr_str='[num2]-[num1]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num0]'], expr_str='[num6]/[num0]')]
+[2022-09-12T13:06:12.827554+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '+', '[num1]'], expr_str='[num2]+[num1]'), OpList(arg0=7, expr_toks=['[num4]', '-', '[num0]', '-', '[num0]'], expr_str='[num4]-[num0]-[num0]'), OpList(arg0=8, expr_toks=['[num6]', '/', '[num7]'], expr_str='[num6]/[num7]')]
+[2022-09-12T13:06:12.827594+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 54.99999999999999694688668228
+[2022-09-12T13:06:12.827632+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 65.00000000000000240548322003
+[2022-09-12T13:06:12.841591+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 18
+[2022-09-12T13:06:12.841689+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小芳家[num0][rk1][int]月份用水量是[num1][rk3][float]吨，每吨水的价格是[num2][rk0][float]元，小芳家一共有[num3][rk1][int]口人，平均每人应交多少水费？
+[2022-09-12T13:06:12.841766+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '/', '[num2]'], expr_str='[num1]/[num2]')]
+[2022-09-12T13:06:12.841811+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '*', '[num2]', '/', '[num0]'], expr_str='[num1]*[num2]/[num0]')]
+[2022-09-12T13:06:12.841871+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 7.857142857142856810545489228
+[2022-09-12T13:06:12.841909+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 6.930000000000000293098878502
+[2022-09-12T13:06:12.855305+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 19
+[2022-09-12T13:06:12.855404+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个数除以[num0][rk2][int]，商[num1][rk0][int]余[num2][rk1][int]，这个数=．
+[2022-09-12T13:06:12.855493+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num2]'], expr_str='[num1]*[num2]')]
+[2022-09-12T13:06:12.855559+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num0]', '+', '[num2]'], expr_str='[num1]*[num0]+[num2]')]
+[2022-09-12T13:06:12.855609+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 21
+[2022-09-12T13:06:12.855646+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 43
+[2022-09-12T13:06:12.855823+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 5 val_acc: 0.1
+[2022-09-12T13:06:22.417733+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 6, loss-ave: 1.0138641425541468, mAcc: 0.6176583932505714
+[2022-09-12T13:06:31.811649+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 7, loss-ave: 0.8738040801078554, mAcc: 0.6772584281270466
+[2022-09-12T13:06:41.467255+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 8, loss-ave: 0.7299740919991146, mAcc: 0.7292205388583834
+[2022-09-12T13:06:50.883483+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 9, loss-ave: 0.6573316961053818, mAcc: 0.7621736081819686
+[2022-09-12T13:07:00.966977+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 10, loss-ave: 0.5414833142643883, mAcc: 0.8073711584484766
+[2022-09-12T13:07:00.968391+0800]-[INFO] recursion_trainer.py-train-81: [evaluate test-data]
+[2022-09-12T13:07:01.005006+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 0
+[2022-09-12T13:07:01.005106+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 镇海雅乐学校二年级的小朋友到一条小路的一边植树．小朋友们每隔[num0][rk0][int]米种一棵树（马路两头都种了树），最后发现一共种了[num1][rk1][int]棵，这条小路长多少米．
+[2022-09-12T13:07:01.005193+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '-', '[num2]'], expr_str='[num1]-[num2]'), OpList(arg0=5, expr_toks=['[num4]', '*', '[num0]'], expr_str='[num4]*[num0]')]
+[2022-09-12T13:07:01.005244+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '-', '[num2]'], expr_str='[num1]-[num2]'), OpList(arg0=5, expr_toks=['[num4]', '*', '[num0]'], expr_str='[num4]*[num0]')]
+[2022-09-12T13:07:01.005293+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 20
+[2022-09-12T13:07:01.005334+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 20
+[2022-09-12T13:07:01.041065+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 1
+[2022-09-12T13:07:01.041175+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个工程队挖土，第一天挖了[num0][rk2][int]方，从第二天开始每天都挖[num1][rk1][int]方，连续挖了[num2][rk0][int]天，这个工程队一周共挖土多少方？
+[2022-09-12T13:07:01.041235+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '+', '[num3]'], expr_str='[num2]+[num3]'), OpList(arg0=6, expr_toks=['[num0]', '*', '[num5]'], expr_str='[num0]*[num5]')]
+[2022-09-12T13:07:01.041287+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '-', '[num3]'], expr_str='[num2]-[num3]'), OpList(arg0=6, expr_toks=['[num0]', '+', '[num1]', '*', '[num5]'], expr_str='[num0]+[num1]*[num5]')]
+[2022-09-12T13:07:01.041329+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 2212
+[2022-09-12T13:07:01.041375+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 1466
+[2022-09-12T13:07:01.075699+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 2
+[2022-09-12T13:07:01.075784+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本故事书，第一天看了全书的[num0][rk0][frac]，第二天看了[num1][rk4][int]页，第[num2][rk3][int]天看的页数是前两天看的总数的[num3][rk2][prec]，这时还有全书的[num4][rk1][frac]没有看，那么这本书一共多少页．
+[2022-09-12T13:07:01.075837+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '+', '[num1]'], expr_str='[num1]+[num1]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num4]'], expr_str='[num7]/[num4]')]
+[2022-09-12T13:07:01.075890+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '+', '[num1]', '*', '[num3]'], expr_str='[num1]+[num1]*[num3]'), OpList(arg0=8, expr_toks=['[num5]', '-', '[num0]', '-', '[num0]', '*', '[num3]', '-', '[num4]'], expr_str='[num5]-[num0]-[num0]*[num3]-[num4]'), OpList(arg0=9, expr_toks=['[num7]', '/', '[num8]'], expr_str='[num7]/[num8]')]
+[2022-09-12T13:07:01.075932+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 192
+[2022-09-12T13:07:01.075971+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 179.9999999999999875099909730
+[2022-09-12T13:07:01.094851+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 3
+[2022-09-12T13:07:01.094951+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 从甲地到乙地，如果骑自行车每小时行驶[num0][rk2][int]千米，[num1][rk1][int]小时可以到达，如果乘汽车只需要[num2][rk0][int]小时，汽车每小时行驶多少千米？
+[2022-09-12T13:07:01.095003+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:01.095044+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:01.095085+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 32
+[2022-09-12T13:07:01.095123+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 32
+[2022-09-12T13:07:01.110946+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 4
+[2022-09-12T13:07:01.111051+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小刚的体重是[num0][rk1][float]千克，小强的体重是小刚的[num1][rk0][float]倍，小强的体重=多少千克？
+[2022-09-12T13:07:01.111101+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:07:01.111143+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]')]
+[2022-09-12T13:07:01.111183+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 20.28571428571428598617706726
+[2022-09-12T13:07:01.111220+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39.75999999999999548805362792
+[2022-09-12T13:07:01.142443+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 5
+[2022-09-12T13:07:01.142539+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk3][float]-[num1][rk0][float]与[num2][rk2][float]的积，所得的差除以[num3][rk1][float]，商=？
+[2022-09-12T13:07:01.142591+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num3]'], expr_str='[num6]/[num3]')]
+[2022-09-12T13:07:01.142634+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num3]'], expr_str='[num6]/[num3]')]
+[2022-09-12T13:07:01.142676+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 4.857142857142856757677726152
+[2022-09-12T13:07:01.142715+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 3.999999999999999603491776919
+[2022-09-12T13:07:01.182772+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 6
+[2022-09-12T13:07:01.182862+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 象山学校原有学生[num0][rk4][int]人，[num1][rk0][int]月份毕业[num2][rk2][int]人，[num3][rk1][int]月份招入新生[num4][rk3][int]人，这时象山学校的学生比原来增加百分之几？
+[2022-09-12T13:07:01.182920+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num2]', '-', '[num2]'], expr_str='[num2]-[num2]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num0]'], expr_str='[num7]/[num0]')]
+[2022-09-12T13:07:01.182984+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num4]', '-', '[num2]'], expr_str='[num4]-[num2]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num0]'], expr_str='[num7]/[num0]')]
+[2022-09-12T13:07:01.183029+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 0
+[2022-09-12T13:07:01.183067+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 0.1
+[2022-09-12T13:07:01.199439+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 7
+[2022-09-12T13:07:01.199544+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 买一套住房，售价[num0][rk1][int]万元，每年付[num1][rk0][int]万元，多少年后才能付清？
+[2022-09-12T13:07:01.199595+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:07:01.199646+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:07:01.199688+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 14
+[2022-09-12T13:07:01.199726+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 14
+[2022-09-12T13:07:01.218691+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 8
+[2022-09-12T13:07:01.218794+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 王叔叔开车从甲地去乙地，以[num0][rk2][int]千米/时的速度行了[num1][rk1][int]小时才到达．返回时由于有任务，加快了速度，只用了[num2][rk0][int]小时就回到了甲地，返回时的速度=？
+[2022-09-12T13:07:01.218853+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:01.218902+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:01.218943+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 105
+[2022-09-12T13:07:01.218980+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 105
+[2022-09-12T13:07:01.237278+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 9
+[2022-09-12T13:07:01.237375+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个果园的李树棵数是桃树的[num0][rk1][frac]，桃树棵数是梨树的[num1][rk0][frac]．已知李树有[num2][rk2][int]棵，梨树有多少棵？
+[2022-09-12T13:07:01.237426+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '/', '[num0]', '*', '[num1]'], expr_str='[num2]/[num0]*[num1]')]
+[2022-09-12T13:07:01.237467+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '/', '[num0]', '/', '[num1]'], expr_str='[num2]/[num0]/[num1]')]
+[2022-09-12T13:07:01.237508+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 1600.000000000000071054273576
+[2022-09-12T13:07:01.237547+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 2303.999999999999897681846051
+[2022-09-12T13:07:01.280398+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 10
+[2022-09-12T13:07:01.281138+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一段长[num0][rk2][int]千米的路，第一天修了[num1][rk1][int]千米，第二天修了余下的[num2][rk0][frac]，还剩下多少千米没有修完？
+[2022-09-12T13:07:01.281249+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num5]', '/', '[num2]'], expr_str='[num5]/[num2]')]
+[2022-09-12T13:07:01.281300+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num0]', '-', '[num5]', '*', '[num2]', '-', '[num1]'], expr_str='[num0]-[num5]*[num2]-[num1]')]
+[2022-09-12T13:07:01.281357+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 53.33333333333333333333333333
+[2022-09-12T13:07:01.281397+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 12.500
+[2022-09-12T13:07:01.310833+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 11
+[2022-09-12T13:07:01.310956+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一条长[num0][rk2][int]米的公路，原计划[num1][rk1][int]天完成，实际每天多修[num2][rk0][int]米．这样要多少天才能修完？
+[2022-09-12T13:07:01.311026+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num1]', '-', '[num2]'], expr_str='[num0]/[num1]-[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:07:01.311073+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num1]', '+', '[num2]'], expr_str='[num0]/[num1]+[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:07:01.311119+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 62.4
+[2022-09-12T13:07:01.311156+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39
+[2022-09-12T13:07:01.339182+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 12
+[2022-09-12T13:07:01.339289+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 甲乙两列火车同时从相距[num0][rk3][int]千米的两地相对开出，甲车每小行行[num1][rk2][int]千米，[num2][rk0][int]小时后两车还相距[num3][rk1][int]千米，乙车每小时行多少千米？
+[2022-09-12T13:07:01.339369+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]'], expr_str='[num0]-[num3]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num2]'], expr_str='[num6]/[num2]')]
+[2022-09-12T13:07:01.339411+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num3]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num2]'], expr_str='[num6]/[num2]')]
+[2022-09-12T13:07:01.339451+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 85
+[2022-09-12T13:07:01.339488+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 40
+[2022-09-12T13:07:01.355595+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 13
+[2022-09-12T13:07:01.355693+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: （[num0][rk3][int]*[num1][rk2][int]-[num2][rk4][int]*[num3][rk0][int]）/[num4][rk1][int]=．
+[2022-09-12T13:07:01.355771+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num1]', '*', '[num3]', '*', '[num3]'], expr_str='[num0]*[num1]*[num3]*[num3]')]
+[2022-09-12T13:07:01.355814+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]', '*', '[num3]'], expr_str='[num0]*[num1]-[num2]*[num3]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num4]'], expr_str='[num7]/[num4]')]
+[2022-09-12T13:07:01.355854+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 468864
+[2022-09-12T13:07:01.355891+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 158
+[2022-09-12T13:07:01.368812+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 14
+[2022-09-12T13:07:01.368915+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk1][int]个小朋友捉迷藏，已经捉住了[num1][rk0][int]人，还有多少人没捉住．
+[2022-09-12T13:07:01.368986+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:07:01.369029+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:07:01.369075+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 11
+[2022-09-12T13:07:01.369112+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 11
+[2022-09-12T13:07:01.384571+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 15
+[2022-09-12T13:07:01.384669+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小红每小时跳绳[num0][rk2][int]下，小军每小时跳的下数比小红的[num1][rk0][int]倍多[num2][rk1][int]下，小军每小时跳多少下？
+[2022-09-12T13:07:01.384757+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '+', '[num2]'], expr_str='[num0]*[num1]+[num2]')]
+[2022-09-12T13:07:01.384802+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '+', '[num2]'], expr_str='[num0]*[num1]+[num2]')]
+[2022-09-12T13:07:01.384841+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 85
+[2022-09-12T13:07:01.384877+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 85
+[2022-09-12T13:07:01.399677+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 16
+[2022-09-12T13:07:01.399774+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 火箭每秒能飞行[num0][rk2][int]米，卫星每秒飞行的比火箭的[num1][rk0][int]倍少[num2][rk1][int]米．卫星每秒飞行多少米？
+[2022-09-12T13:07:01.399863+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]'], expr_str='[num0]*[num1]-[num2]')]
+[2022-09-12T13:07:01.399914+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]'], expr_str='[num0]*[num1]-[num2]')]
+[2022-09-12T13:07:01.399953+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 8000
+[2022-09-12T13:07:01.399990+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 8000
+[2022-09-12T13:07:01.441028+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 17
+[2022-09-12T13:07:01.441124+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本书，第一天看了全书的[num0][rk0][frac]，第二天比第一天多看[num1][rk2][int]页，剩下的[num2][rk3][int]页第[num3][rk1][int]天看完，这本书共有多少页？
+[2022-09-12T13:07:01.441216+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '+', '[num1]'], expr_str='[num2]+[num1]'), OpList(arg0=7, expr_toks=['[num4]', '-', '[num0]'], expr_str='[num4]-[num0]'), OpList(arg0=8, expr_toks=['[num6]', '/', '[num7]'], expr_str='[num6]/[num7]')]
+[2022-09-12T13:07:01.441265+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '+', '[num1]'], expr_str='[num2]+[num1]'), OpList(arg0=7, expr_toks=['[num4]', '-', '[num0]', '-', '[num0]'], expr_str='[num4]-[num0]-[num0]'), OpList(arg0=8, expr_toks=['[num6]', '/', '[num7]'], expr_str='[num6]/[num7]')]
+[2022-09-12T13:07:01.441304+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 48.75000000000000067654215563
+[2022-09-12T13:07:01.441341+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 65.00000000000000240548322003
+[2022-09-12T13:07:01.455128+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 18
+[2022-09-12T13:07:01.455226+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小芳家[num0][rk1][int]月份用水量是[num1][rk3][float]吨，每吨水的价格是[num2][rk0][float]元，小芳家一共有[num3][rk1][int]口人，平均每人应交多少水费？
+[2022-09-12T13:07:01.455303+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '*', '[num2]'], expr_str='[num1]*[num2]')]
+[2022-09-12T13:07:01.455347+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '*', '[num2]', '/', '[num0]'], expr_str='[num1]*[num2]/[num0]')]
+[2022-09-12T13:07:01.455391+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 34.65000000000000146549439251
+[2022-09-12T13:07:01.455434+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 6.930000000000000293098878502
+[2022-09-12T13:07:01.469978+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 19
+[2022-09-12T13:07:01.470074+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个数除以[num0][rk2][int]，商[num1][rk0][int]余[num2][rk1][int]，这个数=．
+[2022-09-12T13:07:01.470161+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num0]', '+', '[num2]'], expr_str='[num1]*[num0]+[num2]')]
+[2022-09-12T13:07:01.470212+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num0]', '+', '[num2]'], expr_str='[num1]*[num0]+[num2]')]
+[2022-09-12T13:07:01.470252+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 43
+[2022-09-12T13:07:01.470289+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 43
+[2022-09-12T13:07:01.470549+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 10 val_acc: 0.4
+[2022-09-12T13:07:11.329492+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 11, loss-ave: 0.4866093598187916, mAcc: 0.8329635773386274
+[2022-09-12T13:07:20.646974+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 12, loss-ave: 0.42603369317357503, mAcc: 0.8574145862034389
+[2022-09-12T13:07:30.055834+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 13, loss-ave: 0.369246002227541, mAcc: 0.8761168197980003
+[2022-09-12T13:07:40.082136+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 14, loss-ave: 0.290233664805927, mAcc: 0.9077238828416855
+[2022-09-12T13:07:50.213890+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 15, loss-ave: 0.2530946463701271, mAcc: 0.9158795816557748
+[2022-09-12T13:07:50.214405+0800]-[INFO] recursion_trainer.py-train-81: [evaluate test-data]
+[2022-09-12T13:07:50.249332+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 0
+[2022-09-12T13:07:50.249431+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 镇海雅乐学校二年级的小朋友到一条小路的一边植树．小朋友们每隔[num0][rk0][int]米种一棵树（马路两头都种了树），最后发现一共种了[num1][rk1][int]棵，这条小路长多少米．
+[2022-09-12T13:07:50.249511+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '-', '[num2]'], expr_str='[num1]-[num2]'), OpList(arg0=5, expr_toks=['[num4]', '*', '[num0]'], expr_str='[num4]*[num0]')]
+[2022-09-12T13:07:50.249559+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '-', '[num2]'], expr_str='[num1]-[num2]'), OpList(arg0=5, expr_toks=['[num4]', '*', '[num0]'], expr_str='[num4]*[num0]')]
+[2022-09-12T13:07:50.249607+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 20
+[2022-09-12T13:07:50.249645+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 20
+[2022-09-12T13:07:50.283995+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 1
+[2022-09-12T13:07:50.284101+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个工程队挖土，第一天挖了[num0][rk2][int]方，从第二天开始每天都挖[num1][rk1][int]方，连续挖了[num2][rk0][int]天，这个工程队一周共挖土多少方？
+[2022-09-12T13:07:50.284154+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '-', '[num3]'], expr_str='[num2]-[num3]'), OpList(arg0=6, expr_toks=['[num0]', '+', '[num1]', '*', '[num5]'], expr_str='[num0]+[num1]*[num5]')]
+[2022-09-12T13:07:50.284198+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '-', '[num3]'], expr_str='[num2]-[num3]'), OpList(arg0=6, expr_toks=['[num0]', '+', '[num1]', '*', '[num5]'], expr_str='[num0]+[num1]*[num5]')]
+[2022-09-12T13:07:50.284239+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 1466
+[2022-09-12T13:07:50.284286+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 1466
+[2022-09-12T13:07:50.353385+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 2
+[2022-09-12T13:07:50.353481+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本故事书，第一天看了全书的[num0][rk0][frac]，第二天看了[num1][rk4][int]页，第[num2][rk3][int]天看的页数是前两天看的总数的[num3][rk2][prec]，这时还有全书的[num4][rk1][frac]没有看，那么这本书一共多少页．
+[2022-09-12T13:07:50.353536+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '+', '[num1]'], expr_str='[num1]+[num1]'), OpList(arg0=8, expr_toks=['[num3]', '-', '[num5]'], expr_str='[num3]-[num5]'), OpList(arg0=9, expr_toks=['[num0]', '-', '[num7]'], expr_str='[num0]-[num7]'), OpList(arg0=10, expr_toks=['[num7]', '/', '[num8]'], expr_str='[num7]/[num8]')]
+[2022-09-12T13:07:50.353582+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '+', '[num1]', '*', '[num3]'], expr_str='[num1]+[num1]*[num3]'), OpList(arg0=8, expr_toks=['[num5]', '-', '[num0]', '-', '[num0]', '*', '[num3]', '-', '[num4]'], expr_str='[num5]-[num0]-[num0]*[num3]-[num4]'), OpList(arg0=9, expr_toks=['[num7]', '/', '[num8]'], expr_str='[num7]/[num8]')]
+[2022-09-12T13:07:50.353625+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 96
+[2022-09-12T13:07:50.353663+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 179.9999999999999875099909730
+[2022-09-12T13:07:50.372133+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 3
+[2022-09-12T13:07:50.372237+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 从甲地到乙地，如果骑自行车每小时行驶[num0][rk2][int]千米，[num1][rk1][int]小时可以到达，如果乘汽车只需要[num2][rk0][int]小时，汽车每小时行驶多少千米？
+[2022-09-12T13:07:50.372296+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:50.372339+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:50.372379+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 32
+[2022-09-12T13:07:50.372417+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 32
+[2022-09-12T13:07:50.388234+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 4
+[2022-09-12T13:07:50.388349+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小刚的体重是[num0][rk1][float]千克，小强的体重是小刚的[num1][rk0][float]倍，小强的体重=多少千克？
+[2022-09-12T13:07:50.388400+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]')]
+[2022-09-12T13:07:50.388443+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]')]
+[2022-09-12T13:07:50.388482+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 39.75999999999999548805362792
+[2022-09-12T13:07:50.388520+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39.75999999999999548805362792
+[2022-09-12T13:07:50.421419+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 5
+[2022-09-12T13:07:50.421516+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk3][float]-[num1][rk0][float]与[num2][rk2][float]的积，所得的差除以[num3][rk1][float]，商=？
+[2022-09-12T13:07:50.421569+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num3]'], expr_str='[num6]/[num3]')]
+[2022-09-12T13:07:50.421612+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num3]'], expr_str='[num6]/[num3]')]
+[2022-09-12T13:07:50.421658+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 3.999999999999999603491776919
+[2022-09-12T13:07:50.421697+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 3.999999999999999603491776919
+[2022-09-12T13:07:50.454438+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 6
+[2022-09-12T13:07:50.454539+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 象山学校原有学生[num0][rk4][int]人，[num1][rk0][int]月份毕业[num2][rk2][int]人，[num3][rk1][int]月份招入新生[num4][rk3][int]人，这时象山学校的学生比原来增加百分之几？
+[2022-09-12T13:07:50.454592+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num4]', '-', '[num2]'], expr_str='[num4]-[num2]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num0]'], expr_str='[num7]/[num0]')]
+[2022-09-12T13:07:50.454635+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num4]', '-', '[num2]'], expr_str='[num4]-[num2]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num0]'], expr_str='[num7]/[num0]')]
+[2022-09-12T13:07:50.454675+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 0.1
+[2022-09-12T13:07:50.454713+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 0.1
+[2022-09-12T13:07:50.470606+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 7
+[2022-09-12T13:07:50.470718+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 买一套住房，售价[num0][rk1][int]万元，每年付[num1][rk0][int]万元，多少年后才能付清？
+[2022-09-12T13:07:50.470768+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:07:50.470810+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:07:50.470851+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 14
+[2022-09-12T13:07:50.470889+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 14
+[2022-09-12T13:07:50.489520+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 8
+[2022-09-12T13:07:50.489625+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 王叔叔开车从甲地去乙地，以[num0][rk2][int]千米/时的速度行了[num1][rk1][int]小时才到达．返回时由于有任务，加快了速度，只用了[num2][rk0][int]小时就回到了甲地，返回时的速度=？
+[2022-09-12T13:07:50.489676+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:50.489719+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:07:50.489760+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 105
+[2022-09-12T13:07:50.489796+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 105
+[2022-09-12T13:07:50.507660+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 9
+[2022-09-12T13:07:50.507757+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个果园的李树棵数是桃树的[num0][rk1][frac]，桃树棵数是梨树的[num1][rk0][frac]．已知李树有[num2][rk2][int]棵，梨树有多少棵？
+[2022-09-12T13:07:50.507807+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '/', '[num0]', '/', '[num1]'], expr_str='[num2]/[num0]/[num1]')]
+[2022-09-12T13:07:50.507850+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '/', '[num0]', '/', '[num1]'], expr_str='[num2]/[num0]/[num1]')]
+[2022-09-12T13:07:50.507890+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 2303.999999999999897681846051
+[2022-09-12T13:07:50.507929+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 2303.999999999999897681846051
+[2022-09-12T13:07:50.542073+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 10
+[2022-09-12T13:07:50.542167+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一段长[num0][rk2][int]千米的路，第一天修了[num1][rk1][int]千米，第二天修了余下的[num2][rk0][frac]，还剩下多少千米没有修完？
+[2022-09-12T13:07:50.542219+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num0]', '-', '[num5]', '*', '[num2]'], expr_str='[num0]-[num5]*[num2]')]
+[2022-09-12T13:07:50.542262+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num0]', '-', '[num5]', '*', '[num2]', '-', '[num1]'], expr_str='[num0]-[num5]*[num2]-[num1]')]
+[2022-09-12T13:07:50.542303+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 16.500
+[2022-09-12T13:07:50.542341+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 12.500
+[2022-09-12T13:07:50.576217+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 11
+[2022-09-12T13:07:50.576322+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一条长[num0][rk2][int]米的公路，原计划[num1][rk1][int]天完成，实际每天多修[num2][rk0][int]米．这样要多少天才能修完？
+[2022-09-12T13:07:50.576374+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num1]', '+', '[num2]'], expr_str='[num0]/[num1]+[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:07:50.576417+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num1]', '+', '[num2]'], expr_str='[num0]/[num1]+[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:07:50.576457+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 39
+[2022-09-12T13:07:50.576495+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39
+[2022-09-12T13:07:50.611416+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 12
+[2022-09-12T13:07:50.611513+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 甲乙两列火车同时从相距[num0][rk3][int]千米的两地相对开出，甲车每小行行[num1][rk2][int]千米，[num2][rk0][int]小时后两车还相距[num3][rk1][int]千米，乙车每小时行多少千米？
+[2022-09-12T13:07:50.611564+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]'], expr_str='[num0]-[num3]'), OpList(arg0=7, expr_toks=['[num1]', '-', '[num6]', '*', '[num2]'], expr_str='[num1]-[num6]*[num2]')]
+[2022-09-12T13:07:50.611607+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num3]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num2]'], expr_str='[num6]/[num2]')]
+[2022-09-12T13:07:50.611683+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: -2080
+[2022-09-12T13:07:50.611720+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 40
+[2022-09-12T13:07:50.646441+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 13
+[2022-09-12T13:07:50.646521+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: （[num0][rk3][int]*[num1][rk2][int]-[num2][rk4][int]*[num3][rk0][int]）/[num4][rk1][int]=．
+[2022-09-12T13:07:50.646573+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num1]', '*', '[num2]', '*', '[num3]'], expr_str='[num0]*[num1]*[num2]*[num3]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num4]'], expr_str='[num7]/[num4]')]
+[2022-09-12T13:07:50.646616+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]', '*', '[num3]'], expr_str='[num0]*[num1]-[num2]*[num3]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num4]'], expr_str='[num7]/[num4]')]
+[2022-09-12T13:07:50.646661+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 293040
+[2022-09-12T13:07:50.646698+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 158
+[2022-09-12T13:07:50.662145+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 14
+[2022-09-12T13:07:50.662251+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk1][int]个小朋友捉迷藏，已经捉住了[num1][rk0][int]人，还有多少人没捉住．
+[2022-09-12T13:07:50.662300+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:07:50.662340+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:07:50.662380+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 11
+[2022-09-12T13:07:50.662417+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 11
+[2022-09-12T13:07:50.680240+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 15
+[2022-09-12T13:07:50.680346+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小红每小时跳绳[num0][rk2][int]下，小军每小时跳的下数比小红的[num1][rk0][int]倍多[num2][rk1][int]下，小军每小时跳多少下？
+[2022-09-12T13:07:50.680395+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '+', '[num2]'], expr_str='[num0]*[num1]+[num2]')]
+[2022-09-12T13:07:50.680435+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '+', '[num2]'], expr_str='[num0]*[num1]+[num2]')]
+[2022-09-12T13:07:50.680509+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 85
+[2022-09-12T13:07:50.680547+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 85
+[2022-09-12T13:07:50.698343+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 16
+[2022-09-12T13:07:50.698444+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 火箭每秒能飞行[num0][rk2][int]米，卫星每秒飞行的比火箭的[num1][rk0][int]倍少[num2][rk1][int]米．卫星每秒飞行多少米？
+[2022-09-12T13:07:50.698495+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '-', '[num0]', '*', '[num2]'], expr_str='[num1]-[num0]*[num2]')]
+[2022-09-12T13:07:50.698536+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]'], expr_str='[num0]*[num1]-[num2]')]
+[2022-09-12T13:07:50.698576+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: -4499998
+[2022-09-12T13:07:50.698614+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 8000
+[2022-09-12T13:07:50.747874+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 17
+[2022-09-12T13:07:50.747968+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本书，第一天看了全书的[num0][rk0][frac]，第二天比第一天多看[num1][rk2][int]页，剩下的[num2][rk3][int]页第[num3][rk1][int]天看完，这本书共有多少页？
+[2022-09-12T13:07:50.748021+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '+', '[num1]'], expr_str='[num2]+[num1]'), OpList(arg0=7, expr_toks=['[num4]', '-', '[num0]'], expr_str='[num4]-[num0]'), OpList(arg0=8, expr_toks=['[num6]', '/', '[num7]'], expr_str='[num6]/[num7]')]
+[2022-09-12T13:07:50.748066+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '+', '[num1]'], expr_str='[num2]+[num1]'), OpList(arg0=7, expr_toks=['[num4]', '-', '[num0]', '-', '[num0]'], expr_str='[num4]-[num0]-[num0]'), OpList(arg0=8, expr_toks=['[num6]', '/', '[num7]'], expr_str='[num6]/[num7]')]
+[2022-09-12T13:07:50.748106+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 48.75000000000000067654215563
+[2022-09-12T13:07:50.748151+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 65.00000000000000240548322003
+[2022-09-12T13:07:50.766158+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 18
+[2022-09-12T13:07:50.766255+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小芳家[num0][rk1][int]月份用水量是[num1][rk3][float]吨，每吨水的价格是[num2][rk0][float]元，小芳家一共有[num3][rk1][int]口人，平均每人应交多少水费？
+[2022-09-12T13:07:50.766308+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '*', '[num2]', '/', '[num0]'], expr_str='[num1]*[num2]/[num0]')]
+[2022-09-12T13:07:50.766352+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '*', '[num2]', '/', '[num0]'], expr_str='[num1]*[num2]/[num0]')]
+[2022-09-12T13:07:50.766393+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 6.930000000000000293098878502
+[2022-09-12T13:07:50.766431+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 6.930000000000000293098878502
+[2022-09-12T13:07:50.783614+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 19
+[2022-09-12T13:07:50.783713+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个数除以[num0][rk2][int]，商[num1][rk0][int]余[num2][rk1][int]，这个数=．
+[2022-09-12T13:07:50.783762+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num0]', '+', '[num2]'], expr_str='[num1]*[num0]+[num2]')]
+[2022-09-12T13:07:50.783803+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num0]', '+', '[num2]'], expr_str='[num1]*[num0]+[num2]')]
+[2022-09-12T13:07:50.783869+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 43
+[2022-09-12T13:07:50.783906+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 43
+[2022-09-12T13:07:50.784164+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 15 val_acc: 0.7
+[2022-09-12T13:08:01.188949+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 16, loss-ave: 0.16343913641240862, mAcc: 0.9475925006563701
+[2022-09-12T13:08:11.242321+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 17, loss-ave: 0.1102530448327935, mAcc: 0.9692116578420004
+[2022-09-12T13:08:20.733960+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 18, loss-ave: 0.08943335510908611, mAcc: 0.9740462303161621
+[2022-09-12T13:08:30.142402+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 19, loss-ave: 0.0729413644248058, mAcc: 0.9806608614467439
+[2022-09-12T13:08:39.654531+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 20, loss-ave: 0.06515954952273104, mAcc: 0.9803509712219238
+[2022-09-12T13:08:39.654881+0800]-[INFO] recursion_trainer.py-train-81: [evaluate test-data]
+[2022-09-12T13:08:39.683686+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 0
+[2022-09-12T13:08:39.683804+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 镇海雅乐学校二年级的小朋友到一条小路的一边植树．小朋友们每隔[num0][rk0][int]米种一棵树（马路两头都种了树），最后发现一共种了[num1][rk1][int]棵，这条小路长多少米．
+[2022-09-12T13:08:39.683865+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '-', '[num2]'], expr_str='[num1]-[num2]'), OpList(arg0=5, expr_toks=['[num4]', '*', '[num0]'], expr_str='[num4]*[num0]')]
+[2022-09-12T13:08:39.683906+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num1]', '-', '[num2]'], expr_str='[num1]-[num2]'), OpList(arg0=5, expr_toks=['[num4]', '*', '[num0]'], expr_str='[num4]*[num0]')]
+[2022-09-12T13:08:39.683948+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 20
+[2022-09-12T13:08:39.683984+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 20
+[2022-09-12T13:08:39.712376+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 1
+[2022-09-12T13:08:39.712480+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个工程队挖土，第一天挖了[num0][rk2][int]方，从第二天开始每天都挖[num1][rk1][int]方，连续挖了[num2][rk0][int]天，这个工程队一周共挖土多少方？
+[2022-09-12T13:08:39.712557+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '-', '[num3]'], expr_str='[num2]-[num3]'), OpList(arg0=6, expr_toks=['[num0]', '+', '[num1]', '*', '[num5]'], expr_str='[num0]+[num1]*[num5]')]
+[2022-09-12T13:08:39.712600+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '-', '[num3]'], expr_str='[num2]-[num3]'), OpList(arg0=6, expr_toks=['[num0]', '+', '[num1]', '*', '[num5]'], expr_str='[num0]+[num1]*[num5]')]
+[2022-09-12T13:08:39.712638+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 1466
+[2022-09-12T13:08:39.712673+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 1466
+[2022-09-12T13:08:39.761543+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 2
+[2022-09-12T13:08:39.761644+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本故事书，第一天看了全书的[num0][rk0][frac]，第二天看了[num1][rk4][int]页，第[num2][rk3][int]天看的页数是前两天看的总数的[num3][rk2][prec]，这时还有全书的[num4][rk1][frac]没有看，那么这本书一共多少页．
+[2022-09-12T13:08:39.761695+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '+', '[num1]', '*', '[num3]'], expr_str='[num1]+[num1]*[num3]'), OpList(arg0=8, expr_toks=['[num5]', '-', '[num0]', '-', '[num0]', '*', '[num3]', '-', '[num4]'], expr_str='[num5]-[num0]-[num0]*[num3]-[num4]'), OpList(arg0=9, expr_toks=['[num7]', '/', '[num8]'], expr_str='[num7]/[num8]')]
+[2022-09-12T13:08:39.761737+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num1]', '+', '[num1]', '*', '[num3]'], expr_str='[num1]+[num1]*[num3]'), OpList(arg0=8, expr_toks=['[num5]', '-', '[num0]', '-', '[num0]', '*', '[num3]', '-', '[num4]'], expr_str='[num5]-[num0]-[num0]*[num3]-[num4]'), OpList(arg0=9, expr_toks=['[num7]', '/', '[num8]'], expr_str='[num7]/[num8]')]
+[2022-09-12T13:08:39.761775+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 179.9999999999999875099909730
+[2022-09-12T13:08:39.761810+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 179.9999999999999875099909730
+[2022-09-12T13:08:39.776838+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 3
+[2022-09-12T13:08:39.776933+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 从甲地到乙地，如果骑自行车每小时行驶[num0][rk2][int]千米，[num1][rk1][int]小时可以到达，如果乘汽车只需要[num2][rk0][int]小时，汽车每小时行驶多少千米？
+[2022-09-12T13:08:39.777007+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:08:39.777056+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:08:39.777093+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 32
+[2022-09-12T13:08:39.777127+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 32
+[2022-09-12T13:08:39.789992+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 4
+[2022-09-12T13:08:39.790087+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小刚的体重是[num0][rk1][float]千克，小强的体重是小刚的[num1][rk0][float]倍，小强的体重=多少千克？
+[2022-09-12T13:08:39.790148+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]')]
+[2022-09-12T13:08:39.790203+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '*', '[num1]'], expr_str='[num0]*[num1]')]
+[2022-09-12T13:08:39.790240+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 39.75999999999999548805362792
+[2022-09-12T13:08:39.790284+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39.75999999999999548805362792
+[2022-09-12T13:08:39.817438+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 5
+[2022-09-12T13:08:39.817540+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk3][float]-[num1][rk0][float]与[num2][rk2][float]的积，所得的差除以[num3][rk1][float]，商=？
+[2022-09-12T13:08:39.817603+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num3]'], expr_str='[num6]/[num3]')]
+[2022-09-12T13:08:39.817643+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num3]'], expr_str='[num6]/[num3]')]
+[2022-09-12T13:08:39.817681+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 3.999999999999999603491776919
+[2022-09-12T13:08:39.817715+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 3.999999999999999603491776919
+[2022-09-12T13:08:39.844567+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 6
+[2022-09-12T13:08:39.844662+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 象山学校原有学生[num0][rk4][int]人，[num1][rk0][int]月份毕业[num2][rk2][int]人，[num3][rk1][int]月份招入新生[num4][rk3][int]人，这时象山学校的学生比原来增加百分之几？
+[2022-09-12T13:08:39.844729+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num4]', '-', '[num2]'], expr_str='[num4]-[num2]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num0]'], expr_str='[num7]/[num0]')]
+[2022-09-12T13:08:39.844775+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num4]', '-', '[num2]'], expr_str='[num4]-[num2]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num0]'], expr_str='[num7]/[num0]')]
+[2022-09-12T13:08:39.844813+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 0.1
+[2022-09-12T13:08:39.844847+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 0.1
+[2022-09-12T13:08:39.857590+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 7
+[2022-09-12T13:08:39.857686+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 买一套住房，售价[num0][rk1][int]万元，每年付[num1][rk0][int]万元，多少年后才能付清？
+[2022-09-12T13:08:39.857745+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:08:39.857804+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '/', '[num1]'], expr_str='[num0]/[num1]')]
+[2022-09-12T13:08:39.857841+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 14
+[2022-09-12T13:08:39.857876+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 14
+[2022-09-12T13:08:39.873026+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 8
+[2022-09-12T13:08:39.873121+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 王叔叔开车从甲地去乙地，以[num0][rk2][int]千米/时的速度行了[num1][rk1][int]小时才到达．返回时由于有任务，加快了速度，只用了[num2][rk0][int]小时就回到了甲地，返回时的速度=？
+[2022-09-12T13:08:39.873185+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:08:39.873239+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '/', '[num2]'], expr_str='[num0]*[num1]/[num2]')]
+[2022-09-12T13:08:39.873276+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 105
+[2022-09-12T13:08:39.873310+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 105
+[2022-09-12T13:08:39.888172+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 9
+[2022-09-12T13:08:39.888275+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个果园的李树棵数是桃树的[num0][rk1][frac]，桃树棵数是梨树的[num1][rk0][frac]．已知李树有[num2][rk2][int]棵，梨树有多少棵？
+[2022-09-12T13:08:39.888345+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '/', '[num0]', '/', '[num1]'], expr_str='[num2]/[num0]/[num1]')]
+[2022-09-12T13:08:39.888383+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num2]', '/', '[num0]', '/', '[num1]'], expr_str='[num2]/[num0]/[num1]')]
+[2022-09-12T13:08:39.888420+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 2303.999999999999897681846051
+[2022-09-12T13:08:39.888455+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 2303.999999999999897681846051
+[2022-09-12T13:08:39.917963+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 10
+[2022-09-12T13:08:39.918057+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一段长[num0][rk2][int]千米的路，第一天修了[num1][rk1][int]千米，第二天修了余下的[num2][rk0][frac]，还剩下多少千米没有修完？
+[2022-09-12T13:08:39.918124+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num0]', '-', '[num5]', '*', '[num2]', '-', '[num1]'], expr_str='[num0]-[num5]*[num2]-[num1]')]
+[2022-09-12T13:08:39.918174+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]'), OpList(arg0=6, expr_toks=['[num0]', '-', '[num5]', '*', '[num2]', '-', '[num1]'], expr_str='[num0]-[num5]*[num2]-[num1]')]
+[2022-09-12T13:08:39.918212+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 12.500
+[2022-09-12T13:08:39.918247+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 12.500
+[2022-09-12T13:08:39.946097+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 11
+[2022-09-12T13:08:39.946202+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 要修一条长[num0][rk2][int]米的公路，原计划[num1][rk1][int]天完成，实际每天多修[num2][rk0][int]米．这样要多少天才能修完？
+[2022-09-12T13:08:39.946268+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num1]', '+', '[num2]'], expr_str='[num0]/[num1]+[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:08:39.946316+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '/', '[num1]', '+', '[num2]'], expr_str='[num0]/[num1]+[num2]'), OpList(arg0=6, expr_toks=['[num0]', '/', '[num5]'], expr_str='[num0]/[num5]')]
+[2022-09-12T13:08:39.946355+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 39
+[2022-09-12T13:08:39.946391+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 39
+[2022-09-12T13:08:39.964618+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 12
+[2022-09-12T13:08:39.964717+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 甲乙两列火车同时从相距[num0][rk3][int]千米的两地相对开出，甲车每小行行[num1][rk2][int]千米，[num2][rk0][int]小时后两车还相距[num3][rk1][int]千米，乙车每小时行多少千米？
+[2022-09-12T13:08:39.964781+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]', '-', '[num1]', '*', '[num2]', '-', '[num1]'], expr_str='[num0]-[num3]-[num1]*[num2]-[num1]')]
+[2022-09-12T13:08:39.964821+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num0]', '-', '[num3]', '-', '[num1]', '*', '[num2]'], expr_str='[num0]-[num3]-[num1]*[num2]'), OpList(arg0=7, expr_toks=['[num6]', '/', '[num2]'], expr_str='[num6]/[num2]')]
+[2022-09-12T13:08:39.964867+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 155
+[2022-09-12T13:08:39.964902+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 40
+[2022-09-12T13:08:39.993485+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 13
+[2022-09-12T13:08:39.993579+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: （[num0][rk3][int]*[num1][rk2][int]-[num2][rk4][int]*[num3][rk0][int]）/[num4][rk1][int]=．
+[2022-09-12T13:08:39.993644+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]', '*', '[num3]'], expr_str='[num0]*[num1]-[num2]*[num3]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num4]'], expr_str='[num7]/[num4]')]
+[2022-09-12T13:08:39.993693+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=7, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]', '*', '[num3]'], expr_str='[num0]*[num1]-[num2]*[num3]'), OpList(arg0=8, expr_toks=['[num7]', '/', '[num4]'], expr_str='[num7]/[num4]')]
+[2022-09-12T13:08:39.993731+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 158
+[2022-09-12T13:08:39.993765+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 158
+[2022-09-12T13:08:40.006538+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 14
+[2022-09-12T13:08:40.006635+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: [num0][rk1][int]个小朋友捉迷藏，已经捉住了[num1][rk0][int]人，还有多少人没捉住．
+[2022-09-12T13:08:40.006697+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:08:40.006755+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=4, expr_toks=['[num0]', '-', '[num1]'], expr_str='[num0]-[num1]')]
+[2022-09-12T13:08:40.006793+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 11
+[2022-09-12T13:08:40.006827+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 11
+[2022-09-12T13:08:40.021690+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 15
+[2022-09-12T13:08:40.021785+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小红每小时跳绳[num0][rk2][int]下，小军每小时跳的下数比小红的[num1][rk0][int]倍多[num2][rk1][int]下，小军每小时跳多少下？
+[2022-09-12T13:08:40.021847+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '+', '[num2]'], expr_str='[num0]*[num1]+[num2]')]
+[2022-09-12T13:08:40.021900+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '+', '[num2]'], expr_str='[num0]*[num1]+[num2]')]
+[2022-09-12T13:08:40.021936+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 85
+[2022-09-12T13:08:40.021971+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 85
+[2022-09-12T13:08:40.036502+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 16
+[2022-09-12T13:08:40.036596+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 火箭每秒能飞行[num0][rk2][int]米，卫星每秒飞行的比火箭的[num1][rk0][int]倍少[num2][rk1][int]米．卫星每秒飞行多少米？
+[2022-09-12T13:08:40.036668+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]'], expr_str='[num0]*[num1]-[num2]')]
+[2022-09-12T13:08:40.036707+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num0]', '*', '[num1]', '-', '[num2]'], expr_str='[num0]*[num1]-[num2]')]
+[2022-09-12T13:08:40.036745+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 8000
+[2022-09-12T13:08:40.036780+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 8000
+[2022-09-12T13:08:40.078856+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 17
+[2022-09-12T13:08:40.078951+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小明看一本书，第一天看了全书的[num0][rk0][frac]，第二天比第一天多看[num1][rk2][int]页，剩下的[num2][rk3][int]页第[num3][rk1][int]天看完，这本书共有多少页？
+[2022-09-12T13:08:40.079024+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '+', '[num1]'], expr_str='[num2]+[num1]'), OpList(arg0=7, expr_toks=['[num4]', '-', '[num0]', '-', '[num0]'], expr_str='[num4]-[num0]-[num0]'), OpList(arg0=8, expr_toks=['[num6]', '/', '[num7]'], expr_str='[num6]/[num7]')]
+[2022-09-12T13:08:40.079069+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num2]', '+', '[num1]'], expr_str='[num2]+[num1]'), OpList(arg0=7, expr_toks=['[num4]', '-', '[num0]', '-', '[num0]'], expr_str='[num4]-[num0]-[num0]'), OpList(arg0=8, expr_toks=['[num6]', '/', '[num7]'], expr_str='[num6]/[num7]')]
+[2022-09-12T13:08:40.079108+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 65.00000000000000240548322003
+[2022-09-12T13:08:40.079143+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 65.00000000000000240548322003
+[2022-09-12T13:08:40.093939+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 18
+[2022-09-12T13:08:40.094033+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 小芳家[num0][rk1][int]月份用水量是[num1][rk3][float]吨，每吨水的价格是[num2][rk0][float]元，小芳家一共有[num3][rk1][int]口人，平均每人应交多少水费？
+[2022-09-12T13:08:40.094102+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '*', '[num2]', '/', '[num0]'], expr_str='[num1]*[num2]/[num0]')]
+[2022-09-12T13:08:40.094141+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=6, expr_toks=['[num1]', '*', '[num2]', '/', '[num0]'], expr_str='[num1]*[num2]/[num0]')]
+[2022-09-12T13:08:40.094178+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 6.930000000000000293098878502
+[2022-09-12T13:08:40.094212+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 6.930000000000000293098878502
+[2022-09-12T13:08:40.108739+0800]-[INFO] recursion_trainer.py-evaluate-153: i: 19
+[2022-09-12T13:08:40.108834+0800]-[INFO] recursion_trainer.py-evaluate-154: input_text: 一个数除以[num0][rk2][int]，商[num1][rk0][int]余[num2][rk1][int]，这个数=．
+[2022-09-12T13:08:40.108904+0800]-[INFO] recursion_trainer.py-evaluate-155: output_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num0]', '+', '[num2]'], expr_str='[num1]*[num0]+[num2]')]
+[2022-09-12T13:08:40.108953+0800]-[INFO] recursion_trainer.py-evaluate-156: target_Op_list: [OpList(arg0=5, expr_toks=['[num1]', '*', '[num0]', '+', '[num2]'], expr_str='[num1]*[num0]+[num2]')]
+[2022-09-12T13:08:40.108990+0800]-[INFO] recursion_trainer.py-evaluate-157: output_value: 43
+[2022-09-12T13:08:40.109025+0800]-[INFO] recursion_trainer.py-evaluate-158: target_value: 43
+[2022-09-12T13:08:40.109191+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 20 val_acc: 0.95
+[2022-09-12T13:08:49.621685+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 21, loss-ave: 0.04949774792683976, mAcc: 0.9859325251882038
+[2022-09-12T13:08:58.968524+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 22, loss-ave: 0.04784647057512923, mAcc: 0.9873271991336157
+[2022-09-12T13:09:08.368328+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 23, loss-ave: 0.05761890063091876, mAcc: 0.9830523682019067

@@ -1,0 +1,9 @@
+**/__pycache__
+backup/*
+data/*
+log/*
+models/*
+models_100/*
+models_test/*
+tmp/*
+test.py
