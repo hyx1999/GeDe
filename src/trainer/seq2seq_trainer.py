@@ -55,10 +55,10 @@ class Seq2seqTrainer:
             self.train_one_epoch(epoch, solver, optim, loader)
             scheduler_warmup.step()
             
-            if epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if epoch % 5 == 0:
                 logger.info("[evaluate test-data]")
-                # self.evaluate(epoch, solver, self.test_dataset)
-                self.evaluate(epoch, solver, self.train_dataset[:20])
+                self.evaluate(epoch, solver, self.test_dataset)
+                # self.evaluate(epoch, solver, self.train_dataset[:20])
 
     def train_one_epoch(
         self,
@@ -126,11 +126,11 @@ class Seq2seqTrainer:
 
             output_text = solver.generate(input_text)
 
-            if i < 20:
-                logger.info("i: {}".format(i))
-                logger.info("input_text: {}".format(input_text))
-                logger.info("output_text: {}".format(output_text))
-                logger.info("target_text: {}".format(target_text))
+            # if i < 20:
+            #     logger.info("i: {}".format(i))
+            #     logger.info("input_text: {}".format(input_text))
+            #     logger.info("output_text: {}".format(output_text))
+            #     logger.info("target_text: {}".format(target_text))
 
 
             if output_text == target_text:

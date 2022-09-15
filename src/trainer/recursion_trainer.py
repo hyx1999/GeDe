@@ -77,7 +77,8 @@ class RecursionTrainer:
             self.train_one_epoch(epoch, solver, optim, loader)
             scheduler_warmup.step()
             
-            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            # if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if epoch > 0 and epoch % 5 == 0:
                 logger.info("[evaluate test-data]")
                 self.evaluate(epoch, solver, self.raw_dataset["test"])
                 # self.evaluate(epoch, solver, self.raw_dataset["train"][:20])
@@ -140,21 +141,21 @@ class RecursionTrainer:
             target_OpSeq_list = obj["OpSeq_list"]
 
             try:
-                output_value = compute_OpSeq_list(output_OpSeq_list, nums, self.cfg.max_nums_size)
-                target_value = compute_OpSeq_list(target_OpSeq_list, nums, self.cfg.max_nums_size)
-            except:
+                output_value = compute_OpSeq_list(output_OpSeq_list, nums, const_nums, self.cfg.max_nums_size)
+                target_value = compute_OpSeq_list(target_OpSeq_list, nums, const_nums, self.cfg.max_nums_size)
+            except SyntaxError:
                 output_value = None
                 target_value = None
             eps = 1e-5
 
             # TEST USE
-            if i < 20:
-                logger.info("i: {}".format(i))
-                logger.info("input_text: {}".format(input_text))
-                logger.info("output_Op_list: {}".format(output_OpSeq_list))
-                logger.info("target_Op_list: {}".format(target_OpSeq_list))
-                logger.info("output_value: {}".format(output_value))
-                logger.info("target_value: {}".format(target_value))
+            # if i < 20:
+            #     logger.info("i: {}".format(i))
+            #     logger.info("input_text: {}".format(input_text))
+            #     logger.info("output_Op_list: {}".format(output_OpSeq_list))
+            #     logger.info("target_Op_list: {}".format(target_OpSeq_list))
+            #     logger.info("output_value: {}".format(output_value))
+            #     logger.info("target_value: {}".format(target_value))
 
             if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
                 val_acc.append(1)

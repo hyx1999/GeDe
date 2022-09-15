@@ -88,8 +88,8 @@ class OpSeqDataInstance:
     
     def parse_input(self) -> str:
         input_text = [self.question]
-        for i in range(len(self.nums) - len(self.const_nums), len(self.nums)):
-            input_text.append("[num{}] = {}.".format(i, self.nums[i]))
+        # for i in range(len(self.const_nums)):
+        #     input_text.append("[c{}] = {}.".format(i, self.const_nums[i]))
         for opSeq in self.opSeq_list:
             input_text.append("[SEP]")
             input_text.append("[num{}] = {}"\
@@ -109,7 +109,32 @@ class OpSeqDataInstance:
         return output_text
 
 
-def parse_num_index(num_token: str, nums: List[str]) -> int:
+def convert_const_nums(seg_expr: List[Tok], const_nums: List[str]) -> int:
+    new_seg_expr: List[str] = []
+    for tok in seg_expr:
+        if tok in "+*/^()" or re.match("\[num\d+\]", tok):
+            new_seg_expr.append(tok)
+        elif tok == '-':
+            if len(new_seg_expr) > 0 and \
+                (re.match("\[num\d+\]", new_seg_expr[-1]) \
+                    or re.match("\[c\d+\]", new_seg_expr[-1]) \
+                    or new_seg_expr[-1] == ')'):
+                new_seg_expr.append(tok)
+            else:
+                idx = const_nums.index('-1')
+                new_seg_expr.append(f"[c{idx}]")
+                new_seg_expr.append("*")
+        else:
+            if tok not in const_nums:
+                print("tok:", tok)
+                print("const_nums:", const_nums)
+                raise ValueError
+            idx = const_nums.index(tok)
+            new_seg_expr.append(f"[c{idx}]")
+    return new_seg_expr
+
+
+def seq2seq_parse_num_index(num_token: str, nums: List[str]) -> int:
     m = re.match("\[num(\d+)\]", num_token)
     if m:
         return int(m.group(1))
@@ -117,6 +142,20 @@ def parse_num_index(num_token: str, nums: List[str]) -> int:
         if num_token not in nums:
             raise ValueError
         return nums.index(num_token)
+
+def parse_num_index(num_token: str) -> int:
+    m = re.match("\[num(\d+)\]", num_token)
+    if m:
+        return int(m.group(1))
+    else:
+        raise ValueError
+
+def parse_const_num_index(num_token: str) -> int:
+    m = re.match("\[c(\d+)\]", num_token)
+    if m:
+        return int(m.group(1))
+    else:
+        raise ValueError
 
 def parse_value(x: str) -> float:
     x = x.replace("%","*0.01")
@@ -126,6 +165,88 @@ def parse_value(x: str) -> float:
     except:
         print(x)
         exit(-1)
+
+
+def eval_expr(tokens: List[Tok]):
+    op_stack = []
+    v_stack = []
+
+    def pop_stack():
+        o = op_stack.pop()
+        v1 = v_stack.pop()
+        v0 = v_stack.pop()
+        if o not in '+-*/^':
+            raise SyntaxError
+        if o == '^':
+            v_stack.append(pow(v0, v1))
+        elif o == '+':
+            v_stack.append(v0 + v1)
+        elif o == '-':
+            v_stack.append(v0 - v1)
+        elif o == '*':
+            v_stack.append(v0 * v1)
+        elif o == '/':
+            v_stack.append(v0 / v1)
+
+    for t in tokens:
+        if t.replace(" ", "") == "":
+            continue
+        if t == '(':
+            op_stack.append('(')
+        elif t == ')':
+            while len(op_stack) > 0 and op_stack[-1] != '(':
+                pop_stack()
+            op_stack.pop()
+        elif t == '+' or t == '-':
+            while len(op_stack) > 0 and op_stack[-1] in '+-*/^':
+                pop_stack()
+            op_stack.append(t)
+        elif t == '*' or t == '/':
+            while len(op_stack) > 0 and op_stack[-1] in '*/^':
+                pop_stack()
+            op_stack.append(t)
+        elif t == '^':
+            while len(op_stack) > 0 and op_stack[-1] in '^':
+                pop_stack()
+            op_stack.append(t)
+        else:
+            v_stack.append(Decimal(eval(t)))
+    while len(op_stack) > 0:
+        pop_stack()
+    if len(v_stack) != 1:
+        raise SyntaxError
+    return v_stack[-1]
+
+
+def convert_expr(expr: str, nums: List[str]):
+    tokens = []
+    while len(expr) > 0:
+        m: re.Match = re.match("\[num\d+\]", expr)
+        token_length = 0
+        if m is None:
+            token_length = 1
+            tokens.append(expr[0])
+        else:
+            token_length = m.end()
+            idx = seq2seq_parse_num_index(expr[:token_length], nums)
+            num = nums[idx] if idx < len(nums) else '1'
+            tokens.append("(" + num + ")")
+        expr = expr[token_length:]
+    expr = "".join(tokens)
+    return expr
+
+
+def compute_expr(expr: str, nums: List[str]):
+    expr = convert_expr(expr, nums)
+    expr = expr.replace("%", "*0.01")
+    tokens = re.split(r"([\*\/\^\(\)\+\-])", expr)
+    # print("".join(tokens))
+    try:
+        value = eval_expr(tokens)
+    except:
+        print("".join(tokens))
+        value = None
+    return value
 
 
 def build_Op_list(seg_expr: List[Tok], nums: List[str]) -> List[Op]:
@@ -195,7 +316,7 @@ def compute_Op_list(Op_list: List[Op], nums: List[str], max_nums_size: int) -> f
         elif op == '=':
             return nums_table[arg1]
         else:
-            raise ValueError
+            raise SyntaxError
     try:
         for Op in Op_list:
             nums_table[Op.arg0] = do_Op(Op.arg1, Op.arg2, Op.op)
@@ -205,10 +326,11 @@ def compute_Op_list(Op_list: List[Op], nums: List[str], max_nums_size: int) -> f
     return nums_table[Op_list[-1].arg0] if len(Op_list) > 0 else None
 
 
-def build_OpSeq_list_v1(seg_expr: List[Tok], nums: List[str], debug: bool = False) -> List[OpSeq]:
+def build_OpSeq_list_v1(seg_expr: List[Tok], nums_size: int) -> List[OpSeq]:
+    # 根据括号对表达式进行切分
     OpSeq_list: List[OpSeq]   = []
     match_pos: Dict[int, int] = {}
-    expr_dict: Dict[str, int] = {f'[num{i}]': i for i in range(len(nums))}
+    expr_dict: Dict[str, int] = {f'[num{i}]': i for i in range(nums_size)}
 
     def compute_match_pos():
         stk = []
@@ -229,17 +351,12 @@ def build_OpSeq_list_v1(seg_expr: List[Tok], nums: List[str], debug: bool = Fals
                     arg = rec_build_OpSeq_list(i + 1, match_pos[i])
                     expr_toks.append('[num{}]'.format(arg))
                     i = match_pos[i]
-                elif tok in '+-*/^':
-                    expr_toks.append(tok)
                 else:
-                    expr_toks.append('[num{}]'.format(parse_num_index(tok, nums)))
+                    expr_toks.append(tok)
             i += 1
         expr_str = "".join(expr_toks)
         if expr_str not in expr_dict:
             arg0 = len(expr_dict)
-            if debug:
-                print("arg0:", arg0)
-                print("expr_dict:", expr_dict)
             expr_dict[expr_str] = arg0
             OpSeq_list.append(
                 OpSeq(arg0=arg0, expr_toks=expr_toks, expr_str=expr_str)
@@ -252,10 +369,76 @@ def build_OpSeq_list_v1(seg_expr: List[Tok], nums: List[str], debug: bool = Fals
     return OpSeq_list
 
 
-def compute_OpSeq_list(OpSeq_list: List[OpSeq], nums: List[str], max_nums_size: int):
+def build_OpSeq_list_v2(seg_expr: List[Tok], nums_size: int) -> List[OpSeq]:
+    # 不对表达式进行切分
+    expr_toks = seg_expr
+    OpSeq_list: List[OpSeq] = [OpSeq(arg0=nums_size, expr_toks=expr_toks, expr_str="".join(expr_toks))]
+    return OpSeq_list
+
+
+def build_OpSeq_list_v3(seg_expr: List[Tok], nums_size: int) -> List[OpSeq]:
+    # 根据运算符对表达式进行切分
+    if len(seg_expr) == 1:
+        return [OpSeq(arg0=nums_size, expr_toks=seg_expr, expr_str="".join(seg_expr))]
+
+    OpSeq_list: List[OpSeq] = []
+    expr_dict: Dict[str, int] = {f'[num{i}]': f'[num{i}]' for i in range(nums_size)}
+
+    op_stack = []
+    v_stack = []
+
+    def pop_stack():
+        op = op_stack.pop()
+        arg2 = v_stack.pop()
+        arg1 = v_stack.pop()
+        expr_toks=[arg1, op, arg2]
+        expr_str=f'{arg1}{op}{arg2}'
+        if expr_str not in expr_dict:
+            arg0 = len(expr_dict)
+            expr_dict[expr_str] = f'[num{arg0}]'
+            OpSeq_list.append(OpSeq(
+                arg0=arg0, 
+                expr_toks=expr_toks,
+                expr_str=expr_str
+            ))
+        v_stack.append(expr_dict[expr_str])
+    for t in seg_expr:
+        if t.replace(" ", "") == "":
+            continue
+        if t == '(':
+            op_stack.append('(')
+        elif t == ')':
+            while len(op_stack) > 0 and op_stack[-1] != '(':
+                pop_stack()
+            op_stack.pop()
+        elif t == '+' or t == '-':
+            while len(op_stack) > 0 and op_stack[-1] in '+-*/^':
+                pop_stack()
+            op_stack.append(t)
+        elif t == '*' or t == '/':
+            while len(op_stack) > 0 and op_stack[-1] in '*/^':
+                pop_stack()
+            op_stack.append(t)
+        elif t == '^':
+            while len(op_stack) > 0 and op_stack[-1] in '^':
+                pop_stack()
+            op_stack.append(t)
+        else:
+            v_stack.append(t)
+    while len(op_stack) > 0:
+        pop_stack()
+    if len(v_stack) != 1:
+        raise SyntaxError
+
+    return OpSeq_list
+
+
+def compute_OpSeq_list(OpSeq_list: List[OpSeq], nums: List[str], const_nums: List[str], max_nums_size: int):
 
     nums = [parse_value(x) for x in nums]
     nums_table = nums + [0.0] * (max_nums_size - len(nums))
+
+    const_nums = [parse_value(x) for x in const_nums]
 
     def do_OpSeq(expr_toks: List[Tok]):
         # print("expr_tokens:", expr_toks)
@@ -284,7 +467,16 @@ def compute_OpSeq_list(OpSeq_list: List[OpSeq], nums: List[str], max_nums_size: 
         for t in expr_toks:
             if t.replace(" ", "") == "":
                 continue
-            if t == '+' or t == '-':
+            if t == '(':
+                op_stack.append('(')
+            elif t == ')':
+                while len(op_stack) > 0 and op_stack[-1] != '(':
+                    pop_stack()
+                if len(op_stack) == 0:
+                    logger.warning("decimal.Error: {}".format(OpSeq_list))
+                    return None
+                op_stack.pop()
+            elif t == '+' or t == '-':
                 while len(op_stack) > 0 and op_stack[-1] in '+-*/^':
                     pop_stack()
                 op_stack.append(t)
@@ -297,9 +489,13 @@ def compute_OpSeq_list(OpSeq_list: List[OpSeq], nums: List[str], max_nums_size: 
                     pop_stack()
                 op_stack.append(t)
             else:
-                i = parse_num_index(t, nums)
-                v_stack.append(Decimal(nums_table[i]))
-        
+                if re.match('\[num\d+\]', t):
+                    i = parse_num_index(t)
+                    v_stack.append(Decimal(nums_table[i]))
+                else:
+                    i = parse_const_num_index(t)
+                    v_stack.append(Decimal(const_nums[i]))
+            
         while len(op_stack) > 0:
             pop_stack()
         if len(v_stack) != 1:
@@ -309,89 +505,7 @@ def compute_OpSeq_list(OpSeq_list: List[OpSeq], nums: List[str], max_nums_size: 
     try:
         for opSeq in OpSeq_list:
             nums_table[opSeq.arg0] = do_OpSeq(opSeq.expr_toks)
-    except SyntaxError:
+    except:
         logger.warning("decimal.Error: {}".format(OpSeq_list))
         return None
     return nums_table[OpSeq_list[-1].arg0] if len(OpSeq_list) > 0 else None
-
-
-def eval_expr(tokens: List[Tok]):
-    op_stack = []
-    v_stack = []
-
-    def pop_stack():
-        o = op_stack.pop()
-        v1 = v_stack.pop()
-        v0 = v_stack.pop()
-        if o not in '+-*/^':
-            raise SyntaxError
-        if o == '^':
-            v_stack.append(pow(v0, v1))
-        elif o == '+':
-            v_stack.append(v0 + v1)
-        elif o == '-':
-            v_stack.append(v0 - v1)
-        elif o == '*':
-            v_stack.append(v0 * v1)
-        elif o == '/':
-            v_stack.append(v0 / v1)
-
-    for t in tokens:
-        if t.replace(" ", "") == "":
-            continue
-        if t == '(':
-            op_stack.append('(')
-        elif t == ')':
-            while len(op_stack) > 0 and op_stack[-1] != '(':
-                pop_stack()
-            op_stack.pop()
-        elif t == '+' or t == '-':
-            while len(op_stack) > 0 and op_stack[-1] in '+-*/^':
-                pop_stack()
-            op_stack.append(t)
-        elif t == '*' or t == '/':
-            while len(op_stack) > 0 and op_stack[-1] in '*/^':
-                pop_stack()
-            op_stack.append(t)
-        elif t == '^':
-            while len(op_stack) > 0 and op_stack[-1] in '^':
-                pop_stack()
-            op_stack.append(t)
-        else:
-            v_stack.append(Decimal(eval(t)))
-    while len(op_stack) > 0:
-        pop_stack()
-    if len(v_stack) != 1:
-        raise SyntaxError
-    return v_stack[-1]
-
-
-def convert_expr(expr: str, nums: List[str]):
-    tokens = []
-    while len(expr) > 0:
-        m: re.Match = re.match("\[num\d+\]", expr)
-        token_length = 0
-        if m is None:
-            token_length = 1
-            tokens.append(expr[0])
-        else:
-            token_length = m.end()
-            idx = parse_num_index(expr[:token_length], nums)
-            num = nums[idx] if idx < len(nums) else '1'
-            tokens.append("(" + num + ")")
-        expr = expr[token_length:]
-    expr = "".join(tokens)
-    return expr
-
-
-def compute_expr(expr: str, nums: List[str]):
-    expr = convert_expr(expr, nums)
-    expr = expr.replace("%", "*0.01")
-    tokens = re.split(r"([\*\/\^\(\)\+\-])", expr)
-    # print("".join(tokens))
-    try:
-        value = eval_expr(tokens)
-    except:
-        print("".join(tokens))
-        value = None
-    return value

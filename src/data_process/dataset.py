@@ -6,7 +6,9 @@ import re
 import jieba
 from typing import Any, AnyStr, Dict, List, Tuple
 from tqdm import tqdm
-from utils import build_Op_list, build_OpSeq_list_v1
+from utils import build_Op_list, \
+    build_OpSeq_list_v1, build_OpSeq_list_v2, build_OpSeq_list_v3, \
+    convert_const_nums
 
 
 def seg_and_tag(expr: str, nums: List[str], fracs: List[str], tag: List[bool]) -> List[str]:  # seg the equation and tag the num
@@ -190,7 +192,7 @@ def loadMath23K(data_path: str, fold: int = -1, head: int = None) -> Tuple[List[
     return train_data, test_data
 
 
-def build_ext_words(dataset: List[Dict], threshold: int = 5) -> List[str]:
+def build_ext_words(dataset: List[Dict], threshold: int = 0) -> List[str]:
     ext_words: Dict[str, int] = {}
     for obj in dataset:
         seg_expr = obj["seg_expr"]
@@ -207,7 +209,7 @@ def build_ext_words(dataset: List[Dict], threshold: int = 5) -> List[str]:
 def join_const_nums(dataset: List[Dict], const_nums):
     for obj in dataset:
         obj["const_nums"] = deepcopy(const_nums)
-        obj["nums"].extend(const_nums)
+        obj["seg_expr"] = convert_const_nums(obj["seg_expr"], const_nums)
 
 
 def join_Op_list(dataset: List[Dict]):
@@ -220,12 +222,19 @@ def join_Op_list(dataset: List[Dict]):
     return filter_count
 
 
-def join_OpSeq_list(dataset: List[Dict]):
+def join_OpSeq_list(dataset: List[Dict], mode: str):
     filter_count = 0
     for obj in dataset:
         try:
-            obj["OpSeq_list"] = build_OpSeq_list_v1(obj["seg_expr"], obj["nums"])
-        except ValueError:
-            print(obj["seg_expr"], obj["nums"])
+            if mode == "v1":
+                obj["OpSeq_list"] = build_OpSeq_list_v1(obj["seg_expr"], len(obj["nums"]))
+            elif mode == "v2":
+                obj["OpSeq_list"] = build_OpSeq_list_v2(obj["seg_expr"], len(obj["nums"]))
+            elif mode == "v3":
+                obj["OpSeq_list"] = build_OpSeq_list_v3(obj["seg_expr"], len(obj["nums"]))
+            else:
+                raise ValueError
+        except SyntaxError:
+            print(obj["raw_text"], obj["seg_expr"], obj["nums"])
             filter_count += 1
     print("filter count: {}".format(filter_count))

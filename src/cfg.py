@@ -5,7 +5,7 @@ class Config:
         self.model_name = "bert-base-chinese"
         self.model_hidden_size = 768
 
-        self.batch_size = 8
+        self.batch_size = 16
         self.scheduler_step_size = 10
         self.num_epochs = 100  # 80
 
@@ -27,6 +27,9 @@ class RecConfig:
         self.num_epochs = 100
         
         self.max_nums_size = 35
+        self.max_const_nums_size = 10
+        self.max_step_size = 35
+        self.use_bracket = False
 
         self.device = "cuda:0"
 

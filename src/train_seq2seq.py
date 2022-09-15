@@ -1,4 +1,3 @@
-import torch
 from data_process import loadMath23K, build_ext_words
 from solver import Seq2seqSolver
 from trainer import Seq2seqTrainer
@@ -8,6 +7,10 @@ import argparse
 import json
 from loguru import logger
 from typing import Dict, List, Union
+
+import torch
+import numpy as np
+import random
 
 def setup_logger():
     format_time = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -20,6 +23,14 @@ def setup_logger():
         format=format
     )
 
+def setup_seed():
+    seed = 0
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--log_text", type=str, default="none")
@@ -30,6 +41,8 @@ def get_args():
     parser.add_argument("--fold", type=int, required=True)
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
+    parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--op_seq_mode", type=str, default="v1")
     return parser.parse_args()
 
 def train_math_solver(
