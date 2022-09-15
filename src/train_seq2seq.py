@@ -14,7 +14,7 @@ def setup_logger():
     format="[{time}]-[{level}] {file}-{function}-{line}: {message}"
     logger.remove(None)
     logger.add(
-        f"log/{format_time}.log",
+        f"../log/{format_time}.log",
         rotation="100 MB", 
         level="INFO", 
         format=format

@@ -204,10 +204,10 @@ def build_ext_words(dataset: List[Dict], threshold: int = 5) -> List[str]:
     return ext_words
 
 
-def join_constant_nums(dataset: List[Dict], constant_nums):
+def join_const_nums(dataset: List[Dict], const_nums):
     for obj in dataset:
-        obj["constant_nums"] = deepcopy(constant_nums)
-        obj["nums"].extend(constant_nums)
+        obj["const_nums"] = deepcopy(const_nums)
+        obj["nums"].extend(const_nums)
 
 
 def join_Op_list(dataset: List[Dict]):

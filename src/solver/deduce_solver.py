@@ -19,12 +19,12 @@ from cfg import Config
 
 class DeducePreprocesser:
     
-    def __init__(self, ops: List[Tok], constant_nums: List[Tok], max_nums_size: int) -> None:
+    def __init__(self, ops: List[Tok], const_nums: List[Tok], max_nums_size: int) -> None:
         self.ops_size = len(ops)
         self.max_nums_size = max_nums_size
-        self.constant_nums_size = len(constant_nums)
+        self.const_nums_size = len(const_nums)
         self.ops = ops
-        self.constant_nums = constant_nums
+        self.const_nums = const_nums
         self.op2id = {
             w: i for i, w in enumerate(ops)
         }
@@ -80,17 +80,17 @@ class Attention(nn.Module):
 
 class DeduceDecoder(nn.Module):
 
-    def __init__(self, hidden_dim: int, ops_size: int, constant_nums_size: int, max_nums_size: int) -> None:
+    def __init__(self, hidden_dim: int, ops_size: int, const_nums_size: int, max_nums_size: int) -> None:
         super().__init__()
 
         self.hidden_dim = hidden_dim
         self.ops_size = ops_size
-        self.constant_nums_size = constant_nums_size
+        self.const_nums_size = const_nums_size
         self.max_nums_size = max_nums_size
         self.inf = 1e5
         
-        self.constant_nums_embedding = nn.parameter\
-            .Parameter(torch.randn(self.constant_nums_size, hidden_dim))
+        self.const_nums_embedding = nn.parameter\
+            .Parameter(torch.randn(self.const_nums_size, hidden_dim))
 
         self.bos_embedding = nn.parameter\
             .Parameter(torch.randn(hidden_dim))
@@ -183,18 +183,18 @@ class DeduceSolver:
         self,
         cfg_dict: Dict[AnyStr, Any],
         op_words: List[str],
-        constant_nums: List[str],
+        const_nums: List[str],
     ) -> None:
         self.cfg = Config(**cfg_dict)
 
         self.enc_tokenizer: BertTokenizer = BertTokenizer.from_pretrained(self.cfg.model_name)
         self.encoder = BertEncoder(self.cfg.model_name)
 
-        self.deduce_preprocesser = DeducePreprocesser(op_words, constant_nums, self.cfg.max_nums_size)
+        self.deduce_preprocesser = DeducePreprocesser(op_words, const_nums, self.cfg.max_nums_size)
         self.deducer = DeduceDecoder(
             self.cfg.model_hidden_size, 
             self.deduce_preprocesser.ops_size,
-            self.deduce_preprocesser.constant_nums_size,
+            self.deduce_preprocesser.const_nums_size,
             self.deduce_preprocesser.max_nums_size
         )
         
@@ -298,7 +298,7 @@ class DeduceSolver:
         for i in range(N):
             n = len(batch_num_ids[i])
             nums_embedding[i, :n, :].copy_(encoder_outputs[i, batch_num_ids[i], :])
-            nums_embedding[i, n:n + self.deducer.constant_nums_size, :].copy_(self.deducer.constant_nums_embedding)
+            nums_embedding[i, n:n + self.deducer.const_nums_size, :].copy_(self.deducer.const_nums_embedding)
         text_embedding = encoder_outputs[:, 0, :].clone()
         return text_embedding, encoder_outputs, nums_embedding
 

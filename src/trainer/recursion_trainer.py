@@ -37,7 +37,7 @@ class RecursionTrainer:
         for obj in dataset:
             question = "".join(obj["seg_text"])
             nums = obj["nums"]
-            const_nums = obj["constant_nums"]
+            const_nums = obj["const_nums"]
             OpSeq_list = obj["OpSeq_list"]
             new_dataset.append(OpSeqDataInstance(
                 question=question,
@@ -134,7 +134,7 @@ class RecursionTrainer:
             obj = test_dataset[i]
             input_text = "".join(obj["seg_text"])
             nums = obj["nums"]
-            const_nums = obj["constant_nums"]
+            const_nums = obj["const_nums"]
             
             output_OpSeq_list = solver.generate(input_text, nums, const_nums)
             target_OpSeq_list = obj["OpSeq_list"]

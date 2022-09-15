@@ -1,5 +1,5 @@
 import torch
-from data_process import loadMath23K, build_ext_words, join_constant_nums, join_Op_list
+from data_process import loadMath23K, build_ext_words, join_const_nums, join_Op_list
 from solver import DeduceSolver
 from trainer import DeduceTrainer
 
@@ -17,7 +17,7 @@ def setup_logger():
     format="[{time}]-[{level}] {file}-{function}-{line}: {message}"
     logger.remove(None)
     logger.add(
-        f"log/{format_time}.log",
+        f"../log/{format_time}.log",
         rotation="100 MB", 
         level="INFO", 
         format=format
@@ -59,17 +59,17 @@ def main(args: argparse.Namespace):
     train_dataset, test_dataset = loadMath23K(args.data_path, args.fold, head=args.head)
     ext_words = build_ext_words(train_dataset)
 
-    constant_nums = [word for word in ext_words if word not in '+-*/^()']
+    const_nums = [word for word in ext_words if word not in '+-*/^()']
     op_words = ['+', '-', '*', '/', '^']
     
     for dataset in [train_dataset, test_dataset]:
-        join_constant_nums(dataset, constant_nums)
+        join_const_nums(dataset, const_nums)
         join_Op_list(dataset)
     
     train_dataset = [obj for obj in train_dataset if "Op_list" in obj]
     test_dataset = [obj for obj in test_dataset if "Op_list" in obj]
 
-    solver = DeduceSolver(json.loads(args.cfg), op_words, constant_nums)
+    solver = DeduceSolver(json.loads(args.cfg), op_words, const_nums)
 
     if args.save_model:
         solver.save_model("models_test")
