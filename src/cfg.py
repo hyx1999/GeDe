@@ -24,7 +24,7 @@ class RecConfig:
 
         self.batch_size = 16
         self.scheduler_step_size = 10
-        self.num_epochs = 100
+        self.num_epochs = 80
         
         self.max_nums_size = 35
         self.max_const_nums_size = 10

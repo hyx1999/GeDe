@@ -70,10 +70,7 @@ class SeqDecoder(nn.Module):
         self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
         self.fc = nn.Linear(hidden_dim * 2, hidden_dim)
 
-        self.ext_emb0 = nn.parameter.Parameter(
-            torch.randn(ext_size, hidden_dim)
-        )
-        self.ext_emb1 = nn.parameter.Parameter(
+        self.ext_emb = nn.parameter.Parameter(
             torch.randn(ext_size, hidden_dim)
         )
     
@@ -96,18 +93,16 @@ class SeqDecoder(nn.Module):
             decoder_input_ids = decoder_input_ids.unsqueeze(dim=-1)  # [N] -> [N, L]
 
         bs = decoder_input_ids.shape[0]
-        ext_emb0 = self.ext_emb0.unsqueeze(0).repeat(bs, 1, 1)
-        ext_emb1 = self.ext_emb1.unsqueeze(0).repeat(bs, 1, 1)
+        ext_emb = self.ext_emb.unsqueeze(0).repeat(bs, 1, 1)
 
-        voc_emb0 = torch.cat((ext_emb0, num_emb), dim=1)  # [N, V, D]
-        voc_emb1 = torch.cat((ext_emb1, num_emb), dim=1)
+        voc_emb = torch.cat((ext_emb, num_emb), dim=1)  # [N, V, D]
 
-        decoder_inputs = self.embedding(decoder_input_ids, voc_emb0)
+        decoder_inputs = self.embedding(decoder_input_ids, voc_emb)
         qs, hn = self.gru(decoder_inputs, past_value.unsqueeze(dim=0))  # queries [N, L, D], hn [1, N, D]
         cs = self.attn(qs, memory, cross_attn_mask)  # contexts [N, L, D]
         feat = torch.tanh(self.fc(torch.cat((qs, cs), dim=-1)))  # feature [N, L, D]
 
-        logits = torch.bmm(feat, voc_emb1.transpose(1, 2))  # [N, L, voc_size]
+        logits = torch.bmm(feat, voc_emb.transpose(1, 2))  # [N, L, voc_size]
         logits = logits.masked_fill((~voc_mask).unsqueeze(dim=1), torch.finfo(torch.float).min)
         if dim1:
             logits = logits.squeeze(dim=1)  # [N, voc_size]
@@ -358,26 +353,29 @@ class RecursionSolver(nn.Module):
         F = {
             "start": dict(
                 [(self.voc2dvoc[k], "arg") for k in self.num_token_ids] + \
-                [(self.voc2dvoc[self.op_token_ids[-2]], "lb")]   # "("
+                [(self.voc2dvoc[k], "arg") for k in self.const_num_token_ids] + \
+                [(self.dvoc_token_id["("], "lb")]   # "("
             ),
             "arg": dict(
                 [(self.voc2dvoc[k], "op") for k in self.op_token_ids[:-2]] + \
                 [(self.dvoc_token_id["[eos0]"], "end")] + \
                 [(self.dvoc_token_id["[eos1]"], "end")] + \
-                [(self.voc2dvoc[self.op_token_ids[-1]], "rb")]  # ")"
+                [(self.dvoc_token_id[")"], "rb")]  # ")"
             ),
             "op": dict(
                 [(self.voc2dvoc[k], "arg") for k in self.num_token_ids] + \
-                [(self.voc2dvoc[self.op_token_ids[-2]], "lb")]   # "("
+                [(self.voc2dvoc[k], "arg") for k in self.const_num_token_ids] + \
+                [(self.dvoc_token_id["("], "lb")]   # "("
             ),
             "lb": dict(
-                [(self.voc2dvoc[k], "arg") for k in self.num_token_ids]
+                [(self.voc2dvoc[k], "arg") for k in self.num_token_ids] + \
+                [(self.voc2dvoc[k], "arg") for k in self.const_num_token_ids]
             ),
             "rb": dict(
                 [(self.voc2dvoc[k], "op") for k in self.op_token_ids[:-2]] + \
                 [(self.dvoc_token_id["[eos0]"], "end")] + \
                 [(self.dvoc_token_id["[eos1]"], "end")] + \
-                [(self.voc2dvoc[self.op_token_ids[-1]], "rb")]  # ")"
+                [(self.dvoc_token_id[")"], "rb")]  # ")"
             )
         }
         allowed_token_ids = {
@@ -391,14 +389,6 @@ class RecursionSolver(nn.Module):
         input_dict, num_ids = self.prepare_input([input_text])
         input_emb, memory, num_emb, voc_mask = self.encode(input_dict, num_ids)
 
-        # if debug:
-        #     print("input_text:", input_text)
-        #     print("input_emb:", input_emb.view(-1)[:10])
-        #     print("input_ids:", input_dict.input_ids[0])
-        #     print("attn_mask:")
-        #     for i in range(len(input_dict.attention_mask[0])):
-        #         print(input_dict.attention_mask[0, i, -15:])
-
         past_value = input_emb if prev_past_value is None else prev_past_value
         decoder_input_ids = torch.tensor(
             self.dvoc_token_id["[eos0]"], 
@@ -410,13 +400,13 @@ class RecursionSolver(nn.Module):
 
         state = "start"
         bracket_count = 0
-        lb_id = self.voc2dvoc[self.op_token_ids[-2]]
-        rb_id = self.voc2dvoc[self.op_token_ids[-1]]
+
+        lb_id = self.dvoc_token_id["("]
+        rb_id = self.dvoc_token_id[")"]
         eos0_id = self.dvoc_eos0_token_id
         eos1_id = self.dvoc_eos1_token_id
 
         while len(predict_ids) < max_length:
-            state_mask = torch.zeros_like(voc_mask, dtype=torch.bool)
             _allowed = deepcopy(allowed_token_ids[state])
             if bracket_count == 0 and rb_id in _allowed:
                 _allowed.remove(rb_id)
@@ -430,8 +420,9 @@ class RecursionSolver(nn.Module):
                     _allowed.remove(lb_id)
                 if rb_id in _allowed:
                     _allowed.remove(rb_id)
-
+            state_mask = torch.zeros_like(voc_mask, dtype=torch.bool)
             state_mask[0, _allowed] = True
+
             next_token_logits, past_value = self.decode(
                 decoder_input_ids=decoder_input_ids[:, -1],
                 past_value=past_value,

@@ -1,0 +1,31 @@
+[2022-09-15T20:29:08.576698+0800]-[INFO] train_recursion_dag.py-main-72: log_text: (debug)
+[2022-09-15T20:29:38.011739+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 0, loss-ave: 10.31836844247485, mAcc: 0.06265632500724187
+[2022-09-15T20:29:55.717695+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 1, loss-ave: 2.5001218394627647, mAcc: 0.4586195281100652
+[2022-09-15T20:30:13.348611+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 2, loss-ave: 1.628356565558721, mAcc: 0.5284484298456282
+[2022-09-15T20:30:30.973495+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 3, loss-ave: 1.5243141840374659, mAcc: 0.5732261472278171
+[2022-09-15T20:30:48.780867+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 4, loss-ave: 1.439534466418009, mAcc: 0.5880236748665099
+[2022-09-15T20:31:06.639845+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 5, loss-ave: 1.2064305846653287, mAcc: 0.6211973712557838
+[2022-09-15T20:31:06.640397+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-15T20:32:50.781576+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 5 val_acc: 0.16
+[2022-09-15T20:33:08.501222+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 6, loss-ave: 0.9278230903640626, mAcc: 0.6661363414355687
+[2022-09-15T20:33:26.095187+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 7, loss-ave: 0.7243154957180932, mAcc: 0.7155523025800311
+[2022-09-15T20:33:43.822129+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 8, loss-ave: 0.6659260472607991, mAcc: 0.7392287944990491
+[2022-09-15T20:34:01.763634+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 9, loss-ave: 0.663463357422087, mAcc: 0.7561362423594036
+[2022-09-15T20:34:19.671220+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 10, loss-ave: 0.5706460456999521, mAcc: 0.7844362571125939
+[2022-09-15T20:34:19.671868+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-15T20:35:57.168059+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 10 val_acc: 0.19
+[2022-09-15T20:36:14.840552+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 11, loss-ave: 0.5201777555639782, mAcc: 0.8003325367730761
+[2022-09-15T20:36:32.659437+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 12, loss-ave: 0.48372616370519, mAcc: 0.8139604765271383
+[2022-09-15T20:36:50.648248+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 13, loss-ave: 0.43319697252341677, mAcc: 0.8284824594618783
+[2022-09-15T20:37:08.205451+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 14, loss-ave: 0.4522602915290802, mAcc: 0.835298186256772
+[2022-09-15T20:37:26.132295+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 15, loss-ave: 0.4116460539045788, mAcc: 0.843417103328402
+[2022-09-15T20:37:26.132958+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-15T20:38:56.337098+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 15 val_acc: 0.19
+[2022-09-15T20:39:14.138303+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 16, loss-ave: 0.30925241361061734, mAcc: 0.8773754617524525
+[2022-09-15T20:39:32.051996+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 17, loss-ave: 0.31548820187648136, mAcc: 0.8771622985128372
+[2022-09-15T20:39:49.921266+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 18, loss-ave: 0.2711371508619142, mAcc: 0.8925537202093337
+[2022-09-15T20:40:07.788781+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 19, loss-ave: 0.2817378650818552, mAcc: 0.8928339225905282
+[2022-09-15T20:40:26.006567+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 20, loss-ave: 0.24580381597791398, mAcc: 0.9038883324653383
+[2022-09-15T20:40:26.007166+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-15T20:41:40.993481+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 20 val_acc: 0.2
+[2022-09-15T20:41:40.994344+0800]-[INFO] train_recursion_dag.py-train_solver-65: [finish train solver]

@@ -141,7 +141,7 @@ class Seq2seqTrainer:
             eps = 1e-5
             v0 = compute_expr(output_text, nums)
             v1 = compute_expr(target_text, nums)
-            if (v0 is not None and v1 is not None and abs(v0 - v1) < eps) or output_text == target_text:
+            if v0 is not None and v1 is not None and abs(v0 - v1) < eps:
                 val_acc.append(1)
             else:
                 val_acc.append(0)

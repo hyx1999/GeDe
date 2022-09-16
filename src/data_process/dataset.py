@@ -192,6 +192,23 @@ def loadMath23K(data_path: str, fold: int = -1, head: int = None) -> Tuple[List[
     return train_data, test_data
 
 
+def loadDAG(data_path: str, head: int = None) -> Tuple[List[Dict], List[Dict]]:
+    train_data = []
+    test_data  = []
+
+    traindata_path = os.path.join(data_path, "train.json")
+    testdata_path = os.path.join(data_path, "test.json")
+    for data, path in zip([train_data, test_data], [traindata_path, testdata_path]):
+        with open(path, "r") as f:
+            data.extend(json.load(f))
+    
+    if head is not None and head != -1:
+        train_data = train_data[:head]
+        test_data = test_data[:head // 10]
+
+    return train_data, test_data
+
+
 def build_ext_words(dataset: List[Dict], threshold: int = 0) -> List[str]:
     ext_words: Dict[str, int] = {}
     for obj in dataset:
