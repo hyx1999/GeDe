@@ -3,7 +3,7 @@
 set -e
 
 mod=${1}
-device=1
+device=2
 echo "mod: ${mod}"
 
 cd src
@@ -12,6 +12,7 @@ cd src
 if [[ ${mod} == "train_math23k" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
+        --log_text '(v1)' \
         --data_path '../data/Math23K' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \

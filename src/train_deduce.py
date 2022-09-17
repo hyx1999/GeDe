@@ -66,9 +66,6 @@ def main(args: argparse.Namespace):
         join_const_nums(dataset, const_nums)
         join_Op_list(dataset)
     
-    train_dataset = [obj for obj in train_dataset if "Op_list" in obj]
-    test_dataset = [obj for obj in test_dataset if "Op_list" in obj]
-
     solver = DeduceSolver(json.loads(args.cfg), op_words, const_nums)
 
     if args.save_model:

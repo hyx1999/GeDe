@@ -77,14 +77,11 @@ def main(args: argparse.Namespace):
     const_nums = [word for word in ext_words if word not in '+-*/^()=']
     if '-1' not in const_nums:
         const_nums.append('-1')
+    print(const_nums)
 
-    for dataset in [train_dataset, test_dataset]:
-        join_const_nums(dataset, const_nums)
-        join_OpSeq_list(dataset, args.op_seq_mode)
+    train_dataset = join_OpSeq_list(join_const_nums(train_dataset, const_nums), args.op_seq_mode)
+    test_dataset  = join_OpSeq_list(join_const_nums(test_dataset , const_nums), args.op_seq_mode)
     
-    train_dataset = [obj for obj in train_dataset if "OpSeq_list" in obj]
-    test_dataset = [obj for obj in test_dataset if "OpSeq_list" in obj]
-
     solver = RecursionSolver(json.loads(args.cfg), const_nums)
     
     if args.op_seq_mode == "v2":

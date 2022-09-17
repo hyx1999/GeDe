@@ -77,8 +77,7 @@ class RecursionTrainer:
             self.train_one_epoch(epoch, solver, optim, loader)
             scheduler_warmup.step()
             
-            # if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
-            if epoch > 0 and epoch % 5 == 0:
+            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 logger.info("[evaluate test-data]")
                 self.evaluate(epoch, solver, self.raw_dataset["test"])
                 # self.evaluate(epoch, solver, self.raw_dataset["train"][:20])

@@ -209,7 +209,7 @@ def loadDAG(data_path: str, head: int = None) -> Tuple[List[Dict], List[Dict]]:
     return train_data, test_data
 
 
-def build_ext_words(dataset: List[Dict], threshold: int = 0) -> List[str]:
+def build_ext_words(dataset: List[Dict], threshold: int = 5) -> List[str]:
     ext_words: Dict[str, int] = {}
     for obj in dataset:
         seg_expr = obj["seg_expr"]
@@ -224,9 +224,17 @@ def build_ext_words(dataset: List[Dict], threshold: int = 0) -> List[str]:
 
 
 def join_const_nums(dataset: List[Dict], const_nums):
+    filter_count = 0
+    new_dataset = []
     for obj in dataset:
-        obj["const_nums"] = deepcopy(const_nums)
-        obj["seg_expr"] = convert_const_nums(obj["seg_expr"], const_nums)
+        try:
+            obj["const_nums"] = deepcopy(const_nums)
+            obj["seg_expr"] = convert_const_nums(obj["seg_expr"], const_nums)
+            new_dataset.append(obj)
+        except:
+            filter_count += 1
+    print("filter count:", filter_count)
+    return new_dataset
 
 
 def join_Op_list(dataset: List[Dict]):
@@ -236,11 +244,13 @@ def join_Op_list(dataset: List[Dict]):
             obj["Op_list"] = build_Op_list(obj["seg_expr"], obj["nums"])
         except:
             filter_count += 1
+    print("filter count:", filter_count)
     return filter_count
 
 
 def join_OpSeq_list(dataset: List[Dict], mode: str):
     filter_count = 0
+    new_dataset = []
     for obj in dataset:
         try:
             if mode == "v1":
@@ -251,7 +261,9 @@ def join_OpSeq_list(dataset: List[Dict], mode: str):
                 obj["OpSeq_list"] = build_OpSeq_list_v3(obj["seg_expr"], len(obj["nums"]))
             else:
                 raise ValueError
+            new_dataset.append(obj)
         except SyntaxError:
             print(obj["raw_text"], obj["seg_expr"], obj["nums"])
             filter_count += 1
     print("filter count: {}".format(filter_count))
+    return new_dataset

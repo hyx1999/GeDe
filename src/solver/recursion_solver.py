@@ -73,7 +73,11 @@ class SeqDecoder(nn.Module):
         self.ext_emb = nn.parameter.Parameter(
             torch.randn(ext_size, hidden_dim)
         )
-    
+        # self.ext_emb_out = nn.parameter.Parameter(
+        #     torch.randn(ext_size, hidden_dim)
+        # )
+
+
     def embedding(self, input_ids: Tensor, voc_emb: Tensor) -> Tensor:
         input_ids = input_ids.unsqueeze(dim=-1).repeat([1, 1, self.hidden_dim])  # [N, L, D]
         input_emb = torch.gather(voc_emb, dim=1, index=input_ids)
@@ -94,8 +98,10 @@ class SeqDecoder(nn.Module):
 
         bs = decoder_input_ids.shape[0]
         ext_emb = self.ext_emb.unsqueeze(0).repeat(bs, 1, 1)
+        # ext_emb_out = self.ext_emb_out.unsqueeze(0).repeat(bs, 1, 1)
 
         voc_emb = torch.cat((ext_emb, num_emb), dim=1)  # [N, V, D]
+        # voc_emb_out = torch.cat((ext_emb_out, num_emb), dim=1)  # [N, V, D]
 
         decoder_inputs = self.embedding(decoder_input_ids, voc_emb)
         qs, hn = self.gru(decoder_inputs, past_value.unsqueeze(dim=0))  # queries [N, L, D], hn [1, N, D]
@@ -103,6 +109,7 @@ class SeqDecoder(nn.Module):
         feat = torch.tanh(self.fc(torch.cat((qs, cs), dim=-1)))  # feature [N, L, D]
 
         logits = torch.bmm(feat, voc_emb.transpose(1, 2))  # [N, L, voc_size]
+        # logits = torch.bmm(feat, voc_emb_out.transpose(1, 2))  # [N, L, voc_size]
         logits = logits.masked_fill((~voc_mask).unsqueeze(dim=1), torch.finfo(torch.float).min)
         if dim1:
             logits = logits.squeeze(dim=1)  # [N, voc_size]

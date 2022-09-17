@@ -5,7 +5,7 @@ class Config:
         self.model_name = "bert-base-chinese"
         self.model_hidden_size = 768
 
-        self.batch_size = 16
+        self.batch_size = 8
         self.scheduler_step_size = 10
         self.num_epochs = 100  # 80
 
@@ -22,7 +22,7 @@ class RecConfig:
     def __init__(self, **kwargs) -> None:
         self.model_name = "bert-base-chinese"
 
-        self.batch_size = 16
+        self.batch_size = 8
         self.scheduler_step_size = 10
         self.num_epochs = 80
         

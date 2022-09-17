@@ -61,7 +61,8 @@ def train_math_solver(
 
 def main(args: argparse.Namespace):
     setup_logger()
-
+    setup_seed()
+    
     logger.info("log_text: {}".format(args.log_text))
     
     train_dataset, test_dataset = loadMath23K(args.data_path, args.fold, head=args.head)

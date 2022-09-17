@@ -1,0 +1,153 @@
+[2022-09-16T19:46:12.992033+0800]-[INFO] train_recursion_math23k.py-main-72: log_text: 
+[2022-09-16T19:49:24.717553+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 0, loss-ave: 11.847047042709065, mAcc: 0.022843598571241783
+[2022-09-16T19:52:16.767250+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 1, loss-ave: 1.1406389341123864, mAcc: 0.626263202159984
+[2022-09-16T19:55:09.603807+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 2, loss-ave: 0.8083336235468865, mAcc: 0.7336338696541724
+[2022-09-16T19:58:01.672066+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 3, loss-ave: 0.717543571768127, mAcc: 0.7835041978658536
+[2022-09-16T20:00:53.292827+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 4, loss-ave: 0.670433387660232, mAcc: 0.8147391900527701
+[2022-09-16T20:03:46.340114+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 5, loss-ave: 0.6999234604887116, mAcc: 0.8258513198872494
+[2022-09-16T20:03:46.340601+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T20:03:46.474306+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=2, expr_toks=['[c1]', '*', '[c1]', '*', '[num0]', '^', '(', '[num0]', '/', '[num1]', '^', '[num0]', '^', '(', '[num0]', '^', '(', '[num0]', '+', '[num1]', ')', '^', '(', '[num0]', '/', '[num1]', ')', '^', '(', '[num0]', '/', '[num1]', ')', '^', '('], expr_str='[c1]*[c1]*[num0]^([num0]/[num1]^[num0]^([num0]^([num0]+[num1])^([num0]/[num1])^([num0]/[num1])^(')]
+[2022-09-16T20:03:46.550278+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num2]', '/', '(', '[c0]', '-', '(', '[c0]', '/', '(', '[c0]', '/', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*'], expr_str='[num2]/([c0]-([c0]/([c0]/([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*')]
+[2022-09-16T20:03:47.010460+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=2, expr_toks=['[num1]', '/', '(', '[c0]', '-', '[num0]', '-', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]'], expr_str='[num1]/([c0]-[num0]-([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0]')]
+[2022-09-16T20:03:47.827182+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num0]', '*', '[num2]', '*', '[num1]', '*', '(', '[c0]', '+', '(', '[num0]', ')', '*', '(', '[c0]', '+', '[num2]', '*', '[num1]', ')', '*', '(', '[c0]', ')', '*', '(', '[c0]', ')', '/', '(', '[c0]', ')', '*', '(', '[c0]'], expr_str='[num0]*[num2]*[num1]*([c0]+([num0])*([c0]+[num2]*[num1])*([c0])*([c0])/([c0])*([c0]')]
+[2022-09-16T20:03:49.125092+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num0]', '*', '[num1]', '-', '(', '[num0]', '+', '(', '[c0]', '-', '[num2]', ')', '/', '(', '[c0]', '-', '[num1]', ')', '-', '(', '[c0]', '-', '(', '[c0]', ')', '/', '(', '[c0]', '-', '(', '[c0]', ')', '/', '(', '[c0]'], expr_str='[num0]*[num1]-([num0]+([c0]-[num2])/([c0]-[num1])-([c0]-([c0])/([c0]-([c0])/([c0]')]
+[2022-09-16T20:03:49.164607+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=5, expr_toks=['(', '[num1]', '+', '[num3]', '+', '[num3]', '*', '[num2]', ')', '*', '(', '[num0]', '+', '[num3]', ')', '*', '(', '[num0]', '+', '[num3]', ')', '*', '(', '[num0]', '+', '[num3]', ')', '*', '(', '[num0]', '+', '[num3]', ')', '*', '('], expr_str='([num1]+[num3]+[num3]*[num2])*([num0]+[num3])*([num0]+[num3])*([num0]+[num3])*([num0]+[num3])*(')]
+[2022-09-16T20:03:50.540274+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '+', '[num2]', '-', '[num3]', ')', '/', '(', '[num1]', '-', '[num1]', ')'], expr_str='([num0]+[num2]-[num3])/([num1]-[num1])')]
+[2022-09-16T20:03:51.314353+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '+', '(', '[num0]', '-', '[num2]', '*', '[num1]', ')', '*', '[num3]', '*', '(', '[num2]', '*', '[num1]', ')', '*', '(', '[num2]', '*', '[num1]', ')', '*', '(', '[num2]', '*', '[num1]', ')', '*', '(', '[num2]', '*', '[num1]'], expr_str='([num0]+([num0]-[num2]*[num1])*[num3]*([num2]*[num1])*([num2]*[num1])*([num2]*[num1])*([num2]*[num1]')]
+[2022-09-16T20:03:52.130481+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=2, expr_toks=['[num0]', '*', '[num1]', '*', '[c0]', '*', '(', '[c0]', '+', '[num0]', '*', '[c0]', '*', '[num1]', '*', '[c0]', '*', '(', '[c0]', ')', '*', '(', '[c0]', ')', '/', '(', '[c0]', ')', '*', '(', '[c0]', ')', '/', '(', '[c0]'], expr_str='[num0]*[num1]*[c0]*([c0]+[num0]*[c0]*[num1]*[c0]*([c0])*([c0])/([c0])*([c0])/([c0]')]
+[2022-09-16T20:03:52.815961+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[c0]', '/', '(', '[c0]', '/', '(', '[c0]', '/', '[num0]', '+', '[c0]', ')', '*', '(', '[c0]', '/', '(', '[c0]', '/', '(', '[c0]', '/', '[num0]', ')', '*', '(', '[c0]', '/', '(', '[c0]', '/', '[num0]', ')', ')'], expr_str='([c0]/([c0]/([c0]/[num0]+[c0])*([c0]/([c0]/([c0]/[num0])*([c0]/([c0]/[num0]))')]
+[2022-09-16T20:03:55.275092+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=5, expr_toks=['(', '[num1]', '+', '[num3]', '*', '[num4]', ')', '*', '(', '[num1]', '+', '(', '[num3]', '+', '[num3]', ')', '*', '(', '[num1]', '+', '[num3]', ')', '*', '(', '[num1]', '+', '[num3]', ')', '*', '(', '[num1]', '+', '[num3]', ')', '*'], expr_str='([num1]+[num3]*[num4])*([num1]+([num3]+[num3])*([num1]+[num3])*([num1]+[num3])*([num1]+[num3])*')]
+[2022-09-16T20:03:56.368294+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=5, expr_toks=['(', '[num0]', '-', '[num3]', '*', '[num1]', ')', '*', '(', '[c0]', '-', '(', '[num2]', '+', '(', '[c0]', ')', '/', '(', '[c0]', '-', '[num1]', ')', ')', '*', '(', '[c0]', '-', '(', '[c0]', '/', '(', '[c0]', ')', '/'], expr_str='([num0]-[num3]*[num1])*([c0]-([num2]+([c0])/([c0]-[num1]))*([c0]-([c0]/([c0])/')]
+[2022-09-16T20:03:56.763491+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '*', '[num1]', '+', '[num2]', ')', '/', '(', '[num3]', '-', '(', '[num0]', '+', '[num0]', ')', '*', '(', '[c0]', '-', '[num1]', ')', '/', '(', '[num3]', '-', '(', '[num0]', '+', '[num0]', ')', ')', '*', '(', '[num0]'], expr_str='([num0]*[num1]+[num2])/([num3]-([num0]+[num0])*([c0]-[num1])/([num3]-([num0]+[num0]))*([num0]')]
+[2022-09-16T20:03:56.972735+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num2]', '*', '(', '[c0]', '-', '[num0]', '-', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]'], expr_str='[num2]*([c0]-[num0]-([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0]')]
+[2022-09-16T20:03:57.535951+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '+', '[num1]', ')', '*', '(', '[num2]', '-', '(', '[num0]', '+', '[num1]', ')', '*', '(', '[num2]', '-', '[num3]', ')', '*', '(', '[num2]', '-', '[num3]', ')', '*', '(', '[num2]', '-', '[num3]', ')', '*', '(', '[num2]'], expr_str='([num0]+[num1])*([num2]-([num0]+[num1])*([num2]-[num3])*([num2]-[num3])*([num2]-[num3])*([num2]')]
+[2022-09-16T20:03:57.921233+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=5, expr_toks=['(', '[num4]', '+', '[num1]', '+', '[num1]', '+', '[num1]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '('], expr_str='([num4]+[num1]+[num1]+[num1])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*(')]
+[2022-09-16T20:03:58.256945+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['(', '[c0]', '/', '(', '[c0]', '/', '[num1]', '*', '[num1]', ')', '*', '(', '[c0]', '-', '[num2]', ')', '/', '(', '[c0]', '-', '[num2]', ')', '*', '(', '[c0]', '/', '(', '[c0]', '/', '[num1]', ')', ')', '/', '(', '[c0]'], expr_str='([c0]/([c0]/[num1]*[num1])*([c0]-[num2])/([c0]-[num2])*([c0]/([c0]/[num1]))/([c0]')]
+[2022-09-16T20:04:02.650398+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num1]', '*', '(', '[c0]', '+', '(', '[c0]', '+', '(', '[c0]', '+', '[num0]', '+', '[num2]', ')', '*', '(', '[c0]', '+', '[num0]', ')', '*', '(', '[c0]', '+', '[num2]', ')', ')', '*', '(', '[c0]', '/', '(', '[c0]', ')'], expr_str='[num1]*([c0]+([c0]+([c0]+[num0]+[num2])*([c0]+[num0])*([c0]+[num2]))*([c0]/([c0])')]
+[2022-09-16T20:04:03.212398+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '-', '(', '[num2]', '+', '[num1]', '+', '(', '[num0]', '-', '[num1]', ')', '*', '(', '[num2]', '+', '[num3]', ')', '*', '(', '[num2]', '+', '[num3]', ')', '*', '(', '[num2]', '+', '[num3]', ')', ')', '*', '(', '[num2]'], expr_str='([num0]-([num2]+[num1]+([num0]-[num1])*([num2]+[num3])*([num2]+[num3])*([num2]+[num3]))*([num2]')]
+[2022-09-16T20:04:03.970732+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=5, expr_toks=['(', '[num4]', '-', '[num4]', '/', '(', '[c0]', '-', '[num0]', '-', '(', '[c0]', '-', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]'], expr_str='([num4]-[num4]/([c0]-[num0]-([c0]-([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0]')]
+[2022-09-16T20:04:05.194480+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num2]', '/', '(', '[c0]', '-', '(', '[c0]', '/', '(', '[c0]', '-', '[num0]', '-', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]', ')', '*', '(', '[c0]', '-', '[num0]'], expr_str='[num2]/([c0]-([c0]/([c0]-[num0]-([c0]-[num0])*([c0]-[num0])*([c0]-[num0])*([c0]-[num0]')]
+[2022-09-16T20:04:05.243218+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 5 val_acc: 0.327
+[2022-09-16T20:06:58.970699+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 6, loss-ave: 0.577452417479191, mAcc: 0.8535918378812755
+[2022-09-16T20:09:52.779019+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 7, loss-ave: 0.5025318196234206, mAcc: 0.8720803995755155
+[2022-09-16T20:12:45.263937+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 8, loss-ave: 0.43109756905160856, mAcc: 0.8878829159261861
+[2022-09-16T20:15:41.680722+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 9, loss-ave: 0.3488334756745039, mAcc: 0.9038373130826551
+[2022-09-16T20:18:35.947690+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 10, loss-ave: 0.2665996157697269, mAcc: 0.9184401665329073
+[2022-09-16T20:18:35.948172+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T20:18:36.613887+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '*', '[num1]', '-', '[num3]', ')', '/', '(', '[num2]', '-', '[num2]', ')'], expr_str='([num0]*[num1]-[num3])/([num2]-[num2])')]
+[2022-09-16T20:18:36.986635+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num1]', '/', '(', '[c0]', '-', '[num0]', '-', '(', '[c0]', '-', '[num0]', ')', ')'], expr_str='[num1]/([c0]-[num0]-([c0]-[num0]))')]
+[2022-09-16T20:18:39.462405+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['[num1]', '/', '(', '[num3]', '-', '[num3]', ')', '*', '[num0]'], expr_str='[num1]/([num3]-[num3])*[num0]')]
+[2022-09-16T20:18:39.610047+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=5, expr_toks=['(', '[num0]', '-', '[num3]', ')', '*', '[num2]', '/', '(', '[num3]', '-', '[num3]', ')', '*', '[num2]'], expr_str='([num0]-[num3])*[num2]/([num3]-[num3])*[num2]')]
+[2022-09-16T20:18:40.897653+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num0]', '/', '[num1]', '/', '[num2]'], expr_str='[num0]/[num1]/[num2]')]
+[2022-09-16T20:18:44.671884+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=5, expr_toks=['(', '[num0]', '-', '[num3]', ')', '/', '(', '[num2]', '-', '[num2]', ')', '/', '[num2]'], expr_str='([num0]-[num3])/([num2]-[num2])/[num2]')]
+[2022-09-16T20:18:49.995102+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num1]', '-', '[num3]', '*', '[num0]', ')', '/', '(', '[num2]', '-', '[num2]', ')'], expr_str='([num1]-[num3]*[num0])/([num2]-[num2])')]
+[2022-09-16T20:18:50.475855+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['[num0]', '/', '(', '[num1]', '-', '[num1]', ')', '*', '(', '[num2]', '-', '[num1]', ')'], expr_str='[num0]/([num1]-[num1])*([num2]-[num1])')]
+[2022-09-16T20:18:52.397110+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 10 val_acc: 0.737
+[2022-09-16T20:21:45.617014+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 11, loss-ave: 0.22599324403857493, mAcc: 0.9282117757360312
+[2022-09-16T20:24:39.139078+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 12, loss-ave: 0.19322604140398478, mAcc: 0.9376643336180485
+[2022-09-16T20:27:31.993105+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 13, loss-ave: 0.17291859594545989, mAcc: 0.9427045674465091
+[2022-09-16T20:30:28.041440+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 14, loss-ave: 0.16170945892266358, mAcc: 0.9463527061550476
+[2022-09-16T20:33:20.397894+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 15, loss-ave: 0.1361671511195049, mAcc: 0.9539734322099287
+[2022-09-16T20:33:20.398350+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T20:33:24.841651+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num3]', '*', '(', '[num1]', ')', '/', '(', '[num0]', '+', '[num1]', ')', ')', '/', '(', '[c0]', '-', '[num0]', ')'], expr_str='([num3]*([num1])/([num0]+[num1]))/([c0]-[num0])')]
+[2022-09-16T20:33:26.923044+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=2, expr_toks=['[num1]', '/', '(', '[c1]', '*', '[num0]', '*', '(', '[c0]', '-', '[num0]', ')', ')'], expr_str='[num1]/([c1]*[num0]*([c0]-[num0]))')]
+[2022-09-16T20:33:32.439774+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '*', '[num3]', '+', '[num0]', '*', '[num3]', ')', '/', '(', '[num1]', '-', '[num1]', ')'], expr_str='([num0]*[num3]+[num0]*[num3])/([num1]-[num1])')]
+[2022-09-16T20:33:37.013703+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 15 val_acc: 0.759
+[2022-09-16T20:36:29.828551+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 16, loss-ave: 0.07505166565254448, mAcc: 0.9734708757971616
+[2022-09-16T20:39:22.564075+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 17, loss-ave: 0.059592087282794144, mAcc: 0.9788058244046711
+[2022-09-16T20:42:16.453215+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 18, loss-ave: 0.05551819749917159, mAcc: 0.9805864723127814
+[2022-09-16T20:45:10.376035+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 19, loss-ave: 0.05020639233283674, mAcc: 0.9826950531931322
+[2022-09-16T20:48:05.030117+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 20, loss-ave: 0.04605000724280927, mAcc: 0.9842308276315445
+[2022-09-16T20:48:05.030618+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T20:48:05.377631+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=3, expr_toks=['(', '[num1]', '*', '[num2]', ')', '/', '(', '[num0]', '-', '[num0]', ')'], expr_str='([num1]*[num2])/([num0]-[num0])')]
+[2022-09-16T20:48:09.460789+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num3]', '*', '(', '[num1]', '+', '[num0]', ')', '/', '(', '[num0]', '+', '[num1]', ')', '/', '[num0]', '/', '[c0]', '-', '[num2]', '*', '[num0]', '/', '[num0]', '*', '[num1]', '/', '[num0]', '/', '[num0]', '/', '[num1]', '*', '[num0]', '/'], expr_str='([num3]*([num1]+[num0])/([num0]+[num1])/[num0]/[c0]-[num2]*[num0]/[num0]*[num1]/[num0]/[num0]/[num1]*[num0]/')]
+[2022-09-16T20:48:21.473856+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 20 val_acc: 0.781
+[2022-09-16T20:51:14.564669+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 21, loss-ave: 0.04384189405348179, mAcc: 0.9846506446470946
+[2022-09-16T20:54:07.880100+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 22, loss-ave: 0.038923609259926766, mAcc: 0.9866724289942957
+[2022-09-16T20:57:02.138780+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 23, loss-ave: 0.03830446464005467, mAcc: 0.9869677266173205
+[2022-09-16T20:59:56.009104+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 24, loss-ave: 0.036519154653719466, mAcc: 0.9875642558798989
+[2022-09-16T21:02:49.587633+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 25, loss-ave: 0.03319342762365083, mAcc: 0.9887355320467406
+[2022-09-16T21:02:49.588174+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T21:03:06.029402+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 25 val_acc: 0.801
+[2022-09-16T21:05:59.684721+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 26, loss-ave: 0.02041589308121481, mAcc: 0.9933376353110414
+[2022-09-16T21:08:52.530370+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 27, loss-ave: 0.013198053677774066, mAcc: 0.9954970275168811
+[2022-09-16T21:11:47.010078+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 28, loss-ave: 0.013577125537724137, mAcc: 0.9955207179979156
+[2022-09-16T21:14:42.420379+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 29, loss-ave: 0.013188722901525538, mAcc: 0.9956284595860375
+[2022-09-16T21:17:36.668762+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 30, loss-ave: 0.011791630604559903, mAcc: 0.99643551512026
+[2022-09-16T21:17:36.669241+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T21:17:37.341565+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '*', '[num1]', '-', '[num3]', ')', '/', '(', '[num2]', '-', '[num2]', ')'], expr_str='([num0]*[num1]-[num3])/([num2]-[num2])')]
+[2022-09-16T21:17:42.533174+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['[num1]', '/', '(', '[num3]', '-', '[num0]', '-', '(', '[num3]', '-', '[num0]', ')', ')'], expr_str='[num1]/([num3]-[num0]-([num3]-[num0]))')]
+[2022-09-16T21:17:50.608877+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['[num1]', '/', '(', '[num3]', '-', '[num0]', '-', '(', '[num3]', '-', '[num0]', ')', ')'], expr_str='[num1]/([num3]-[num0]-([num3]-[num0]))')]
+[2022-09-16T21:17:53.191697+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 30 val_acc: 0.829
+[2022-09-16T21:20:46.880036+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 31, loss-ave: 0.011501091503489097, mAcc: 0.9961625473495858
+[2022-09-16T21:23:41.167754+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 32, loss-ave: 0.011455867757135026, mAcc: 0.9963066625646698
+[2022-09-16T21:26:35.908385+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 33, loss-ave: 0.010647321090614982, mAcc: 0.9967201676805643
+[2022-09-16T21:29:29.527630+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 34, loss-ave: 0.010738971957617817, mAcc: 0.9964017907176355
+[2022-09-16T21:32:24.188893+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 35, loss-ave: 0.010913626291578956, mAcc: 0.9964014774707145
+[2022-09-16T21:32:24.189387+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T21:32:24.857168+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num0]', '*', '[num1]', '-', '[num3]', ')', '/', '(', '[num2]', '-', '[num2]', ')'], expr_str='([num0]*[num1]-[num3])/([num2]-[num2])')]
+[2022-09-16T21:32:36.050431+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['(', '[num1]', '-', '[num3]', ')', '/', '(', '[num2]', '-', '[num2]', ')'], expr_str='([num1]-[num3])/([num2]-[num2])')]
+[2022-09-16T21:32:40.752602+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 35 val_acc: 0.829
+[2022-09-16T21:35:35.148945+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 36, loss-ave: 0.005792039319291891, mAcc: 0.9981999678099138
+[2022-09-16T21:38:29.398089+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 37, loss-ave: 0.004370661933483299, mAcc: 0.9984983349001253
+[2022-09-16T21:41:23.486797+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 38, loss-ave: 0.004693188171290178, mAcc: 0.9984814530241197
+[2022-09-16T21:44:16.980801+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 39, loss-ave: 0.005006988985390652, mAcc: 0.998278832624829
+[2022-09-16T21:47:13.830866+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 40, loss-ave: 0.004298219321056688, mAcc: 0.9985033394540371
+[2022-09-16T21:47:13.831363+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T21:47:28.010387+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['[num1]', '/', '(', '[num3]', '*', '[num0]', '-', '[num3]', '*', '[num0]', ')'], expr_str='[num1]/([num3]*[num0]-[num3]*[num0])')]
+[2022-09-16T21:47:30.418952+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 40 val_acc: 0.823
+[2022-09-16T21:50:24.746369+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 41, loss-ave: 0.003925725934530762, mAcc: 0.9987016819084189
+[2022-09-16T21:53:18.408948+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 42, loss-ave: 0.0043172892170233405, mAcc: 0.9985258958126387
+[2022-09-16T21:56:13.620278+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 43, loss-ave: 0.004046283052428937, mAcc: 0.9987184441020822
+[2022-09-16T21:59:07.286512+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 44, loss-ave: 0.0035542190575961596, mAcc: 0.9987876673711499
+[2022-09-16T22:02:01.394339+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 45, loss-ave: 0.003679419465959872, mAcc: 0.9987488530070923
+[2022-09-16T22:02:01.394817+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T22:02:17.870735+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 45 val_acc: 0.831
+[2022-09-16T22:05:12.810376+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 46, loss-ave: 0.0032670800761287174, mAcc: 0.9990102561005266
+[2022-09-16T22:08:07.404822+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 47, loss-ave: 0.002284928170818035, mAcc: 0.9992056051632027
+[2022-09-16T22:11:02.944280+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 48, loss-ave: 0.0021520813978588562, mAcc: 0.9992349072108193
+[2022-09-16T22:13:57.990356+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 49, loss-ave: 0.0022224713465413297, mAcc: 0.9991963939663308
+[2022-09-16T22:16:51.821955+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 50, loss-ave: 0.0019627054350964176, mAcc: 0.9992770301917243
+[2022-09-16T22:16:51.822436+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T22:17:08.209432+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 50 val_acc: 0.83
+[2022-09-16T22:20:01.854323+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 51, loss-ave: 0.0021435602734237945, mAcc: 0.9992198058193036
+[2022-09-16T22:22:55.572703+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 52, loss-ave: 0.002272951397472391, mAcc: 0.9992434983645683
+[2022-09-16T22:25:48.927708+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 53, loss-ave: 0.001977044270607833, mAcc: 0.9992302105282292
+[2022-09-16T22:28:45.672781+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 54, loss-ave: 0.0020936692191511684, mAcc: 0.9992526635893152
+[2022-09-16T22:31:40.671323+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 55, loss-ave: 0.0018708631525623696, mAcc: 0.999323928295964
+[2022-09-16T22:31:40.671817+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T22:31:57.333833+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 55 val_acc: 0.836
+[2022-09-16T22:34:50.484562+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 56, loss-ave: 0.0016507006210711077, mAcc: 0.9993186385772617
+[2022-09-16T22:37:44.328509+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 57, loss-ave: 0.0015578205424731505, mAcc: 0.9993714382294109
+[2022-09-16T22:40:38.905615+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 58, loss-ave: 0.0014664699486795546, mAcc: 0.9994289803642559
+[2022-09-16T22:43:32.834778+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 59, loss-ave: 0.0014516773247179292, mAcc: 0.9994364400618693
+[2022-09-16T22:46:28.114328+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 60, loss-ave: 0.0012996533413683054, mAcc: 0.9994433908837527
+[2022-09-16T22:46:28.114819+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T22:46:44.858574+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 60 val_acc: 0.836
+[2022-09-16T22:49:40.006696+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 61, loss-ave: 0.001327044951238115, mAcc: 0.9994482453509327
+[2022-09-16T22:52:33.155295+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 62, loss-ave: 0.0015302108595930848, mAcc: 0.9993933511502815
+[2022-09-16T22:55:26.521122+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 63, loss-ave: 0.0013862454466660218, mAcc: 0.999449945287443
+[2022-09-16T22:58:21.160332+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 64, loss-ave: 0.0011948510016309985, mAcc: 0.999507107302912
+[2022-09-16T23:01:15.186699+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 65, loss-ave: 0.0011920947182729087, mAcc: 0.9995235985663719
+[2022-09-16T23:01:15.187327+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T23:01:31.931679+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 65 val_acc: 0.839
+[2022-09-16T23:04:25.290595+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 66, loss-ave: 0.0011773997429591681, mAcc: 0.9994959783502472
+[2022-09-16T23:07:19.871347+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 67, loss-ave: 0.001181925507375266, mAcc: 0.9994506701762542
+[2022-09-16T23:10:15.270658+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 68, loss-ave: 0.0010913298351411828, mAcc: 0.9995379957973871
+[2022-09-16T23:13:11.039920+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 69, loss-ave: 0.0011308576309799895, mAcc: 0.9994875109642959
+[2022-09-16T23:16:04.289375+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 70, loss-ave: 0.0012373876094217773, mAcc: 0.999511809447111
+[2022-09-16T23:16:04.289864+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T23:16:10.132270+0800]-[WARNING] utils.py-compute_OpSeq_list-509: decimal.Error: [OpList(arg0=4, expr_toks=['[num1]', '/', '(', '[c0]', '-', '(', '[num0]', '+', '(', '[c0]', '-', '[num0]', ')', ')', '*', '[num0]', '-', '(', '[c0]', '-', '[num0]', ')', ')'], expr_str='[num1]/([c0]-([num0]+([c0]-[num0]))*[num0]-([c0]-[num0]))')]
+[2022-09-16T23:16:20.834843+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 70 val_acc: 0.84
+[2022-09-16T23:19:15.266548+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 71, loss-ave: 0.0011142296936935713, mAcc: 0.999476649716475
+[2022-09-16T23:22:08.736508+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 72, loss-ave: 0.0010214629033414896, mAcc: 0.9995654952560497
+[2022-09-16T23:25:02.843475+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 73, loss-ave: 0.0010884082335458883, mAcc: 0.9995055986947311
+[2022-09-16T23:27:55.990633+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 74, loss-ave: 0.0010949840681232803, mAcc: 0.9994762782840674
+[2022-09-16T23:30:50.148841+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 75, loss-ave: 0.00118665871977193, mAcc: 0.9994749973002622
+[2022-09-16T23:30:50.149343+0800]-[INFO] recursion_trainer.py-train-82: [evaluate test-data]
+[2022-09-16T23:31:06.819889+0800]-[INFO] recursion_trainer.py-evaluate-167: epoch: 75 val_acc: 0.841
+[2022-09-16T23:34:02.629761+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 76, loss-ave: 0.0010187001765761337, mAcc: 0.9995619199664734
+[2022-09-16T23:36:56.911609+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 77, loss-ave: 0.0010355468618193995, mAcc: 0.9996146628522942
+[2022-09-16T23:39:52.536178+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 78, loss-ave: 0.0009762293943065914, mAcc: 0.9995672595277321
+[2022-09-16T23:42:48.893461+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 79, loss-ave: 0.0010487832623361326, mAcc: 0.9995536112682127
+[2022-09-16T23:42:49.489372+0800]-[INFO] train_recursion_math23k.py-train_solver-65: [finish train solver]
