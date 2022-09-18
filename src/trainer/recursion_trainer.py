@@ -94,12 +94,14 @@ class RecursionTrainer:
             scheduler_warmup.step()
             
             if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
-                logger.info("[evaluate dev-data]")
-                self.evaluate(epoch, solver, self.raw_dataset["dev"])
-                logger.info("[evaluate test-data]")
-                self.evaluate(epoch, solver, self.raw_dataset["test"])
-                # self.evaluate(epoch, solver, self.raw_dataset["train"][:20])
-
+                if not self.cfg.debug:
+                    logger.info("[evaluate dev-data]")
+                    self.evaluate(epoch, solver, self.raw_dataset["dev"])
+                    logger.info("[evaluate test-data]")
+                    self.evaluate(epoch, solver, self.raw_dataset["test"])
+                else:
+                    logger.info("[evaluate train-data]")
+                    self.evaluate(epoch, solver, self.raw_dataset["train"][:20])
 
 
     def train_one_epoch(
@@ -149,7 +151,7 @@ class RecursionTrainer:
         test_dataset = DefaultDataset(test_data)
         
         os.makedirs("tmp", exist_ok=True)
-        f = open("tmp/save_output_{}.txt".format(epoch), "w")
+        f = open("tmp/{}_save_output_{}.txt".format(self.cfg.dataset_name, epoch), "w")
 
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]

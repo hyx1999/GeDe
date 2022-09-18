@@ -39,6 +39,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
     parser.add_argument("--load_model_dir", type=str, required=True)
@@ -59,6 +60,8 @@ def train_solver(
 ):
     cfg = json.loads(args.cfg)
     trainer = RecursionTrainer(cfg, train_dataset, test_dataset)
+    trainer.cfg.dataset_name = args.dataset_name
+    trainer.cfg.debug = args.debug
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final")

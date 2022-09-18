@@ -339,7 +339,7 @@ def loadGSM8k(file_path: str, head: int = -1):
             return None
         else:
             return {
-                "question": question,
+                "seg_text": question,
                 "answer": answer_text,
                 "nums": nums,
                 "OpSeq_list": OpSeq_list,

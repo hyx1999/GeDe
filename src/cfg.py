@@ -20,6 +20,7 @@ class Config:
 class RecConfig:
 
     def __init__(self, **kwargs) -> None:
+        self.dataset_name = ""
         self.model_name = "bert-base-chinese"
 
         self.batch_size = 8
@@ -31,7 +32,7 @@ class RecConfig:
         self.max_step_size = 35
         self.use_bracket = False
         self.op_seq_mode = "v1"
-
+        self.debug = False
         self.device = "cuda:0"
 
         kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}

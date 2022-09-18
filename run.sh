@@ -3,7 +3,7 @@
 set -e
 
 mod=${1}
-device=2
+device=1
 echo "mod: ${mod}"
 
 cd src
@@ -13,6 +13,7 @@ if [[ ${mod} == "train_math23k" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
+        --dataset_name 'math23k' \
         --log_text '(v3) 不同的输出词表' \
         --data_path '../data/Math23K' \
         --load_model_dir '../models' \
@@ -27,6 +28,7 @@ fi
 if [[ ${mod} == "debug_math23k" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
+        --dataset_name 'math23k' \
         --log_text '(debug)' \
         --data_path '../data/Math23K' \
         --load_model_dir 'models_test' \
@@ -40,6 +42,7 @@ fi
 if [[ ${mod} == "debug_dag" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_dag.py \
+        --dataset_name 'dag' \
         --log_text '(debug)' \
         --data_path '../data/DAG' \
         --load_model_dir 'models_test' \
@@ -52,13 +55,15 @@ fi
 if [[ ${mod} == "debug_gsm8k" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_gsm8k.py \
+        --dataset_name 'gsm8k' \
         --log_text '(debug)' \
-        --data_path '../data/Math23K' \
+        --data_path '../data/GSM8k' \
         --load_model_dir 'models_test' \
         --save_model_dir 'models_test' \
         --cfg '{"num_epochs":30}' \
-        --head 1000 \
-        --op_seq_mode v1
+        --head 200 \
+        --op_seq_mode v1 \
+        --debug
 fi
 
 cd ..

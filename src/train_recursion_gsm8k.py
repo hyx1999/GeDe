@@ -38,12 +38,12 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
     parser.add_argument("--load_model_dir", type=str, required=True)
     parser.add_argument("--save_model_dir", type=str, required=True)
     parser.add_argument("--head", type=int, default=-1)
-    parser.add_argument("--fold", type=int, required=True)
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
@@ -59,6 +59,8 @@ def train_solver(
 ):
     cfg = json.loads(args.cfg)
     trainer = RecursionTrainer(cfg, train_dataset, test_dataset)
+    trainer.cfg.dataset_name = args.dataset_name
+    trainer.cfg.debug = args.debug
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-20220917")
@@ -71,12 +73,12 @@ def main(args: argparse.Namespace):
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
-    train_dataset, test_dataset, const_nums = loadGSM8k(args.data_path, args.fold, head=args.head)
+    train_dataset, test_dataset, const_nums = loadGSM8k(args.data_path, head=args.head)
 
     assert args.op_seq_mode in ["v1", "v2"]
 
     for dataset in [train_dataset, test_dataset]:
-        for obj in dataset:
+        for i, obj in enumerate(dataset):
             OpSeq_list = []
             if args.op_seq_mode == "v1":
                 for OpSeq_obj in obj["OpSeq_list"]:
@@ -96,6 +98,7 @@ def main(args: argparse.Namespace):
                     )
                     OpSeq_list.append(opSeq)
                 obj["OpSeq_list"] = OpSeq_list
+            obj["sample_id"] = i
 
     solver = RecursionSolver(json.loads(args.cfg), const_nums)
     
@@ -107,7 +110,7 @@ def main(args: argparse.Namespace):
 
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
-    
+        
     train_solver(args, train_dataset, test_dataset, solver)
 
 
