@@ -1,4 +1,4 @@
-from data_process import loadMath23K, build_ext_words, join_const_nums, join_OpSeq_list
+from data_process import loadGSM8k, build_ext_words, join_const_nums, join_OpSeq_list
 from solver import RecursionSolver
 from trainer import RecursionTrainer
 
@@ -7,12 +7,12 @@ import argparse
 import json
 from loguru import logger
 from typing import Dict, List, Union
-from copy import deepcopy
-from tqdm import tqdm
 
 import random
 import torch
 import numpy as np
+
+from utils import OpSeq
 
 
 def setup_logger():
@@ -71,17 +71,32 @@ def main(args: argparse.Namespace):
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
-    train_dataset, test_dataset = loadMath23K(args.data_path, args.fold, head=args.head)
-    ext_words = build_ext_words(train_dataset + test_dataset)
+    train_dataset, test_dataset, const_nums = loadGSM8k(args.data_path, args.fold, head=args.head)
 
-    const_nums = [word for word in ext_words if word not in '+-*/^()=']
-    if '-1' not in const_nums:
-        const_nums.append('-1')
-    print(const_nums)
+    assert args.op_seq_mode in ["v1", "v2"]
 
-    train_dataset = join_OpSeq_list(join_const_nums(train_dataset, const_nums), args.op_seq_mode)
-    test_dataset  = join_OpSeq_list(join_const_nums(test_dataset , const_nums), args.op_seq_mode)
-    
+    for dataset in [train_dataset, test_dataset]:
+        for obj in dataset:
+            OpSeq_list = []
+            if args.op_seq_mode == "v1":
+                for OpSeq_obj in obj["OpSeq_list"]:
+                    opSeq = OpSeq(
+                        arg0=OpSeq_obj["arg0"],
+                        expr_toks=OpSeq_obj["expr_toks"],
+                        expr_str=OpSeq_obj["expr_str"]
+                    )
+                    OpSeq_list.append(opSeq)
+                obj["OpSeq_list"] = OpSeq_list
+            else:
+                for OpSeq_obj in obj["OpSeq_list_v2"]:
+                    opSeq = OpSeq(
+                        arg0=OpSeq_obj["arg0"],
+                        expr_toks=OpSeq_obj["expr_toks"],
+                        expr_str=OpSeq_obj["expr_str"]
+                    )
+                    OpSeq_list.append(opSeq)
+                obj["OpSeq_list"] = OpSeq_list
+
     solver = RecursionSolver(json.loads(args.cfg), const_nums)
     
     solver.cfg.op_seq_mode = args.op_seq_mode
@@ -89,7 +104,6 @@ def main(args: argparse.Namespace):
         solver.cfg.max_step_size = 1
         solver.cfg.use_bracket = True
     print(args.op_seq_mode)
-
 
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")

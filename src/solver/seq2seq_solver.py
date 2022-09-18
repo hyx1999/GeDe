@@ -175,7 +175,10 @@ class BertEncoder(nn.Module):
 
     def __init__(self, bert_name: str) -> None:
         super().__init__()
-        self.impl: BertModel = BertModel.from_pretrained(bert_name)
+        self.impl: BertModel = BertModel.from_pretrained(
+            bert_name,
+            cache_dir="../data/cache"
+        )
     
     def forward(
         self,
@@ -195,7 +198,10 @@ class Seq2seqSolver:
     ) -> None:
         self.cfg = Config(**cfg_dict)
 
-        self.enc_tokenizer: BertTokenizer = BertTokenizer.from_pretrained(self.cfg.model_name)
+        self.enc_tokenizer: BertTokenizer = BertTokenizer.from_pretrained(
+            self.cfg.model_name,
+            cache_dir="../data/cache"
+        )
         self.dec_tokenizer = DecoderTokenizer(ext_words, self.cfg.max_nums_size)
 
         self.encoder = BertEncoder(self.cfg.model_name)

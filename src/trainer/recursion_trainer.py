@@ -1,3 +1,4 @@
+import os
 from solver import RecursionSolver
 from scheduler import GradualWarmupScheduler
 from utils import DefaultDataset, compute_OpSeq_list
@@ -130,6 +131,9 @@ class RecursionTrainer:
 
         test_dataset = DefaultDataset(test_data)
         
+        os.makedirs("tmp", exist_ok=True)
+        f = open("tmp/save_output_{}.txt".format(epoch), "w")
+
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
             input_text = "".join(obj["seg_text"])
@@ -160,6 +164,17 @@ class RecursionTrainer:
                 val_acc.append(1)
             else:
                 val_acc.append(0)
+            
+            op_seq_list0 = [", ".join(x.expr_toks) for x in output_OpSeq_list]
+            op_seq_list1 = [", ".join(x.expr_toks) for x in target_OpSeq_list]
+            f.write("test-id: {}\n".format(i))
+            f.write("input={}\n".format(input_text))
+            f.write("nums={}\n".format(nums))
+            f.write("output={}\n".format(op_seq_list0))
+            f.write("target={}\n".format(op_seq_list1))
+            f.write("correct={}\n".format("True" if val_acc[-1] == 1 else "False"))
+
+        f.close()
 
         for name, acc in zip(["val_acc"], [val_acc]):
             msg = "epoch: {} {}: {}".format(epoch, name, sum(acc) / len(acc))

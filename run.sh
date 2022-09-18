@@ -3,7 +3,7 @@
 set -e
 
 mod=${1}
-device=1
+device=2
 echo "mod: ${mod}"
 
 cd src
@@ -11,18 +11,20 @@ cd src
 # train recursion
 if [[ ${mod} == "train_math23k" ]];
 then
+
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
-        --log_text '(v2) 不同的输出词表' \
+        --log_text '(v3) 不同的输出词表' \
         --data_path '../data/Math23K' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --fold -1 \
         --save_model \
-        --op_seq_mode v2
+        --op_seq_mode v3
+
 fi
 
 # debug
-if [[ ${mod} == "debug_math23k" ]];
+if [[ ${mod} == "debug_math23k_0" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
         --log_text '(debug)' \
@@ -32,8 +34,21 @@ then
         --cfg '{"num_epochs":30}' \
         --head 1000 \
         --fold -1 \
-        --op_seq_mode v1
+        --op_seq_mode v2
 fi
+
+if [[ ${mod} == "debug_math23k_1" ]];
+then
+    CUDA_VISIBLE_DEVICES=${device} python train_seq2seq.py \
+        --log_text 'baseline model (BERT2seq)' \
+        --data_path '../data/Math23K' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --cfg '{"num_epochs":30}' \
+        --head 1000 \
+        --fold -1
+fi
+
 
 if [[ ${mod} == "debug_dag" ]];
 then
