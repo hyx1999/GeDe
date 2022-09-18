@@ -30,6 +30,7 @@ class RecConfig:
         self.max_const_nums_size = 10
         self.max_step_size = 35
         self.use_bracket = False
+        self.op_seq_mode = "v1"
 
         self.device = "cuda:0"
 

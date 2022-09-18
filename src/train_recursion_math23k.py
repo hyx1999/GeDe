@@ -61,7 +61,7 @@ def train_solver(
     trainer = RecursionTrainer(cfg, train_dataset, test_dataset)
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final")
+        solver.save_model(args.save_model_dir, "final-20220917")
     logger.info("[finish train solver]")
 
 
@@ -84,9 +84,11 @@ def main(args: argparse.Namespace):
     
     solver = RecursionSolver(json.loads(args.cfg), const_nums)
     
+    solver.cfg.op_seq_mode = args.op_seq_mode
     if args.op_seq_mode == "v2":
         solver.cfg.max_step_size = 1
         solver.cfg.use_bracket = True
+
 
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
