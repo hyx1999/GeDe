@@ -24,7 +24,7 @@ then
 fi
 
 # debug
-if [[ ${mod} == "debug_math23k_0" ]];
+if [[ ${mod} == "debug_math23k" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
         --log_text '(debug)' \
@@ -36,19 +36,6 @@ then
         --fold -1 \
         --op_seq_mode v2
 fi
-
-if [[ ${mod} == "debug_math23k_1" ]];
-then
-    CUDA_VISIBLE_DEVICES=${device} python train_seq2seq.py \
-        --log_text 'baseline model (BERT2seq)' \
-        --data_path '../data/Math23K' \
-        --load_model_dir '../models' \
-        --save_model_dir '../models' \
-        --cfg '{"num_epochs":30}' \
-        --head 1000 \
-        --fold -1
-fi
-
 
 if [[ ${mod} == "debug_dag" ]];
 then
@@ -62,9 +49,19 @@ then
         --op_seq_mode v2
 fi
 
+if [[ ${mod} == "debug_gsm8k" ]];
+then
+    CUDA_VISIBLE_DEVICES=${device} python train_recursion_gsm8k.py \
+        --log_text '(debug)' \
+        --data_path '../data/Math23K' \
+        --load_model_dir 'models_test' \
+        --save_model_dir 'models_test' \
+        --cfg '{"num_epochs":30}' \
+        --head 1000 \
+        --op_seq_mode v1
+fi
+
 cd ..
-
-
 
 # backup
 

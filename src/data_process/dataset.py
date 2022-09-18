@@ -223,17 +223,27 @@ def loadGSM8k(file_path: str, head: int = -1):
             raw_train_dataset.append(json.loads(line))
 
     const_nums = []
+    
+    def gsm8k_filter(x: str) -> str:
+        x = x.lstrip('0')
+        if len(x) == 0:
+            x = '0'
+        return x
 
     def compress_OpSeq_list(OpSeq_list: List[OpSeq], nums_size: int):
-        p = re.compile('\[num(\d+)\]')
+        p0 = re.compile('\[num(\d+)\]')
+        p1 = re.compile('\[c\d+\]')
         all_nums = [[f'[num{i}]'] for i in range(nums_size)]
-        for OpSeq in OpSeq_list:
+        for opSeq in OpSeq_list:
             expr_toks = []
-            for t in OpSeq.expr_toks:
-                if t in '+-*/':
-                    expr_toks.append(t)
+            for t in opSeq["expr_toks"]:
+                if t in '+-*/()' or p1.match(t):
+                    expr_toks.append(t)                    
                 else:
-                    i = p.match(t).group(1)
+                    try:
+                        i = int(p0.match(t).group(1))
+                    except:
+                        print(t)
                     expr_toks.append('(')
                     expr_toks.extend(all_nums[i])
                     expr_toks.append(')')
@@ -242,7 +252,13 @@ def loadGSM8k(file_path: str, head: int = -1):
 
     def parse_data(question_text: str, answer_text: str):
 
-        answer_value = str(eval(answer_text.split("####")[-1]))
+        answer_value = str(eval(gsm8k_filter(answer_text.split("####")[-1].replace(",", ""))))
+
+        for x, y in zip(
+            ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'],
+            ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        ):
+            question_text = question_text.replace(x, y)
 
         # parse interger
         p0 = re.compile('\d+/\d+')
@@ -250,13 +266,13 @@ def loadGSM8k(file_path: str, head: int = -1):
         p2 = re.compile('\d+')
 
         nums_frac  = re.findall(p0, question_text)
-        for num in nums_frac:
+        for num in sorted(nums_frac, key=lambda x: len(x), reverse=True):
             question_text = question_text.replace(num, "[num][frac]")
         nums_float = re.findall(p1, question_text)
-        for num in nums_float:
+        for num in sorted(nums_float, key=lambda x: len(x), reverse=True):
             question_text = question_text.replace(num, "[num][float]")
         nums_int   = re.findall(p2, question_text)
-        for num in nums_int:
+        for num in sorted(nums_int, key=lambda x: len(x), reverse=True):
             question_text = question_text.replace(num, "[num][int]")
 
         nums = []
@@ -267,16 +283,16 @@ def loadGSM8k(file_path: str, head: int = -1):
         q_texts = question_text.split('[num]')
         new_q_text = [q_texts[0]]
         for i in range(len(q_texts) - 1):
-            new_q_text.append('[num{}]'.format(len(num)))
+            new_q_text.append('[num{}]'.format(len(nums)))
             new_q_text.append(q_texts[i + 1])
             if q_texts[i + 1].startswith('[frac]'):
-                nums.append(str(eval(nums_frac[i_frac])))
+                nums.append(str(eval(gsm8k_filter(nums_frac[i_frac]))))
                 i_frac += 1
             elif q_texts[i + 1].startswith('[float]'):
-                nums.append(str(eval(nums_float[i_float])))
+                nums.append(str(eval(gsm8k_filter(nums_float[i_float]))))
                 i_float += 1
             elif q_texts[i + 1].startswith('[int]'):
-                nums.append(str(eval(nums_int[i_int])))
+                nums.append(str(eval(gsm8k_filter(nums_int[i_int]))))
                 i_int += 1
 
         question = "".join(new_q_text)
@@ -292,10 +308,10 @@ def loadGSM8k(file_path: str, head: int = -1):
             if m is None:
                 raise ValueError
             v0, v1 = m.group(1, 2)
-            raw_expr_toks = re.split(r"([\*\/\+\-])", v0)
+            raw_expr_toks = re.split(r"([\*\/\+\-\(\)])", v0)
             expr_toks = []
             for x in raw_expr_toks:
-                if x in "+-*/":
+                if x in "+-*/()":
                     expr_toks.append(x)
                 else:
                     x = str(eval(x))
@@ -305,7 +321,7 @@ def loadGSM8k(file_path: str, head: int = -1):
                         if x not in const_nums:
                             const_nums.append(x)
                         expr_toks.append('[c{}]'.format(const_nums.index(x)))
-            all_nums.append(str(eval(v1)))
+            all_nums.append(str(eval(gsm8k_filter(v1))))
             OpSeq_list.append({
                 "arg0": len(all_nums) - 1,
                 "expr_toks": expr_toks,
@@ -313,7 +329,7 @@ def loadGSM8k(file_path: str, head: int = -1):
             })
 
         compress_expr_toks = compress_OpSeq_list(OpSeq_list, len(nums))
-        compress_OpSeq_list = [OpSeq(
+        OpSeq_list_v2 = [OpSeq(
             arg0=len(nums),
             expr_toks=compress_expr_toks,
             expr_str="".join(compress_expr_toks)
@@ -324,9 +340,10 @@ def loadGSM8k(file_path: str, head: int = -1):
         else:
             return {
                 "question": question,
+                "answer": answer_text,
                 "nums": nums,
                 "OpSeq_list": OpSeq_list,
-                "OpSeq_list_v2": compress_OpSeq_list
+                "OpSeq_list_v2": OpSeq_list_v2,
             }
 
     train_dataset = []

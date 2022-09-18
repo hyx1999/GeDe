@@ -5,6 +5,7 @@ from utils import DefaultDataset, compute_OpSeq_list
 from cfg import RecConfig
 from utils import OpSeqDataInstance
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import Tensor
@@ -27,11 +28,25 @@ class RecursionTrainer:
         test_dataset: List[Dict[AnyStr, Any]]
     ) -> None:
         self.cfg = RecConfig(**cfg_dict)
-        self.train_dataset = self.convert_dataset(train_dataset)
         self.raw_dataset = {
             "train": deepcopy(train_dataset),
             "test": deepcopy(test_dataset),
         }
+        self.split_data()
+        self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
+    
+    def split_data(self):
+        raw_train_dataset = self.raw_dataset["train"]
+        val_ids = set(np.random.choice(len(raw_train_dataset), size=100, replace=False).tolist())
+        train_dataset = []
+        dev_dataset   = []
+        for i in range(len(raw_train_dataset)):
+            if i in val_ids:
+                dev_dataset.append(raw_train_dataset[i])
+            else:
+                train_dataset.append(raw_train_dataset[i])
+        self.raw_dataset["train"] = train_dataset
+        self.raw_dataset["dev"] = dev_dataset
         
     def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[OpSeqDataInstance]:
         new_dataset = []
@@ -79,6 +94,8 @@ class RecursionTrainer:
             scheduler_warmup.step()
             
             if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+                logger.info("[evaluate dev-data]")
+                self.evaluate(epoch, solver, self.raw_dataset["dev"])
                 logger.info("[evaluate test-data]")
                 self.evaluate(epoch, solver, self.raw_dataset["test"])
                 # self.evaluate(epoch, solver, self.raw_dataset["train"][:20])

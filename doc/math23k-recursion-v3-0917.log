@@ -1,4 +1,4 @@
-[2022-09-16T20:59:28.192075+0800]-[INFO] train_recursion_math23k.py-main-72: log_text: (v3)
+[2022-09-16T20:59:28.192075+0800]-[INFO] train_recursion_math23k.py-main-72: log_text: (v3) batch-size = 16
 [2022-09-16T21:03:16.099255+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 0, loss-ave: 12.891762893093269, mAcc: 0.005427468662159611
 [2022-09-16T21:06:48.624244+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 1, loss-ave: 1.1132490320983215, mAcc: 0.6059289618535034
 [2022-09-16T21:10:20.057946+0800]-[INFO] recursion_trainer.py-train_one_epoch-117: epoch: 2, loss-ave: 0.7471422754633973, mAcc: 0.7351080148681074

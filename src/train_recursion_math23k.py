@@ -61,7 +61,7 @@ def train_solver(
     trainer = RecursionTrainer(cfg, train_dataset, test_dataset)
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-20220917")
+        solver.save_model(args.save_model_dir, "final-v3")
     logger.info("[finish train solver]")
 
 
