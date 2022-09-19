@@ -24,6 +24,20 @@ then
 
 fi
 
+if [[ ${mod} == "train_gsm8k" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_recursion_gsm8k.py \
+        --dataset_name 'gsm8k' \
+        --log_text '(v1)' \
+        --data_path '../data/GSM8k' \
+        --load_model_dir 'models_test' \
+        --save_model_dir 'models_test' \
+        --cfg '{"model_name":"bert-base-uncased"}' \
+        --op_seq_mode v1 \
+
+fi
+
 # debug
 if [[ ${mod} == "debug_math23k" ]];
 then
