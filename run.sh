@@ -12,7 +12,7 @@ cd src
 if [[ ${mod} == "train_math23k" ]];
 then
 
-    CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
+    CUDA_VISIBLE_DEVICES=${device} python train_math_math23k.py \
         --dataset_name 'math23k' \
         --log_text '(v3) 不同的输出词表' \
         --data_path '../data/Math23K' \
@@ -24,24 +24,10 @@ then
 
 fi
 
-if [[ ${mod} == "train_gsm8k" ]];
-then
-
-    CUDA_VISIBLE_DEVICES=${device} python train_recursion_gsm8k.py \
-        --dataset_name 'gsm8k' \
-        --log_text '(v1)' \
-        --data_path '../data/GSM8k' \
-        --load_model_dir 'models_test' \
-        --save_model_dir 'models_test' \
-        --cfg '{"model_name":"bert-base-uncased"}' \
-        --op_seq_mode v1 \
-
-fi
-
 # debug
 if [[ ${mod} == "debug_math23k" ]];
 then
-    CUDA_VISIBLE_DEVICES=${device} python train_recursion_math23k.py \
+    CUDA_VISIBLE_DEVICES=${device} python train_math_math23k.py \
         --dataset_name 'math23k' \
         --log_text '(debug)' \
         --data_path '../data/Math23K' \
@@ -55,7 +41,7 @@ fi
 
 if [[ ${mod} == "debug_dag" ]];
 then
-    CUDA_VISIBLE_DEVICES=${device} python train_recursion_dag.py \
+    CUDA_VISIBLE_DEVICES=${device} python train_math_dag.py \
         --dataset_name 'dag' \
         --log_text '(debug)' \
         --data_path '../data/DAG' \
@@ -64,20 +50,6 @@ then
         --cfg '{"num_epochs":21}' \
         --head 1000 \
         --op_seq_mode v2
-fi
-
-if [[ ${mod} == "debug_gsm8k" ]];
-then
-    CUDA_VISIBLE_DEVICES=${device} python train_recursion_gsm8k.py \
-        --dataset_name 'gsm8k' \
-        --log_text '(debug)' \
-        --data_path '../data/GSM8k' \
-        --load_model_dir 'models_test' \
-        --save_model_dir 'models_test' \
-        --cfg '{"num_epochs":30}' \
-        --head 200 \
-        --op_seq_mode v1 \
-        --debug
 fi
 
 cd ..

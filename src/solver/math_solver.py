@@ -16,7 +16,7 @@ from tqdm import tqdm
 
 from loguru import logger
 from utils import Op, OpSeq, Tok, OpSeqDataInstance
-from cfg import RecConfig
+from cfg import MathConfig
 
 class Attention(nn.Module):
 
@@ -133,7 +133,7 @@ class BertEncoder(nn.Module):
         return encoder_outputs
 
 
-class RecursionSolver(nn.Module):
+class MathSolver(nn.Module):
     
     def __init__(
         self,
@@ -141,7 +141,7 @@ class RecursionSolver(nn.Module):
         const_nums: List[str]
     ) -> None:
         super().__init__()
-        self.cfg = RecConfig(**cfg_dict)
+        self.cfg = MathConfig(**cfg_dict)
 
         self.tok: BertTokenizer = BertTokenizer.from_pretrained(
             self.cfg.model_name,

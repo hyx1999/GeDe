@@ -1,8 +1,8 @@
 import os
-from solver import RecursionSolver
+from solver import MathSolver
 from scheduler import GradualWarmupScheduler
 from utils import DefaultDataset, compute_OpSeq_list
-from cfg import RecConfig
+from cfg import MathConfig
 from utils import OpSeqDataInstance
 
 import numpy as np
@@ -19,7 +19,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class RecursionTrainer:
+class MathTrainer:
 
     def __init__(
         self, 
@@ -27,7 +27,7 @@ class RecursionTrainer:
         train_dataset: List[Dict[AnyStr, Any]],
         test_dataset: List[Dict[AnyStr, Any]]
     ) -> None:
-        self.cfg = RecConfig(**cfg_dict)
+        self.cfg = MathConfig(**cfg_dict)
         self.raw_dataset = {
             "train": deepcopy(train_dataset),
             "test": deepcopy(test_dataset),
@@ -72,7 +72,7 @@ class RecursionTrainer:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: RecursionSolver):
+    def train(self, solver: MathSolver):
         solver.to(self.cfg.device)
 
         optim = AdamW(
@@ -107,7 +107,7 @@ class RecursionTrainer:
     def train_one_epoch(
         self,
         epoch: int,
-        solver: RecursionSolver,
+        solver: MathSolver,
         optim: Union[Adam, AdamW],
         loader: DataLoader
     ) -> None:
@@ -141,7 +141,7 @@ class RecursionTrainer:
     def evaluate(
         self,
         epoch: int,
-        solver: RecursionSolver,
+        solver: MathSolver,
         test_data: List[Dict]
     ) -> float:
         solver.eval()
