@@ -1,9 +1,9 @@
 import os
 from solver import MathSolver
 from scheduler import GradualWarmupScheduler
-from utils import DefaultDataset, compute_OpSeq_list
+from math_utils import DefaultDataset, compute_OpSeq_list
 from cfg import MathConfig
-from utils import OpSeqDataInstance
+from math_utils import OpSeqDataInstance
 
 import numpy as np
 import torch

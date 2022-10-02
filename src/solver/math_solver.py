@@ -15,7 +15,7 @@ from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from utils import Op, OpSeq, Tok, OpSeqDataInstance
+from math_utils import Op, OpSeq, Tok, OpSeqDataInstance
 from cfg import MathConfig
 
 class Attention(nn.Module):

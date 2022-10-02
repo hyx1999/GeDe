@@ -1,4 +1,4 @@
-from data_process import loadMath23K, build_ext_words, join_const_nums, join_OpSeq_list
+from dataset import loadMath23K, build_ext_words, join_const_nums, join_OpSeq_list
 from solver import MathSolver
 from trainer import MathTrainer
 

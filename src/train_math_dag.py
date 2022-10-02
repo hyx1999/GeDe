@@ -1,7 +1,7 @@
-from data_process import loadDAG
+from dataset import loadDAG
 from solver import MathSolver
 from trainer import MathTrainer
-from utils import OpSeq
+from math_utils import OpSeq
 
 import datetime
 import argparse

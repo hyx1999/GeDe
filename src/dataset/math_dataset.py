@@ -6,7 +6,7 @@ import re
 import jieba
 from typing import Any, AnyStr, Dict, List, Tuple
 from tqdm import tqdm
-from utils import OpSeq, build_Op_list, \
+from math_utils import OpSeq, build_Op_list, \
     build_OpSeq_list_v1, build_OpSeq_list_v2, build_OpSeq_list_v3, \
     convert_const_nums
 
