@@ -1,4 +1,3 @@
-from asyncio.log import logger
 from copy import deepcopy
 import json
 import os
@@ -6,8 +5,8 @@ import re
 import jieba
 from typing import Any, AnyStr, Dict, List, Tuple
 from tqdm import tqdm
-from math_utils import OpSeq, build_Op_list, \
-    build_OpSeq_list_v1, build_OpSeq_list_v2, build_OpSeq_list_v3, \
+from math_utils import Expr, \
+    build_Expr_list_v1, build_Expr_list_v2, build_Expr_list_v3, \
     convert_const_nums
 
 
@@ -192,7 +191,7 @@ def loadMath23K(data_path: str, fold: int = -1, head: int = None) -> Tuple[List[
     return train_data, test_data
 
 
-def loadDAG(data_path: str, head: int = None) -> Tuple[List[Dict], List[Dict]]:
+def loadMathToy(data_path: str, head: int = None) -> Tuple[List[Dict], List[Dict]]:
     train_data = []
     test_data  = []
 
@@ -230,13 +229,13 @@ def loadGSM8k(file_path: str, head: int = -1):
             x = '0'
         return x
 
-    def compress_OpSeq_list(OpSeq_list: List[OpSeq], nums_size: int):
+    def compress_Expr_list(Expr_list: List[Expr], nums_size: int):
         p0 = re.compile('\[num(\d+)\]')
         p1 = re.compile('\[c\d+\]')
         all_nums = [[f'[num{i}]'] for i in range(nums_size)]
-        for opSeq in OpSeq_list:
+        for expr in Expr_list:
             expr_toks = []
-            for t in opSeq["expr_toks"]:
+            for t in expr["expr_toks"]:
                 if t in '+-*/()' or p1.match(t):
                     expr_toks.append(t)                    
                 else:
@@ -299,11 +298,11 @@ def loadGSM8k(file_path: str, head: int = -1):
 
         p3 = re.compile('<<[^<>]*>>')
         p4 = re.compile('<<([^=<>]*)=([^=<>]*)>>')
-        raw_OpSeq_list = re.findall(p3, answer_text)
+        raw_Expr_list = re.findall(p3, answer_text)
         
         all_nums = [x for x in nums]
-        OpSeq_list = []
-        for opseq_text in raw_OpSeq_list:
+        Expr_list = []
+        for opseq_text in raw_Expr_list:
             m = p4.match(opseq_text)
             if m is None:
                 raise ValueError
@@ -322,14 +321,14 @@ def loadGSM8k(file_path: str, head: int = -1):
                             const_nums.append(x)
                         expr_toks.append('[c{}]'.format(const_nums.index(x)))
             all_nums.append(str(eval(gsm8k_filter(v1))))
-            OpSeq_list.append({
+            Expr_list.append({
                 "arg0": len(all_nums) - 1,
                 "expr_toks": expr_toks,
                 "expr_str": "".join(expr_toks)
             })
 
-        compress_expr_toks = compress_OpSeq_list(OpSeq_list, len(nums))
-        OpSeq_list_v2 = [OpSeq(
+        compress_expr_toks = compress_Expr_list(Expr_list, len(nums))
+        Expr_list_v2 = [Expr(
             arg0=len(nums),
             expr_toks=compress_expr_toks,
             expr_str="".join(compress_expr_toks)
@@ -342,8 +341,8 @@ def loadGSM8k(file_path: str, head: int = -1):
                 "seg_text": question,
                 "answer": answer_text,
                 "nums": nums,
-                "OpSeq_list": OpSeq_list,
-                "OpSeq_list_v2": OpSeq_list_v2,
+                "Expr_list": Expr_list,
+                "Expr_list_v2": Expr_list_v2,
             }
 
     train_dataset = []
@@ -391,28 +390,17 @@ def join_const_nums(dataset: List[Dict], const_nums):
     return new_dataset
 
 
-def join_Op_list(dataset: List[Dict]):
-    filter_count = 0
-    for obj in dataset:
-        try:
-            obj["Op_list"] = build_Op_list(obj["seg_expr"], obj["nums"])
-        except:
-            filter_count += 1
-    print("filter count:", filter_count)
-    return filter_count
-
-
-def join_OpSeq_list(dataset: List[Dict], mode: str):
+def join_Expr_list(dataset: List[Dict], mode: str):
     filter_count = 0
     new_dataset = []
     for obj in dataset:
         try:
             if mode == "v1":
-                obj["OpSeq_list"] = build_OpSeq_list_v1(obj["seg_expr"], len(obj["nums"]))
+                obj["Expr_list"] = build_Expr_list_v1(obj["seg_expr"], len(obj["nums"]))
             elif mode == "v2":
-                obj["OpSeq_list"] = build_OpSeq_list_v2(obj["seg_expr"], len(obj["nums"]))
+                obj["Expr_list"] = build_Expr_list_v2(obj["seg_expr"], len(obj["nums"]))
             elif mode == "v3":
-                obj["OpSeq_list"] = build_OpSeq_list_v3(obj["seg_expr"], len(obj["nums"]))
+                obj["Expr_list"] = build_Expr_list_v3(obj["seg_expr"], len(obj["nums"]))
             else:
                 raise ValueError
             new_dataset.append(obj)

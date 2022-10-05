@@ -1,7 +1,7 @@
-from dataset import loadDAG
+from dataset import loadMathToy
 from solver import MathSolver
 from trainer import MathTrainer
-from math_utils import OpSeq
+from math_utils import Expr
 
 import datetime
 import argparse
@@ -48,7 +48,7 @@ def get_args():
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--op_seq_mode", type=str, default="v1")
+    parser.add_argument("--expr_mode", type=str, default="v1")
     return parser.parse_args()
 
 
@@ -74,32 +74,32 @@ def main(args: argparse.Namespace):
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
-    train_dataset, test_dataset = loadDAG(args.data_path, head=args.head)
+    train_dataset, test_dataset = loadMathToy(args.data_path, head=args.head)
     const_nums = []
 
     solver = MathSolver(json.loads(args.cfg), const_nums)
     
-    if args.op_seq_mode == "v1":
+    if args.expr_mode == "v1":
         for obj in train_dataset:
-            obj["OpSeq_list"] = obj["OpSeq_list0"]
+            obj["Expr_list"] = obj["Expr_list0"]
         for obj in test_dataset:
-            obj["OpSeq_list"] = obj["OpSeq_list0"]
+            obj["Expr_list"] = obj["Expr_list0"]
     else:
         for obj in train_dataset:
-            obj["OpSeq_list"] = [obj["OpSeq_list1"]]
+            obj["Expr_list"] = [obj["Expr_list1"]]
         for obj in test_dataset:
-            obj["OpSeq_list"] = [obj["OpSeq_list1"]]
+            obj["Expr_list"] = [obj["Expr_list1"]]
     
     for dataset in [train_dataset, test_dataset]:
         for obj in dataset:
-            OpSeq_list = [
-                OpSeq(
+            Expr_list = [
+                Expr(
                     arg0=opseq_obj["arg0"],
                     expr_toks=opseq_obj["expr_toks"],
                     expr_str="".join(opseq_obj["expr_toks"])
-                ) for opseq_obj in obj["OpSeq_list"]
+                ) for opseq_obj in obj["Expr_list"]
             ]
-            obj["OpSeq_list"] = OpSeq_list
+            obj["Expr_list"] = Expr_list
 
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")

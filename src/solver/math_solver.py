@@ -15,8 +15,9 @@ from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from math_utils import Op, OpSeq, Tok, OpSeqDataInstance
+from math_utils import Op, Expr, Tok, ExprDataInstance
 from cfg import MathConfig
+
 
 class Attention(nn.Module):
 
@@ -59,7 +60,7 @@ class Attention(nn.Module):
         return output
 
 
-class SeqDecoder(nn.Module):
+class GRUDecoder(nn.Module):
 
     def __init__(self, hidden_dim: int, ext_size: int) -> None:
         super().__init__()
@@ -122,7 +123,7 @@ class BertEncoder(nn.Module):
         super().__init__()
         self.bert: BertModel = BertModel.from_pretrained(
             bert_name,
-            cache_dir="../data/cache"
+            cache_dir="../cache/model"
         )
     
     def forward(
@@ -137,31 +138,27 @@ class MathSolver(nn.Module):
     
     def __init__(
         self,
-        cfg_dict: Dict[AnyStr, Any],
+        cfg: MathConfig,
         const_nums: List[str]
     ) -> None:
         super().__init__()
-        self.cfg = MathConfig(**cfg_dict)
+        self.cfg = cfg
 
         self.tok: BertTokenizer = BertTokenizer.from_pretrained(
             self.cfg.model_name,
-            cache_dir="../data/cache"
+            cache_dir="../cache/model"
         )
         self.update_voc(len(const_nums))
 
         self.encoder = BertEncoder(self.cfg.model_name)
 
-        self.decoder = SeqDecoder(
+        self.decoder = GRUDecoder(
             self.encoder.bert.config.hidden_size,
             len(self.ext_tokens) + len(self.const_nums_id)
         )
 
         self.encoder.bert.resize_token_embeddings(len(self.tok))
 
-        # 21130, 120, 21131, 118, 21130, 120, 21132, 138, 10434, 8148, 140
-        # print(self.tok.convert_ids_to_tokens([21130, 120, 21131, 118, 21130, 120, 21132]))
-        # print(self.tok.convert_ids_to_tokens([10434, 8148, 140]))
-        # exit(0)
 
     def save_model(self, dir_path: str, suffix: str = "") -> None:
         path = os.path.join(dir_path, f"seq2seqv2_{suffix}.pth")
@@ -263,7 +260,7 @@ class MathSolver(nn.Module):
         labels[labels == self.voc2dvoc[self.tok.pad_token_id]] = -1
         return shift_labels, labels
     
-    def build_cross_attn_mask(
+    def prepare_cross_attn_mask(
         self,
         input_ids: Tensor,
         labels: Tensor
@@ -317,14 +314,14 @@ class MathSolver(nn.Module):
     ) -> Tuple[Tensor, Tensor]:
         return self.decoder(*args, **kwargs)
     
-    def forward(self, batch: List[OpSeqDataInstance]) -> Tensor:
+    def forward(self, batch: List[ExprDataInstance]) -> Tensor:
         input_dict, num_ids = self.prepare_input(
             [I.parse_input() for I in batch]
         )
         shift_labels, labels = self.prepare_output(
             [I.parse_output() for I in batch]
         )
-        cross_attn_mask = self.build_cross_attn_mask(
+        cross_attn_mask = self.prepare_cross_attn_mask(
             input_dict.input_ids,
             labels
         )
@@ -348,13 +345,16 @@ class MathSolver(nn.Module):
 
         return loss, Acc
 
+    def parse_expr(self, expr_str: str, arg0: int) -> Expr:
+        expr_toks = [t for t in re.split(r"([\*\/\^\+\-\(\)])", expr_str) if t != ""]
+        return Expr(arg0=arg0, expr_toks=expr_toks, expr_str=expr_str)
+
     @torch.no_grad()
-    def generate_one_step(
-        self, 
+    def generate_expr(
+        self,
         input_text: str, 
         max_length: int = 35,
         prev_past_value: Optional[Tensor] = None,
-        debug: bool = False
     ) -> str:
 
         F = {
@@ -460,38 +460,31 @@ class MathSolver(nn.Module):
         exit_flag = (len(predict_ids) == 0 or predict_ids[-1] == self.dvoc_eos1_token_id)
         return predict_text, exit_flag, past_value
 
-    def parse_opSeq(self, op_text: str, arg0: int) -> Op:
-        expr_toks = [t for t in re.split(r"([\*\/\^\+\-\(\)])", op_text) if t != ""]
-        expr_str = op_text
-        return OpSeq(arg0=arg0, expr_toks=expr_toks, expr_str=expr_str)
-
     @torch.no_grad()
     def generate(
         self, 
         question: str, 
         nums: List[str], 
-        const_nums: List[str],
-        debug: bool = False
-    ) -> List[OpSeq]:
-        opSeq_list: List[OpSeq] = []
+        const_nums: List[str]
+    ) -> List[Expr]:
+        expr_list: List[Expr] = []
         nums_size = len(nums)
         prev_past_value = None
         step = 0
-        while len(nums) + len(opSeq_list) < self.cfg.max_nums_size and step < self.cfg.max_step_size:
-            I = OpSeqDataInstance(
+        while len(nums) + len(expr_list) < self.cfg.max_nums_size and step < self.cfg.max_step_size:
+            I = ExprDataInstance(
                 question=question,
                 nums=nums,
                 const_nums=const_nums,
-                opSeq_list=opSeq_list
+                expr_list=expr_list
             )
-            op_text, exit_flag, past_value = self.generate_one_step(
+            op_text, exit_flag, past_value = self.generate_expr(
                 I.parse_input(),
                 prev_past_value=prev_past_value,
-                debug=debug
             )
             try:
-                opSeq = self.parse_opSeq(op_text, nums_size)
-                opSeq_list.append(opSeq)
+                opSeq = self.parse_expr(op_text, nums_size)
+                expr_list.append(opSeq)
             except:
                 break
             nums_size += 1
@@ -499,4 +492,216 @@ class MathSolver(nn.Module):
             step += 1
             if exit_flag:
                 break
-        return opSeq_list
+        return expr_list
+
+    @torch.no_grad()
+    def expr_beam_search(
+        self,
+        input_text: str,
+        gru_hidden: Optional[Tensor],
+        max_length: int = 35,
+        beam_size: int = 4,
+    ):
+        input_dict, num_ids = self.prepare_input([input_text])
+        input_emb, memory, num_emb, voc_mask = self.encode(input_dict, num_ids)
+        if gru_hidden is None:
+            gru_hidden = input_emb
+
+        decoder_input_id = torch.tensor(
+            self.dvoc_token_id["[eos0]"], 
+            dtype=torch.long,
+            device=gru_hidden.device
+        ).view(1, 1)
+        
+        beams = [ExprBeam([], decoder_input_id, gru_hidden, 0.0)]
+        
+        while len(beams) > 0:
+            do_search = False
+            for beam in beams:
+                do_search |= (not beam.end)
+            if not do_search:
+                break
+            next_beams: List[ExprBeam] = []
+            for beam in beams:
+                if beam.end:
+                    next_beams.append(beam)
+                else:
+                    next_token_logits, next_gru_hidden = self.decode(
+                        decoder_input_ids=beam.decoder_input_id,
+                        past_value=beam.gru_hidden,
+                        num_emb=num_emb,
+                        voc_mask=voc_mask,
+                        memory=memory
+                    )
+                    next_token_probs = torch.log_softmax(next_token_logits.view(-1), dim=0)
+                    log_probs, indices = torch.topk(next_token_probs, beam_size)
+                    for log_prob, index in zip(log_probs, indices):
+                        next_beams.append(
+                            beam.extend(log_prob, index, next_gru_hidden)
+                        )
+            filtered_beams: List[ExprBeam] = []
+            for beam in next_beams:
+                tokens = self.tok.convert_ids_to_tokens(
+                    [self.dvoc2voc[x] for x in beam.predict_ids]
+                )
+                if grammar_test(tokens, max_length):
+                    if not beam.end and tokens[-1] in ['[eos0]', '[eos1]']:
+                        beam.end = True
+                    filtered_beams.append(beam)
+            beams = filtered_beams
+            beams = sorted(beams, key=lambda b: b.score, reverse=True)[:beam_size]
+        
+        return beams
+
+
+    @torch.no_grad()
+    def stat_beam_search(
+        self, 
+        question: str, 
+        nums: List[str], 
+        const_nums: List[str],
+        beam_size: int = 4
+    ) -> List[Expr]:
+        beams: List[StatBeam] = [StatBeam([], None, 0.0)]
+        while len(beams) > 0:
+            do_search = False
+            for beam in beams:
+                do_search |= (not beam.end)
+            if not do_search:
+                break
+            next_beams: List[StatBeam] = []
+            for beam in beams:
+                if beam.end:
+                    next_beams.append(beam)
+                else:
+                    I = ExprDataInstance(
+                        question=question,
+                        nums=nums,
+                        const_nums=const_nums,
+                        expr_list=beam.expr_list
+                    )
+                    expr_beams = self.expr_beam_search(
+                        I.parse_input(),
+                        beam.gru_hidden,
+                        beam_size=beam_size
+                    )
+                    for expr_beam in expr_beams:
+                        tokens = self.tok.convert_ids_to_tokens(
+                            [self.dvoc2voc[x] for x in expr_beam.predict_ids]
+                        )
+                        arg0 = len(nums) + len(beam.expr_list)
+                        expr = Expr(arg0=arg0, expr_toks=tokens[:-1], expr_str="".join(tokens[:-1]))
+                        eos = tokens[-1]
+                        next_beams.append(beam.extend(expr=expr, gru_hidden=expr_beam.gru_hidden, score=expr_beam.score, eos=eos))
+            filtered_beams: List[StatBeam] = []
+            for beam in next_beams:
+                if len(nums) + len(beam.expr_list) >= self.cfg.max_nums_size and beam.eos != "[eos1]":
+                    continue
+                if not beam.end and beam.eos == "[eos1]":
+                    beam.end = True
+                filtered_beams.append(beam)
+            beams = filtered_beams
+
+            print(">>>")
+            for beam in beams:
+                print("beam score:", beam.score)
+                print("beam eos:", beam.eos)
+                print("beam end:", beam.end)
+                print("beam expr-list:", [" ".join(x.expr_toks) for x in beam.expr_list])
+
+            beams = sorted(beams, key=lambda b: b.score, reverse=True)[:beam_size]
+        for beam in beams:
+            print("final beam score:", beam.score)
+            print("final beam expr-list:", [" ".join(x.expr_toks) for x in beam.expr_list])
+        if len(beams) == 0:
+            return None
+        return beams[0].expr_list
+
+
+class ExprBeam:
+    
+    def __init__(self,
+        predict_ids: List[int],
+        decoder_input_id: Tensor,
+        gru_hidden: Tensor,
+        score: float
+    ) -> None:
+        self.predict_ids = predict_ids
+        self.decoder_input_id = decoder_input_id
+        self.gru_hidden = gru_hidden
+        self.score = score
+        self.end = False
+    
+    def extend(self, log_prob: Tensor, index: Tensor, gru_hidden: Tensor) -> 'ExprBeam':
+        length = len(self.predict_ids)
+        next_beam = ExprBeam(
+            predict_ids=self.predict_ids + [index.item()],
+            decoder_input_id=index.clone().view(1),
+            gru_hidden=gru_hidden.clone(),
+            score=(self.score * length + log_prob) / (length + 1)
+        )
+        return next_beam
+
+
+class StatBeam:
+    
+    def __init__(self, 
+        expr_list: List[Expr],
+        gru_hidden: Optional[Tensor],
+        score: float,
+        eos: str = '[eos0]'
+    ) -> None:
+        self.expr_list = expr_list
+        self.gru_hidden = gru_hidden
+        self.score = score
+        self.eos = eos
+        self.end = False
+    
+    def extend(self, expr: Expr, gru_hidden: Tensor, score: float, eos: str) -> 'StatBeam':
+        length = len(self.expr_list)
+        next_beam = StatBeam(
+            expr_list=self.expr_list + [expr],
+            gru_hidden=gru_hidden.clone(),
+            score=(self.score * length + score) / (length + 1),
+            eos=eos
+        )
+        return next_beam
+
+
+def grammar_test(tokens: List[Tok], max_length: int):
+    if len(tokens) >= max_length and tokens[-1] not in ['[eos0]', '[eos1]']:
+        return False
+    end = tokens[-1] in ['[eos0]', '[eos1]']
+    pat = re.compile("\[num\d+\]|\[c\d+\]")
+    n_stk = []
+    o_stk = []
+    try:
+        for i, tok in enumerate(tokens):
+            if pat.match(tok):
+                if i > 0 and tokens[i - 1] not in '+-*/^(':
+                    return False
+                n_stk.append('n')
+            elif tok in '+-*/^':
+                if i > 0 and tokens[i - 1] in '+-*/^(':
+                    return False
+                o_stk.append(tok)
+            elif tok == '(':
+                o_stk.append('(')
+            elif tok == ')':
+                while o_stk[-1] != '(':
+                    o_stk.pop()
+                    n_stk.pop()
+                    n_stk.pop()
+                    n_stk.append('n')
+                o_stk.pop()
+        if end:
+            while len(o_stk) > 0:
+                o_stk.pop()
+                n_stk.pop()
+                n_stk.pop()
+                n_stk.append('n')
+            if len(n_stk) != 1:
+                return False
+    except:
+        return False 
+    return True

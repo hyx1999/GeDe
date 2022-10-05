@@ -1,12 +1,13 @@
-from dataset import loadMath23K, build_ext_words, join_const_nums, join_OpSeq_list
-from solver import MathSolver
-from trainer import MathTrainer
+from dataset import loadWebQSP
+from solver import KBQASolver
+from trainer import KBQATrainer
+from kbqa_utils import build_extra_tokens, build_domain_info
 
 import datetime
 import argparse
 import json
 from loguru import logger
-from typing import Dict, List, Union
+from typing import Dict, List, Set, Union
 from copy import deepcopy
 from tqdm import tqdm
 
@@ -44,25 +45,22 @@ def get_args():
     parser.add_argument("--load_model_dir", type=str, required=True)
     parser.add_argument("--save_model_dir", type=str, required=True)
     parser.add_argument("--head", type=int, default=-1)
-    parser.add_argument("--fold", type=int, required=True)
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--op_seq_mode", type=str, default="v1")
     return parser.parse_args()
 
 
 def train_solver(
     args: argparse.Namespace,
-    train_dataset: List[Dict],
-    test_dataset: List[Dict],
-    solver: MathSolver,
+    dataset_dict: List[Dict],
+    solver: KBQASolver,
 ):
     cfg = json.loads(args.cfg)
-    trainer = MathTrainer(cfg, train_dataset, test_dataset)
+    trainer = KBQATrainer(cfg, dataset_dict, solver)
     trainer.cfg.dataset_name = args.dataset_name
     trainer.cfg.debug = args.debug
-    trainer.train(solver)
+    trainer.train()
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-v3")
     logger.info("[finish train solver]")
@@ -74,27 +72,19 @@ def main(args: argparse.Namespace):
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
-    train_dataset, test_dataset = loadMath23K(args.data_path, args.fold, head=args.head)
-    ext_words = build_ext_words(train_dataset + test_dataset)
-
-    const_nums = [word for word in ext_words if word not in '+-*/^()=']
-    if '-1' not in const_nums:
-        const_nums.append('-1')
-    print(const_nums)
-
-    train_dataset = join_OpSeq_list(join_const_nums(train_dataset, const_nums), args.op_seq_mode)
-    test_dataset  = join_OpSeq_list(join_const_nums(test_dataset , const_nums), args.op_seq_mode)
+    dataset_dict, rel_dict = loadWebQSP(args.data_path, head=args.head)    
+    extra_tokens = build_extra_tokens(dataset_dict, rel_dict)
+    domain_info = build_domain_info(rel_dict)
+    solver = KBQASolver(
+        json.loads(args.cfg),
+        extra_tokens,
+        domain_info
+    )
     
-    solver = MathSolver(json.loads(args.cfg), const_nums)
-    
-    solver.cfg.set_op_seq_mode(args.op_seq_mode)
-    print(args.op_seq_mode)
-
-
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     
-    train_solver(args, train_dataset, test_dataset, solver)
+    train_solver(args, dataset_dict, solver)
 
 
 if __name__ == '__main__':

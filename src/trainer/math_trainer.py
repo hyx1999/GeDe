@@ -1,9 +1,9 @@
 import os
 from solver import MathSolver
 from scheduler import GradualWarmupScheduler
-from math_utils import DefaultDataset, compute_OpSeq_list
+from math_utils import DefaultDataset, compute_Expr_list
 from cfg import MathConfig
-from math_utils import OpSeqDataInstance
+from math_utils import ExprDataInstance
 
 import numpy as np
 import torch
@@ -23,11 +23,11 @@ class MathTrainer:
 
     def __init__(
         self, 
-        cfg_dict: Dict[AnyStr, Any],
+        cfg: MathConfig,
         train_dataset: List[Dict[AnyStr, Any]],
         test_dataset: List[Dict[AnyStr, Any]]
     ) -> None:
-        self.cfg = MathConfig(**cfg_dict)
+        self.cfg = cfg
         self.raw_dataset = {
             "train": deepcopy(train_dataset),
             "test": deepcopy(test_dataset),
@@ -47,20 +47,20 @@ class MathTrainer:
                 train_dataset.append(raw_train_dataset[i])
         self.raw_dataset["train"] = train_dataset
         self.raw_dataset["dev"] = dev_dataset
-        
-    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[OpSeqDataInstance]:
+
+    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[ExprDataInstance]:
         new_dataset = []
         for obj in dataset:
             question = "".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
-            OpSeq_list = obj["OpSeq_list"]
-            new_dataset.append(OpSeqDataInstance(
+            expr_list = obj["Expr_list"]
+            new_dataset.append(ExprDataInstance(
                 question=question,
                 nums=nums,
                 const_nums=const_nums,
-                opSeq_list=OpSeq_list[:-1],
-                target=OpSeq_list,
+                expr_list=expr_list[:-1],
+                target=expr_list,
                 id=obj["sample_id"]
             ))
 
@@ -96,12 +96,13 @@ class MathTrainer:
             if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
                     logger.info("[evaluate dev-data]")
-                    self.evaluate(epoch, solver, self.raw_dataset["dev"])
+                    self.evaluate("dev", epoch, solver, self.raw_dataset["dev"])
                     logger.info("[evaluate test-data]")
-                    self.evaluate(epoch, solver, self.raw_dataset["test"])
+                    self.evaluate("test", epoch, solver, self.raw_dataset["test"])
                 else:
-                    logger.info("[evaluate train-data]")
-                    self.evaluate(epoch, solver, self.raw_dataset["train"][:20])
+                    if epoch >= 25:
+                        logger.info("[evaluate train-data]")
+                        self.evaluate("train", epoch, solver, self.raw_dataset["train"][:5])
 
 
     def train_one_epoch(
@@ -140,6 +141,7 @@ class MathTrainer:
     @torch.no_grad()
     def evaluate(
         self,
+        dataset_type: str,
         epoch: int,
         solver: MathSolver,
         test_data: List[Dict]
@@ -150,8 +152,8 @@ class MathTrainer:
 
         test_dataset = DefaultDataset(test_data)
         
-        os.makedirs("tmp", exist_ok=True)
-        f = open("tmp/{}_save_output_{}.txt".format(self.cfg.dataset_name, epoch), "w")
+        os.makedirs("../cache/mwp", exist_ok=True)
+        f = open("../cache/mwp/{}_{}_{}.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
 
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
@@ -159,12 +161,15 @@ class MathTrainer:
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
-            output_OpSeq_list = solver.generate(input_text, nums, const_nums)
-            target_OpSeq_list = obj["OpSeq_list"]
+            # output_Expr_list = solver.generate(input_text, nums, const_nums)
+            print(">")
+            print("target:", [" ".join(x.expr_toks) for x in obj["Expr_list"]])
+            output_Expr_list = solver.stat_beam_search(input_text, nums, const_nums, beam_size=4)
+            target_Expr_list = obj["Expr_list"]
 
             try:
-                output_value = compute_OpSeq_list(output_OpSeq_list, nums, const_nums, self.cfg.max_nums_size)
-                target_value = compute_OpSeq_list(target_OpSeq_list, nums, const_nums, self.cfg.max_nums_size)
+                output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.max_nums_size)
+                target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.max_nums_size)
             except SyntaxError:
                 output_value = None
                 target_value = None
@@ -174,8 +179,8 @@ class MathTrainer:
             # if i < 20:
             #     logger.info("i: {}".format(i))
             #     logger.info("input_text: {}".format(input_text))
-            #     logger.info("output_Op_list: {}".format(output_OpSeq_list))
-            #     logger.info("target_Op_list: {}".format(target_OpSeq_list))
+            #     logger.info("output_Op_list: {}".format(output_Expr_list))
+            #     logger.info("target_Op_list: {}".format(target_Expr_list))
             #     logger.info("output_value: {}".format(output_value))
             #     logger.info("target_value: {}".format(target_value))
 
@@ -184,13 +189,13 @@ class MathTrainer:
             else:
                 val_acc.append(0)
             
-            op_seq_list0 = [", ".join(x.expr_toks) for x in output_OpSeq_list]
-            op_seq_list1 = [", ".join(x.expr_toks) for x in target_OpSeq_list]
-            f.write("test-id: {}\n".format(i))
+            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
+            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
+            f.write("id: {}\n".format(i))
             f.write("input={}\n".format(input_text))
             f.write("nums={}\n".format(nums))
-            f.write("output={}\n".format(op_seq_list0))
-            f.write("target={}\n".format(op_seq_list1))
+            f.write("output={}\n".format(expr_list0))
+            f.write("target={}\n".format(expr_list1))
             f.write("correct={}\n".format("True" if val_acc[-1] == 1 else "False"))
 
         f.close()

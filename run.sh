@@ -3,16 +3,15 @@
 set -e
 
 mod=${1}
-device=1
+device=3
 echo "mod: ${mod}"
 
 cd src
 
-# train recursion
 if [[ ${mod} == "train_math23k" ]];
 then
 
-    CUDA_VISIBLE_DEVICES=${device} python train_math_math23k.py \
+    CUDA_VISIBLE_DEVICES=${device} python train_math23k.py \
         --dataset_name 'math23k' \
         --log_text '(v3) 不同的输出词表' \
         --data_path '../data/Math23K' \
@@ -20,14 +19,14 @@ then
         --save_model_dir '../models' \
         --fold -1 \
         --save_model \
-        --op_seq_mode v3
+        --expr_mode v3
 
 fi
 
 # debug
 if [[ ${mod} == "debug_math23k" ]];
 then
-    CUDA_VISIBLE_DEVICES=${device} python train_math_math23k.py \
+    CUDA_VISIBLE_DEVICES=${device} python train_math23k.py \
         --dataset_name 'math23k' \
         --log_text '(debug)' \
         --data_path '../data/Math23K' \
@@ -36,20 +35,35 @@ then
         --cfg '{"num_epochs":30}' \
         --head 1000 \
         --fold -1 \
-        --op_seq_mode v2
+        --expr_mode v3 \
+        --debug
 fi
 
-if [[ ${mod} == "debug_dag" ]];
+if [[ ${mod} == "debug_mathtoy" ]];
 then
-    CUDA_VISIBLE_DEVICES=${device} python train_math_dag.py \
+    CUDA_VISIBLE_DEVICES=${device} python train_mathtoy.py \
         --dataset_name 'dag' \
         --log_text '(debug)' \
-        --data_path '../data/DAG' \
+        --data_path '../data/MathToy' \
         --load_model_dir 'models_test' \
         --save_model_dir 'models_test' \
-        --cfg '{"num_epochs":21}' \
+        --cfg '{"num_epochs":30}' \
         --head 1000 \
-        --op_seq_mode v2
+        --expr_mode v2 \
+        --debug
+fi
+
+if [[ ${mod} == "debug_webqsp" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_webqsp.py \
+        --dataset_name 'webqsp' \
+        --log_text 'debug' \
+        --data_path '../data/WebQSP' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --debug
+
 fi
 
 cd ..

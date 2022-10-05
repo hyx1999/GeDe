@@ -2,6 +2,7 @@
 backup/*
 data/*
 log/*
+cache/*
 models/*
 tmp/*
 test.py

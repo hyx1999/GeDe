@@ -30,7 +30,7 @@ class MathConfig:
         self.max_nums_size = 35
         self.max_const_nums_size = 10
 
-        self.op_seq_mode = "v1"
+        self.expr_mode = "v1"
         self.max_step_size = 35
         self.use_bracket = False
 
@@ -40,8 +40,25 @@ class MathConfig:
         kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}
         self.__dict__.update(kwargs)
 
-    def set_op_seq_mode(self, mode: str):
-        self.op_seq_mode = mode
-        if self.op_seq_mode == "v2":
+    def set_expr_mode(self, mode: str):
+        self.expr_mode = mode
+        if self.expr_mode == "v2":
             self.max_step_size = 1
             self.use_bracket = True
+
+
+class KBQAConfig:
+
+    def __init__(self, **kwargs) -> None:
+        self.dataset_name = ""
+        self.model_name = "facebook/bart-base"
+
+        self.batch_size = 8
+        self.scheduler_step_size = 10
+        self.num_epochs = 80
+        
+        self.debug = False
+        self.device = "cuda:0"
+
+        kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}
+        self.__dict__.update(kwargs)
