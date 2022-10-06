@@ -64,7 +64,7 @@ def train_solver(
     trainer.cfg.debug = args.debug
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final")
+        solver.save_model(args.save_model_dir, "final-mathtoy")
     logger.info("[finish train solver]")
 
 

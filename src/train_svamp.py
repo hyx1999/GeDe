@@ -1,4 +1,4 @@
-from dataset import loadMath23K, build_ext_words, join_const_nums, join_Expr_list
+from dataset import loadSVAMP
 from solver import MathSolver
 from trainer import MathTrainer
 from cfg import MathConfig
@@ -44,7 +44,7 @@ def get_args():
     parser.add_argument("--data_path", type=str, required=True)
     parser.add_argument("--load_model_dir", type=str, required=True)
     parser.add_argument("--save_model_dir", type=str, required=True)
-    parser.add_argument("--head", type=int, default=-1)
+    parser.add_argument("--head", type=int, default=None)
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
@@ -64,8 +64,9 @@ def train_solver(
     trainer.cfg.debug = args.debug
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-math23k")
+        solver.save_model(args.save_model_dir, "final-svamp")
     logger.info("[finish train solver]")
+    logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 def main(args: argparse.Namespace):
@@ -74,16 +75,7 @@ def main(args: argparse.Namespace):
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
-    train_dataset, test_dataset = loadMath23K(args.data_path, head=args.head)
-    ext_words = build_ext_words(train_dataset + test_dataset)
-
-    const_nums = [word for word in ext_words if word not in '+-*/^()=']
-    if '-1' not in const_nums:
-        const_nums.append('-1')
-    print(const_nums)
-
-    train_dataset = join_Expr_list(join_const_nums(train_dataset, const_nums), args.expr_mode)
-    test_dataset  = join_Expr_list(join_const_nums(test_dataset , const_nums), args.expr_mode)
+    train_dataset, test_dataset, const_nums = loadSVAMP(args.data_path, head=args.head)
     
     cfg = MathConfig(**json.loads(args.cfg))
     solver = MathSolver(cfg, const_nums)

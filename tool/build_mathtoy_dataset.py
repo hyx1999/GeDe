@@ -5,8 +5,8 @@ import json
 
 random.seed(0)
 
-if not os.path.exists("../data/DAG"):
-    os.makedirs("../data/DAG")
+if not os.path.exists("../data/MathToy"):
+    os.makedirs("../data/MathToy")
 
 def genDAGInstance(id: str):
     base_num_cnt = random.randint(3, 5)
@@ -74,7 +74,7 @@ def genDAGInstance(id: str):
         }
     }
 
-folder_path = "../data/DAG"
+folder_path = "../data/MathToy"
 
 train_path = os.path.join(folder_path, "train.json")
 dev_path = os.path.join(folder_path, "dev.json")

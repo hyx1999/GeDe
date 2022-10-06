@@ -3,7 +3,7 @@ import json
 import os
 import re
 import jieba
-from typing import Any, AnyStr, Dict, List, Tuple
+from typing import Any, AnyStr, Dict, List, Tuple, Optional
 from tqdm import tqdm
 from math_utils import Expr, \
     build_Expr_list_v1, build_Expr_list_v2, build_Expr_list_v3, \
@@ -123,36 +123,14 @@ def preprocess(data: List[Dict]) -> List[Dict]:
     return obj_data
 
 
-def loadMath23K(data_path: str, fold: int = -1, head: int = None) -> Tuple[List[Dict], List[Dict]]:
+def loadMath23K(data_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
     train_data = []
     test_data  = []
 
-    if fold == -1:
-        traindata_path = os.path.join(data_path, "math23k_train.json")
-        testdata_path = os.path.join(data_path, "math23k_test.json")
-        for data, path in zip([train_data, test_data], [traindata_path, testdata_path]):
-            with open(path, "r") as f:
-                js = ""
-                for i, s in enumerate(f):
-                    js += s
-                    i += 1
-                    if i % 7 == 0:  # every 7 line is a json
-                        data_d = json.loads(js)
-                        if "千米/小时" in data_d["equation"]:
-                            data_d["equation"] = data_d["equation"][:-5]
-                        data.append(data_d)
-                        js = ""
-        
-        if head is not None and head != -1:
-            train_data = train_data[:head]
-            test_data = test_data[:head // 10]
-
-        train_data = preprocess(train_data)
-        test_data = preprocess(test_data)
-    else:
-        data_path = os.path.join(data_path, "math23k.json")
-        data = []
-        with open(data_path, "r") as f:
+    traindata_path = os.path.join(data_path, "math23k_train.json")
+    testdata_path = os.path.join(data_path, "math23k_test.json")
+    for data, path in zip([train_data, test_data], [traindata_path, testdata_path]):
+        with open(path, "r") as f:
             js = ""
             for i, s in enumerate(f):
                 js += s
@@ -163,35 +141,18 @@ def loadMath23K(data_path: str, fold: int = -1, head: int = None) -> Tuple[List[
                         data_d["equation"] = data_d["equation"][:-5]
                     data.append(data_d)
                     js = ""
-        
-        if head is not None and head != -1:
-            data = data[:head]
-        
-        data = preprocess(data)
-        
-        if head is not None:
-            for idx in range(5):
-                print(data[idx])
-        
-        # 划分数据集
-        fold_size = int(len(data) * 0.2)
-        fold_data    = []
-        for split_fold in range(4):
-            fold_start = fold_size * split_fold
-            fold_end = fold_size * (split_fold + 1)
-            fold_data.append(data[fold_start:fold_end])
-        fold_data.append(data[(fold_size * 4):])
-        
-        for fold_idx in range(5):
-            if fold_idx == fold:
-                test_data += fold_data[fold_idx]
-            else:
-                train_data += fold_data[fold_idx]
+    
+    if head is not None and head != -1:
+        train_data = train_data[:head]
+        test_data = test_data[:head // 10]
+
+    train_data = preprocess(train_data)
+    test_data = preprocess(test_data)
 
     return train_data, test_data
 
 
-def loadMathToy(data_path: str, head: int = None) -> Tuple[List[Dict], List[Dict]]:
+def loadMathToy(data_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
     train_data = []
     test_data  = []
 
@@ -208,7 +169,7 @@ def loadMathToy(data_path: str, head: int = None) -> Tuple[List[Dict], List[Dict
     return train_data, test_data
 
 
-def loadGSM8k(file_path: str, head: int = -1):
+def loadGSM8k(file_path: str, head: Optional[int] = None):
     file_path = os.path.join(file_path, "grade_school_math", "data")
 
     raw_test_dataset = []
@@ -355,9 +316,151 @@ def loadGSM8k(file_path: str, head: int = -1):
                 obj["const_nums"] = const_nums
                 dataset.append(obj)
     
-    if head != -1:
+    if head is not None and head != -1:
         train_dataset = train_dataset[:head]
         test_dataset = test_dataset[:head]
+    
+    return train_dataset, test_dataset, const_nums
+
+
+def loadSVAMP(file_path: str, head: Optional[int] = None):
+    train_path = os.path.join(file_path, "train.json")
+    test_path = os.path.join(file_path, "test.json")
+    train_dataset = []
+    test_dataset  = []
+    const_nums    = []
+    pat = re.compile("temp_([a-z])")
+    pat_m = re.compile("m_(\d+)")
+    
+    def parse_num(x: str, nums_size: int) -> str:
+        m0 = pat.match(x)
+        if m0:
+            index = ord(m0.group(1)) - ord('a')
+            return '[num{}]'.format(index)
+        m1 = pat_m.match(x)
+        if m1:
+            index = nums_size + int(m1.group(1))
+            return '[num{}]'.format(index)
+        x = float(x)
+        if x not in const_nums:
+            const_nums.append(x)
+        return '[c{}]'.format(const_nums.index(x))
+    
+    for dataset, path in zip([train_dataset, test_dataset], [train_path, test_path]):
+        with open(path, "r") as f:
+            objs = json.loads(f.read())
+            for obj in objs:
+                raw_text: str     = obj["text"]
+                nums: List[float] = obj["num_list"]
+                rank = [i for i in range(len(nums))]
+                rank.sort(key=lambda x: nums[x])
+                question = []
+                for token in raw_text.split():
+                    m = pat.match(token)
+                    if m:
+                        index = ord(m.group(1)) - ord('a')
+                        question.append("[num{}]".format(index))
+                        question.append("[rk{}]".format(rank[index]))
+                    else:
+                        question.append(token)
+                question = " ".join(question)
+                expr_list = []
+                for raw_expr in obj["equation_layer"]:
+                    x: str  = raw_expr[0]
+                    y: str  = raw_expr[1]
+                    op: str = raw_expr[2]
+                    if op.endswith('_rev'):
+                        op.replace("_rev", "")
+                        x, y = y, x
+                    x = parse_num(x)
+                    y = parse_num(y)
+                    arg0 = len(nums) + len(expr_list)
+                    expr_list.append(Expr(arg0=arg0, expr_toks=[x, op, x], expr_str="".join([x, op, y])))
+                dataset.append({
+                    "sample_id": obj["id"],
+                    "raw_text": obj["text"],
+                    "seg_text": question,
+                    "seg_expr": question.split(),
+                    "nums": nums,
+                    "Expr_list": expr_list
+                })
+    for obj in train_dataset + test_dataset:
+        obj.update({"const_nums": const_nums})
+    
+    if head is not None and head != -1:
+        train_dataset = train_dataset[:head]
+        test_dataset  = test_dataset[:head]
+    
+    return train_dataset, test_dataset, const_nums
+
+
+def loadMAWPS(file_path: str, fold: int, head: Optional[int] = None):
+    train_path = os.path.join(file_path, f"train_{fold}.json")
+    test_path = os.path.join(file_path, f"test_{fold}.json")
+    train_dataset = []
+    test_dataset  = []
+    const_nums    = []
+    pat = re.compile("temp_([a-z])")
+    pat_m = re.compile("m_(\d+)")
+    
+    def parse_num(x: str, nums_size: int) -> str:
+        m0 = pat.match(x)
+        if m0:
+            index = ord(m0.group(1)) - ord('a')
+            return '[num{}]'.format(index)
+        m1 = pat_m.match(x)
+        if m1:
+            index = nums_size + int(m1.group(1))
+            return '[num{}]'.format(index)
+        x = float(x)
+        if x not in const_nums:
+            const_nums.append(x)
+        return '[c{}]'.format(const_nums.index(x))
+    
+    for dataset, path in zip([train_dataset, test_dataset], [train_path, test_path]):
+        with open(path, "r") as f:
+            objs = json.loads(f.read())
+            for obj in objs:
+                raw_text: str     = obj["text"]
+                nums: List[float] = obj["num_list"]
+                rank = [i for i in range(len(nums))]
+                rank.sort(key=lambda x: nums[x])
+                question = []
+                for token in raw_text.split():
+                    m = pat.match(token)
+                    if m:
+                        index = ord(m.group(1)) - ord('a')
+                        question.append("[num{}]".format(index))
+                        question.append("[rk{}]".format(rank[index]))
+                    else:
+                        question.append(token)
+                question = " ".join(question)
+                expr_list = []
+                for raw_expr in obj["equation_layer"]:
+                    x: str  = raw_expr[0]
+                    y: str  = raw_expr[1]
+                    op: str = raw_expr[2]
+                    if op.endswith('_rev'):
+                        op.replace("_rev", "")
+                        x, y = y, x
+                    x = parse_num(x)
+                    y = parse_num(y)
+                    arg0 = len(nums) + len(expr_list)
+                    expr_list.append(Expr(arg0=arg0, expr_toks=[x, op, x], expr_str="".join([x, op, y])))
+                dataset.append({
+                    "sample_id": obj["id"],
+                    "raw_text": obj["text"],
+                    "seg_text": question,
+                    "seg_expr": question.split(),
+                    "nums": nums,
+                    "Expr_list": expr_list
+                })
+    for obj in train_dataset + test_dataset:
+        obj.update({"const_nums": const_nums})
+    
+    if head is not None and head != -1:
+        train_dataset = train_dataset[:head]
+        test_dataset  = test_dataset[:head]
     
     return train_dataset, test_dataset, const_nums
 

@@ -21,18 +21,16 @@ class MathConfig:
 
     def __init__(self, **kwargs) -> None:
         self.dataset_name = ""
-        self.model_name = "bert-base-chinese"
+        # self.model_name = "bert-base-chinese"
+        self.model_name = "hfl/chinese-roberta-wwm-ext"
 
         self.batch_size = 8
         self.scheduler_step_size = 10
         self.num_epochs = 80
         
         self.max_nums_size = 35
-        self.max_const_nums_size = 10
 
         self.expr_mode = "v1"
-        self.max_step_size = 35
-        self.use_bracket = False
 
         self.debug = False
         self.device = "cuda:0"
@@ -42,9 +40,6 @@ class MathConfig:
 
     def set_expr_mode(self, mode: str):
         self.expr_mode = mode
-        if self.expr_mode == "v2":
-            self.max_step_size = 1
-            self.use_bracket = True
 
 
 class KBQAConfig:

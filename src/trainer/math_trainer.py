@@ -25,15 +25,20 @@ class MathTrainer:
         self, 
         cfg: MathConfig,
         train_dataset: List[Dict[AnyStr, Any]],
-        test_dataset: List[Dict[AnyStr, Any]]
+        test_dataset: List[Dict[AnyStr, Any]],
+        use_dev: bool = True
     ) -> None:
         self.cfg = cfg
+        self.use_dev = use_dev
         self.raw_dataset = {
             "train": deepcopy(train_dataset),
             "test": deepcopy(test_dataset),
         }
-        self.split_data()
+        if self.use_dev:
+            self.split_data()
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
+        self.best_dev_acc = None
+        self.best_test_acc = None
     
     def split_data(self):
         raw_train_dataset = self.raw_dataset["train"]
@@ -95,10 +100,18 @@ class MathTrainer:
             
             if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
-                    logger.info("[evaluate dev-data]")
-                    self.evaluate("dev", epoch, solver, self.raw_dataset["dev"])
+                    if self.use_dev:
+                        logger.info("[evaluate dev-data]")
+                        dev_acc = self.evaluate("dev", epoch, solver, self.raw_dataset["dev"])
                     logger.info("[evaluate test-data]")
-                    self.evaluate("test", epoch, solver, self.raw_dataset["test"])
+                    test_acc = self.evaluate("test", epoch, solver, self.raw_dataset["test"])
+                    
+                    if not self.use_dev:
+                        dev_acc = test_acc
+                    
+                    if epoch >= 60 and (self.best_dev_acc is None or dev_acc >= self.best_dev_acc):
+                        self.best_dev_acc = dev_acc
+                        self.best_test_acc = test_acc
                 else:
                     if epoch >= 25:
                         logger.info("[evaluate train-data]")
@@ -148,7 +161,7 @@ class MathTrainer:
     ) -> float:
         solver.eval()
         
-        val_acc  = []
+        Acc  = []
 
         test_dataset = DefaultDataset(test_data)
         
@@ -164,7 +177,7 @@ class MathTrainer:
             # output_Expr_list = solver.generate(input_text, nums, const_nums)
             print(">")
             print("target:", [" ".join(x.expr_toks) for x in obj["Expr_list"]])
-            output_Expr_list = solver.stat_beam_search(input_text, nums, const_nums, beam_size=4)
+            output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=4)
             target_Expr_list = obj["Expr_list"]
 
             try:
@@ -185,9 +198,9 @@ class MathTrainer:
             #     logger.info("target_value: {}".format(target_value))
 
             if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
-                val_acc.append(1)
+                Acc.append(1)
             else:
-                val_acc.append(0)
+                Acc.append(0)
             
             expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
             expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
@@ -196,10 +209,12 @@ class MathTrainer:
             f.write("nums={}\n".format(nums))
             f.write("output={}\n".format(expr_list0))
             f.write("target={}\n".format(expr_list1))
-            f.write("correct={}\n".format("True" if val_acc[-1] == 1 else "False"))
+            f.write("correct={}\n".format("True" if Acc[-1] == 1 else "False"))
 
         f.close()
 
-        for name, acc in zip(["val_acc"], [val_acc]):
-            msg = "epoch: {} {}: {}".format(epoch, name, sum(acc) / len(acc))
-            logger.info(msg)
+        answer_mAcc = sum(Acc) / len(Acc)
+        msg = "epoch: {} answer-mAcc: {}".format(epoch, answer_mAcc)
+        logger.info(msg)
+
+        return answer_mAcc
