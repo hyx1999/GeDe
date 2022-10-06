@@ -48,7 +48,6 @@ def get_args():
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--expr_mode", type=str, default="v1")
     return parser.parse_args()
 
 
@@ -80,9 +79,6 @@ def main(args: argparse.Namespace):
     cfg = MathConfig(**json.loads(args.cfg))
     solver = MathSolver(cfg, const_nums)
     
-    solver.cfg.set_expr_mode(args.expr_mode)
-    print("expr-mode:", args.expr_mode)
-
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     

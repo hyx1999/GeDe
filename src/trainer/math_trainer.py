@@ -1,4 +1,6 @@
+from cmath import isinf
 import os
+import math
 from solver import MathSolver
 from scheduler import GradualWarmupScheduler
 from math_utils import DefaultDataset, compute_Expr_list
@@ -92,7 +94,8 @@ class MathTrainer:
         scheduler_warmup = GradualWarmupScheduler(optim, multiplier=1.0, total_epoch=5, after_scheduler=scheduler_steplr)
 
         dataset = DefaultDataset(self.train_dataset)
-        loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=True, collate_fn=self.collate_fn)
+        shuffle_flag = not self.cfg.debug
+        loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
 
         for epoch in range(self.cfg.num_epochs):
             self.train_one_epoch(epoch, solver, optim, loader)
@@ -113,9 +116,8 @@ class MathTrainer:
                         self.best_dev_acc = dev_acc
                         self.best_test_acc = test_acc
                 else:
-                    if epoch >= 25:
-                        logger.info("[evaluate train-data]")
-                        self.evaluate("train", epoch, solver, self.raw_dataset["train"][:5])
+                    logger.info("[evaluate train-data]")
+                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:5])
 
 
     def train_one_epoch(
@@ -135,8 +137,9 @@ class MathTrainer:
             if i == 0 and epoch == 0:
                 for x in [I.parse_input() + " # " + I.parse_output() for I in batch]:
                     print(x)
-            loss, Acc = solver(batch)
 
+            loss, Acc = solver(batch)
+                        
             optim.zero_grad()
             loss.backward()
             optim.step()

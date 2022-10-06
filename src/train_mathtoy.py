@@ -44,11 +44,10 @@ def get_args():
     parser.add_argument("--data_path", type=str, required=True)
     parser.add_argument("--load_model_dir", type=str, required=True)
     parser.add_argument("--save_model_dir", type=str, required=True)
-    parser.add_argument("--head", type=int, default=-1)
+    parser.add_argument("--head", type=int, default=None)
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--expr_mode", type=str, default="v1")
     return parser.parse_args()
 
 

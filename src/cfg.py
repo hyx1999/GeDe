@@ -30,16 +30,11 @@ class MathConfig:
         
         self.max_nums_size = 35
 
-        self.expr_mode = "v1"
-
         self.debug = False
         self.device = "cuda:0"
 
         kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}
         self.__dict__.update(kwargs)
-
-    def set_expr_mode(self, mode: str):
-        self.expr_mode = mode
 
 
 class KBQAConfig:

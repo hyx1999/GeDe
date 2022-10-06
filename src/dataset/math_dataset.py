@@ -330,16 +330,17 @@ def loadSVAMP(file_path: str, head: Optional[int] = None):
     test_dataset  = []
     const_nums    = []
     pat = re.compile("temp_([a-z])")
+    pat_a = re.compile("([a-z])")
     pat_m = re.compile("m_(\d+)")
     
     def parse_num(x: str, nums_size: int) -> str:
-        m0 = pat.match(x)
+        m0 = pat_a.fullmatch(x)
         if m0:
             index = ord(m0.group(1)) - ord('a')
             return '[num{}]'.format(index)
-        m1 = pat_m.match(x)
+        m1 = pat_m.fullmatch(x)
         if m1:
-            index = nums_size + int(m1.group(1))
+            index = nums_size + int(m1.group(1)) - 1
             return '[num{}]'.format(index)
         x = float(x)
         if x not in const_nums:
@@ -349,7 +350,7 @@ def loadSVAMP(file_path: str, head: Optional[int] = None):
     for dataset, path in zip([train_dataset, test_dataset], [train_path, test_path]):
         with open(path, "r") as f:
             objs = json.loads(f.read())
-            for obj in objs:
+            for i, obj in enumerate(objs):
                 raw_text: str     = obj["text"]
                 nums: List[float] = obj["num_list"]
                 rank = [i for i in range(len(nums))]
@@ -370,20 +371,21 @@ def loadSVAMP(file_path: str, head: Optional[int] = None):
                     y: str  = raw_expr[1]
                     op: str = raw_expr[2]
                     if op.endswith('_rev'):
-                        op.replace("_rev", "")
+                        op = op.replace("_rev", "")
                         x, y = y, x
-                    x = parse_num(x)
-                    y = parse_num(y)
+                    x = parse_num(x, len(nums))
+                    y = parse_num(y, len(nums))
                     arg0 = len(nums) + len(expr_list)
-                    expr_list.append(Expr(arg0=arg0, expr_toks=[x, op, x], expr_str="".join([x, op, y])))
+                    expr_list.append(Expr(arg0=arg0, expr_toks=[x, op, y], expr_str="".join([x, op, y])))
                 dataset.append({
-                    "sample_id": obj["id"],
+                    "sample_id": i,
                     "raw_text": obj["text"],
                     "seg_text": question,
                     "seg_expr": question.split(),
-                    "nums": nums,
+                    "nums": [str(x) for x in nums],
                     "Expr_list": expr_list
                 })
+    const_nums = [str(x) for x in const_nums]
     for obj in train_dataset + test_dataset:
         obj.update({"const_nums": const_nums})
     
@@ -452,9 +454,10 @@ def loadMAWPS(file_path: str, fold: int, head: Optional[int] = None):
                     "raw_text": obj["text"],
                     "seg_text": question,
                     "seg_expr": question.split(),
-                    "nums": nums,
+                    "nums": [str(x) for x in nums],
                     "Expr_list": expr_list
                 })
+    const_nums = [str(x) for x in const_nums]
     for obj in train_dataset + test_dataset:
         obj.update({"const_nums": const_nums})
     

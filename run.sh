@@ -33,8 +33,8 @@ then
         --data_path '../data/SVAMP' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --save_model \
-        --expr_mode v3
+        --cfg '{"model_name":"bert-base-uncased"}' \
+        --save_model
 
 fi
 
@@ -63,9 +63,8 @@ then
         --data_path '../data/SVAMP' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --cfg '{"num_epochs":30}' \
+        --cfg '{"num_epochs":30,"model_name":"bert-base-uncased"}' \
         --head 1000 \
-        --expr_mode v3 \
         --debug
 
 fi
@@ -80,7 +79,6 @@ then
         --save_model_dir 'models_test' \
         --cfg '{"num_epochs":30}' \
         --head 1000 \
-        --expr_mode v2 \
         --debug
 fi
 
@@ -93,6 +91,7 @@ then
         --data_path '../data/WebQSP' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
+        --cfg '{"num_epochs":30,"model_name":"bert-base-uncased"}' \
         --debug
 
 fi
