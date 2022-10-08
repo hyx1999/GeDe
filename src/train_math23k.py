@@ -60,8 +60,6 @@ def train_solver(
     solver: MathSolver,
 ):
     trainer = MathTrainer(cfg, train_dataset, test_dataset)
-    trainer.cfg.dataset_name = args.dataset_name
-    trainer.cfg.debug = args.debug
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-math23k")
@@ -86,6 +84,9 @@ def main(args: argparse.Namespace):
     test_dataset  = join_Expr_list(join_const_nums(test_dataset , const_nums), args.expr_mode)
     
     cfg = MathConfig(**json.loads(args.cfg))
+    cfg.dataset_name = args.dataset_name
+    cfg.debug = args.debug
+    
     solver = MathSolver(cfg, const_nums)
     
     print("expr-mode:", args.expr_mode)

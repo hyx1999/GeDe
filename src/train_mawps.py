@@ -60,8 +60,6 @@ def train_solver(
     solver: MathSolver,
 ):
     trainer = MathTrainer(cfg, train_dataset, test_dataset, use_dev=False)
-    trainer.cfg.dataset_name = args.dataset_name
-    trainer.cfg.debug = args.debug
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-mawps")
@@ -80,6 +78,9 @@ def main(args: argparse.Namespace):
         train_dataset, test_dataset, const_nums = loadMAWPS(args.data_path, fold=fold, head=args.head)
         
         cfg = MathConfig(**json.loads(args.cfg))
+        cfg.dataset_name = args.dataset_name
+        cfg.debug = args.debug
+        
         solver = MathSolver(cfg, const_nums)
         
         if args.save_model:

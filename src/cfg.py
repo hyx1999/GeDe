@@ -27,11 +27,16 @@ class MathConfig:
         self.batch_size = 8
         self.scheduler_step_size = 10
         self.num_epochs = 80
+        self.bert_lr = 5e-5
+        self.gru_lr = 5e-4
+        self.weight_decay = 1e-4
         
         self.max_nums_size = 35
+        self.max_step_size = 35
 
         self.debug = False
         self.device = "cuda:0"
+        self.save_result = False
 
         kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}
         self.__dict__.update(kwargs)

@@ -109,7 +109,7 @@ class MathTrainer:
                     test_acc = self.evaluate("test", epoch, solver, self.raw_dataset["test"])
                     
                     if not self.use_dev:
-                        dev_acc = test_acc
+                        dev_acc = 1.0
                     
                     if epoch >= 60 and (self.best_dev_acc is None or dev_acc >= self.best_dev_acc):
                         self.best_dev_acc = dev_acc

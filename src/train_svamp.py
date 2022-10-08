@@ -77,6 +77,9 @@ def main(args: argparse.Namespace):
     train_dataset, test_dataset, const_nums = loadSVAMP(args.data_path, head=args.head)
     
     cfg = MathConfig(**json.loads(args.cfg))
+    cfg.dataset_name = args.dataset_name
+    cfg.debug = args.debug
+
     solver = MathSolver(cfg, const_nums)
     
     if args.save_model:

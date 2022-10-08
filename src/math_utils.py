@@ -47,25 +47,25 @@ class ExprDataInstance:
         self.target = target
         self.id = id
     
-    def parse_input(self) -> str:
+    def parse_input(self, sep_token: str) -> str:
         input_text = [self.question]
         # for i in range(len(self.const_nums)):
         #     input_text.append("[c{}] = {}.".format(i, self.const_nums[i]))
         for expr in self.expr_list:
-            input_text.append("[SEP]")
+            input_text.append(sep_token)
             input_text.append("[num{}] = {}"\
                 .format(expr.arg0, expr.expr_str))
         input_text = " ".join(input_text)
         return input_text
 
-    def parse_output(self) -> str:
+    def parse_output(self, eos0_token: str, eos1_token: str) -> str:
         output_text = []
-        for i, opSeq in enumerate(self.target):
-            output_text.append(opSeq.expr_str)
+        for i, expr in enumerate(self.target):
+            output_text.append(expr.expr_str)
             if i + 1 != len(self.target):
-                output_text.append("[eos0]")
+                output_text.append(eos0_token)
             else:
-                output_text.append("[eos1]")
+                output_text.append(eos1_token)
         output_text = " ".join(output_text)
         return output_text
 

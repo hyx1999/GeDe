@@ -2,6 +2,7 @@ from dataset import loadMathToy
 from solver import MathSolver
 from trainer import MathTrainer
 from math_utils import Expr
+from cfg import MathConfig
 
 import datetime
 import argparse
@@ -55,12 +56,10 @@ def train_solver(
     args: argparse.Namespace,
     train_dataset: List[Dict],
     test_dataset: List[Dict],
+    cfg: MathConfig,
     solver: MathSolver,
 ):
-    cfg = json.loads(args.cfg)
     trainer = MathTrainer(cfg, train_dataset, test_dataset)
-    trainer.cfg.dataset_name = args.dataset_name
-    trainer.cfg.debug = args.debug
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-mathtoy")
@@ -76,7 +75,10 @@ def main(args: argparse.Namespace):
     train_dataset, test_dataset = loadMathToy(args.data_path, head=args.head)
     const_nums = []
 
-    solver = MathSolver(json.loads(args.cfg), const_nums)
+    cfg = MathConfig(**json.loads(args.cfg))
+    cfg.dataset_name = args.dataset_name
+    cfg.debug = args.debug
+    solver = MathSolver(cfg, const_nums)
     
     if args.expr_mode == "v1":
         for obj in train_dataset:
@@ -103,7 +105,7 @@ def main(args: argparse.Namespace):
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     
-    train_solver(args, train_dataset, test_dataset, solver)
+    train_solver(args, train_dataset, test_dataset, cfg, solver)
 
 
 if __name__ == '__main__':
