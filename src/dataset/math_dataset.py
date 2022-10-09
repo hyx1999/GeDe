@@ -285,7 +285,7 @@ def loadGSM8k(file_path: str, head: Optional[int] = None):
             Expr_list.append({
                 "arg0": len(all_nums) - 1,
                 "expr_toks": expr_toks,
-                "expr_str": "".join(expr_toks)
+                "expr_str": " ".join(expr_toks)
             })
 
         compress_expr_toks = compress_Expr_list(Expr_list, len(nums))

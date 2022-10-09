@@ -1,6 +1,6 @@
 import os
 import math
-from solver import MathSolver
+from solver import MathSolverTest
 from scheduler import GradualWarmupScheduler
 from math_utils import DefaultDataset, compute_Expr_list
 from cfg import MathConfig
@@ -20,7 +20,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class MathTrainer:
+class MathTrainerTest:
 
     def __init__(
         self, 
@@ -61,16 +61,23 @@ class MathTrainer:
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
-            new_dataset.append(ExprDataInstance(
-                question=question,
-                nums=nums,
-                const_nums=const_nums,
-                expr_list=expr_list[:-1],
-                target=expr_list,
-                id=obj["sample_id"]
-            ))
-
+            for i in range(len(expr_list)):
+                new_dataset.append(ExprDataInstance(
+                    question=question,
+                    nums=nums,
+                    const_nums=const_nums,
+                    expr_list=expr_list[:i],
+                    target=[expr_list[i]],
+                    id=obj["sample_id"],
+                    end=(i + 1 == len(expr_list))
+                ))
+        
+        if "svamp" in self.cfg.dataset_name:
+            new_dataset.extend(self.augment_dataset(dataset))
         return new_dataset
+
+    def augment_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[ExprDataInstance]:
+        return []
 
     def collate_fn(
         self, 
@@ -78,7 +85,7 @@ class MathTrainer:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolver):
+    def train(self, solver: MathSolverTest):
         solver.to(self.cfg.device)
 
         optim = AdamW(
@@ -109,20 +116,20 @@ class MathTrainer:
                     test_acc = self.evaluate("test", epoch, solver, self.raw_dataset["test"])
                     
                     if not self.use_dev:
-                        dev_acc = 1.0
+                        dev_acc = test_acc
                     
-                    if epoch >= 60 and (self.best_dev_acc is None or dev_acc >= self.best_dev_acc):
+                    if epoch >= 40 and (self.best_dev_acc is None or dev_acc >= self.best_dev_acc):
                         self.best_dev_acc = dev_acc
                         self.best_test_acc = test_acc
                 else:
                     logger.info("[evaluate train-data]")
-                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:20])
+                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:100])
 
 
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolver,
+        solver: MathSolverTest,
         optim: Union[Adam, AdamW],
         loader: DataLoader
     ) -> None:
@@ -133,16 +140,16 @@ class MathTrainer:
         loss_total = 0
         mAcc = 0
         for i, batch in enumerate(pbar):            
-            if i == 0 and epoch == 0:
+            if i < 5 and epoch == 0:
                 for x in [
-                    I.parse_input(solver.tok.sep_token) \
-                    + " # " \
-                    + I.parse_output(solver.eos0_token, solver.eos1_token) for I in batch
+                    I.parse_input(solver.lang_tok.sep_token) \
+                    + " ---> " \
+                    + I.parse_output(solver.expr_tok.bos_token, solver.expr_tok.eos_token) for I in batch
                 ]:
                     print(x)
 
             loss, Acc = solver(batch)
-                        
+
             optim.zero_grad()
             loss.backward()
             optim.step()
@@ -162,7 +169,7 @@ class MathTrainer:
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolver,
+        solver: MathSolverTest,
         test_data: List[Dict]
     ) -> float:
         solver.eval()
@@ -174,7 +181,7 @@ class MathTrainer:
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)
             f = open("../cache/mwp/{}_{}_{}.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
-
+        
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
             input_text = "".join(obj["seg_text"])
@@ -185,7 +192,7 @@ class MathTrainer:
             #     print(">")
             #     print("target:", [" ".join(x.expr_toks) for x in obj["Expr_list"]])
             # output_Expr_list = solver.generate(input_text, nums, const_nums)
-            output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=4)
+            output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
             target_Expr_list = obj["Expr_list"]
 
             try:

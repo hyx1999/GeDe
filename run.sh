@@ -34,7 +34,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","bert_lr":1e-5,"gru_lr":5e-4,"max_step_size":5,"save_result":true}'
+        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"gru_lr":2e-5,"max_step_size":5,"save_result":true}'
 
         # "model_name": "bert-base-uncased", "bert_lr": 5e-5, "gru_lr": 5e-4, "weight_decay": 1e-4
 fi
@@ -50,7 +50,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","bert_lr":1e-5,"gru_lr":5e-4,"max_step_size":2,"save_result":true}'
+        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"gru_lr":2e-5,"max_step_size":5,"save_result":true}'
 
         # "model_name": "bert-base-uncased", "bert_lr": 5e-5, "gru_lr": 5e-4, "weight_decay": 1e-4
 fi
@@ -96,7 +96,7 @@ then
         --data_path '../data/SVAMP' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --cfg '{"model_name":"bert-base-uncased","bert_lr":2e-5,"gru_lr": 2e-4,"weight_decay":1e-2,"max_step_size":7,"save_result":true,"batch_size":16}' \
+        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"gru_lr": 2e-5,"max_step_size":7,"save_result":true,"batch_size":8}' \
         --head 1000 \
         --debug
 

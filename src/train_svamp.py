@@ -1,6 +1,6 @@
 from dataset import loadSVAMP
-from solver import MathSolver
-from trainer import MathTrainer
+from solver import MathSolver, MathSolverTest
+from trainer import MathTrainer, MathTrainerTest
 from cfg import MathConfig
 
 import datetime
@@ -58,9 +58,8 @@ def train_solver(
     cfg: MathConfig,
     solver: MathSolver,
 ):
-    trainer = MathTrainer(cfg, train_dataset, test_dataset)
-    trainer.cfg.dataset_name = args.dataset_name
-    trainer.cfg.debug = args.debug
+    # trainer = MathTrainer(cfg, train_dataset, test_dataset)
+    trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-svamp")
@@ -79,8 +78,10 @@ def main(args: argparse.Namespace):
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
     cfg.debug = args.debug
+    cfg.const_quant_size = len(const_nums)
 
-    solver = MathSolver(cfg, const_nums)
+    # solver = MathSolver(cfg, const_nums)
+    solver = MathSolverTest(cfg)
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")

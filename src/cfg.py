@@ -21,7 +21,6 @@ class MathConfig:
 
     def __init__(self, **kwargs) -> None:
         self.dataset_name = ""
-        # self.model_name = "bert-base-chinese"
         self.model_name = "hfl/chinese-roberta-wwm-ext"
 
         self.batch_size = 8
@@ -37,8 +36,12 @@ class MathConfig:
         self.debug = False
         self.device = "cuda:0"
         self.save_result = False
-
-        kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}
+        
+        self.quant_size = 35
+        self.const_quant_size = None
+        self.ext_tokens = None
+        self.beam_size = 4
+        
         self.__dict__.update(kwargs)
 
 

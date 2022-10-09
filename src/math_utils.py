@@ -38,7 +38,8 @@ class ExprDataInstance:
         const_nums: List[str],
         expr_list: List[Expr],
         target: Optional[List[Expr]] = None,
-        id: Optional[int] = None
+        id: Optional[int] = None,
+        end: Optional[bool] = None
     ) -> None:
         self.question = question
         self.nums = nums
@@ -46,6 +47,7 @@ class ExprDataInstance:
         self.expr_list = expr_list
         self.target = target
         self.id = id
+        self.end = end
     
     def parse_input(self, sep_token: str) -> str:
         input_text = [self.question]
@@ -58,14 +60,22 @@ class ExprDataInstance:
         input_text = " ".join(input_text)
         return input_text
 
-    def parse_output(self, eos0_token: str, eos1_token: str) -> str:
+    def parse_output(self, bos_token: str, eos_token: str) -> str:
         output_text = []
-        for i, expr in enumerate(self.target):
-            output_text.append(expr.expr_str)
-            if i + 1 != len(self.target):
-                output_text.append(eos0_token)
+        if self.end is None:
+            for i, expr in enumerate(self.target):
+                output_text.extend(expr.expr_toks)
+                if i + 1 != len(self.target):
+                    output_text.append(bos_token)
+                else:
+                    output_text.append(eos_token)
+        else:
+            assert len(self.target) == 1
+            output_text.extend(self.target[0].expr_toks)
+            if self.end:
+                output_text.append(eos_token)
             else:
-                output_text.append(eos1_token)
+                output_text.append(bos_token)
         output_text = " ".join(output_text)
         return output_text
 
@@ -241,7 +251,7 @@ def build_Expr_list_v1(seg_expr: List[Tok], nums_size: int) -> List[Expr]:
                 else:
                     expr_toks.append(tok)
             i += 1
-        expr_str = "".join(expr_toks)
+        expr_str = " ".join(expr_toks)
         if expr_str not in expr_dict:
             arg0 = len(expr_dict)
             expr_dict[expr_str] = arg0
@@ -259,7 +269,7 @@ def build_Expr_list_v1(seg_expr: List[Tok], nums_size: int) -> List[Expr]:
 def build_Expr_list_v2(seg_expr: List[Tok], nums_size: int) -> List[Expr]:
     # 不对表达式进行切分
     expr_toks = seg_expr
-    Expr_list: List[Expr] = [Expr(arg0=nums_size, expr_toks=expr_toks, expr_str="".join(expr_toks))]
+    Expr_list: List[Expr] = [Expr(arg0=nums_size, expr_toks=expr_toks, expr_str=" ".join(expr_toks))]
     return Expr_list
 
 
