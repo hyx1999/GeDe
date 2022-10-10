@@ -553,8 +553,6 @@ class MathSolverTest(nn.Module):
                     continue
                 if not constraint_test(tokens):  # common constraint
                     continue
-                if self.cfg.dataset_name == "svamp" and not svamp_constraint_test(tokens):  # hard constraint for svamp
-                    continue
                 if not beam.end and tokens[-1] in [self.expr_tok.bos_token, self.expr_tok.eos_token]:
                     beam.end = True
                 filtered_beams.append(beam)
@@ -679,6 +677,8 @@ def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: 
     if len(tokens) >= max_length and tokens[-1] not in [bos_token, eos_token]:
         return False
     end = tokens[-1] in [bos_token, eos_token]
+    if end:
+        tokens = tokens[:-1]
     pat = re.compile("\[num\d+\]|\[c\d+\]")
     n_stk = []
     o_stk = []
@@ -692,15 +692,6 @@ def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: 
                 if i > 0 and tokens[i - 1] in '+-*/^(':
                     return False
                 o_stk.append(tok)
-            elif tok == '(':
-                o_stk.append('(')
-            elif tok == ')':
-                while o_stk[-1] != '(':
-                    o_stk.pop()
-                    n_stk.pop()
-                    n_stk.pop()
-                    n_stk.append('n')
-                o_stk.pop()
         if end:
             while len(o_stk) > 0:
                 o_stk.pop()
@@ -711,21 +702,12 @@ def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: 
                 return False
     except:
         return False 
-        
     return True
 
 
 def constraint_test(tokens: List[Tok]):
     if len(tokens) < 3:
         return True
-    if tokens[0] == tokens[2] and tokens[1] in ["-/^"]:
-        return False
-    return True
-
-
-def svamp_constraint_test(tokens: List[Tok]):
-    if len(tokens) < 3:
-        return True
-    if tokens[0] == tokens[2]:
+    if tokens[0] == tokens[2] and tokens[1] in "-/^":
         return False
     return True
