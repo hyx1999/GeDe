@@ -1,6 +1,6 @@
 from dataset import loadMAWPS
-from solver import MathSolverTest
-from trainer import MathTrainerTest
+from solver import MathSolverTest2
+from trainer import MathTrainerTest2
 from cfg import MathConfig
 
 import datetime
@@ -57,9 +57,9 @@ def train_solver(
     train_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolverTest,
+    solver: MathSolverTest2,
 ):
-    trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)
+    trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-mawps")
@@ -82,7 +82,7 @@ def main(args: argparse.Namespace):
         cfg.debug = args.debug
         cfg.const_quant_size = len(const_nums)
         
-        solver = MathSolverTest(cfg)
+        solver = MathSolverTest2(cfg)
         
         if args.save_model:
             solver.save_model(args.save_model_dir, "test")

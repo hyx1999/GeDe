@@ -25,10 +25,10 @@ class MathConfig:
 
         self.batch_size = 8
         self.scheduler_step_size = 10
-        self.num_epochs = 80
-        self.bert_lr = 5e-5
-        self.gru_lr = 5e-4
-        self.weight_decay = 1e-4
+        self.num_epochs = 200
+        self.bert_lr = 2e-5
+        self.gru_lr = 2e-5
+        self.weight_decay = 1e-2
         
         self.max_nums_size = 35
         self.max_step_size = 35

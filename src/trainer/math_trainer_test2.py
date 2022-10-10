@@ -1,6 +1,6 @@
 import os
 import math
-from solver import MathSolverTest
+from solver import MathSolverTest2
 from scheduler import GradualWarmupScheduler
 from math_utils import DefaultDataset, compute_Expr_list
 from cfg import MathConfig
@@ -12,7 +12,7 @@ import torch
 import torch.nn.functional as F
 from torch import Tensor
 from torch.optim import AdamW, Adam
-from torch.optim.lr_scheduler import StepLR, LambdaLR
+from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data import Dataset, DataLoader
 
 from loguru import logger
@@ -21,7 +21,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class MathTrainerTest:
+class MathTrainerTest2:
 
     def __init__(
         self, 
@@ -62,16 +62,23 @@ class MathTrainerTest:
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
-            new_dataset.append(ExprDataInstance(
-                question=question,
-                nums=nums,
-                const_nums=const_nums,
-                expr_list=expr_list[:-1],
-                target=expr_list,
-                id=obj["sample_id"]
-            ))
-
+            for i in range(len(expr_list)):
+                new_dataset.append(ExprDataInstance(
+                    question=question,
+                    nums=nums,
+                    const_nums=const_nums,
+                    expr_list=expr_list[:i],
+                    target=[expr_list[i]],
+                    id=obj["sample_id"],
+                    end=(i + 1 == len(expr_list))
+                ))
+        
+        if "svamp" in self.cfg.dataset_name:
+            new_dataset.extend(self.augment_dataset(dataset))
         return new_dataset
+
+    def augment_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[ExprDataInstance]:
+        return []
 
     def collate_fn(
         self, 
@@ -79,7 +86,7 @@ class MathTrainerTest:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolverTest):
+    def train(self, solver: MathSolverTest2):
         solver.to(self.cfg.device)
         
         dataset = DefaultDataset(self.train_dataset)
@@ -92,12 +99,15 @@ class MathTrainerTest:
             ],
             weight_decay=self.cfg.weight_decay
         )
+
+        print("num_training_steps = {}".format(self.cfg.num_epochs * len(loader)))
+
         scheduler = get_linear_schedule_with_warmup(
             optim, 
             num_warmup_steps=0,
             num_training_steps=self.cfg.num_epochs * len(loader)
         )
-
+        
         for epoch in range(self.cfg.num_epochs):
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
@@ -119,10 +129,11 @@ class MathTrainerTest:
                     logger.info("[evaluate train-data]")
                     self.evaluate("train", epoch, solver, self.raw_dataset["train"][:100])
 
+
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolverTest,
+        solver: MathSolverTest2,
         optim: Union[Adam, AdamW],
         scheduler: LambdaLR,
         loader: DataLoader
@@ -136,7 +147,7 @@ class MathTrainerTest:
         for i, batch in enumerate(pbar):            
             if i < 5 and epoch == 0:
                 for x in [
-                    I.parse_input_test() \
+                    I.parse_input(solver.lang_tok.sep_token) \
                     + " ---> " \
                     + I.parse_output(solver.expr_tok.bos_token, solver.expr_tok.eos_token) for I in batch
                 ]:
@@ -164,7 +175,7 @@ class MathTrainerTest:
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolverTest,
+        solver: MathSolverTest2,
         test_data: List[Dict]
     ) -> float:
         solver.eval()

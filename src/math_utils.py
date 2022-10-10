@@ -276,7 +276,7 @@ def build_Expr_list_v2(seg_expr: List[Tok], nums_size: int) -> List[Expr]:
 def build_Expr_list_v3(seg_expr: List[Tok], nums_size: int) -> List[Expr]:
     # 根据运算符对表达式进行切分
     if len(seg_expr) == 1:
-        return [Expr(arg0=nums_size, expr_toks=seg_expr, expr_str="".join(seg_expr))]
+        return [Expr(arg0=nums_size, expr_toks=seg_expr, expr_str=" ".join(seg_expr))]
 
     Expr_list: List[Expr] = []
     expr_dict: Dict[str, int] = {f'[num{i}]': f'[num{i}]' for i in range(nums_size)}
@@ -289,7 +289,7 @@ def build_Expr_list_v3(seg_expr: List[Tok], nums_size: int) -> List[Expr]:
         arg2 = v_stack.pop()
         arg1 = v_stack.pop()
         expr_toks=[arg1, op, arg2]
-        expr_str=f'{arg1}{op}{arg2}'
+        expr_str=f'{arg1} {op} {arg2}'
         if expr_str not in expr_dict:
             arg0 = len(expr_dict)
             expr_dict[expr_str] = f'[num{arg0}]'
