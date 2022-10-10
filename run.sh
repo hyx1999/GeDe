@@ -18,8 +18,9 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"max_step_size":5,"save_result":true}'
+        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"max_step_size":5,"save_result":true,"num_epochs":1000,"batch_size":32}'
 fi
+
 
 if [[ ${mod} == "debug_svamp" ]];
 then

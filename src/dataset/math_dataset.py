@@ -381,7 +381,6 @@ def loadSVAMP(file_path: str, head: Optional[int] = None):
                     "sample_id": i,
                     "raw_text": obj["text"],
                     "seg_text": question,
-                    "seg_expr": question.split(),
                     "nums": [str(x) for x in nums],
                     "Expr_list": expr_list
                 })
@@ -454,7 +453,6 @@ def loadMAWPS(file_path: str, fold: int, head: Optional[int] = None):
                     "sample_id": i,
                     "raw_text": obj["text"],
                     "seg_text": question,
-                    "seg_expr": question.split(),
                     "nums": [str(x) for x in nums],
                     "Expr_list": expr_list
                 })

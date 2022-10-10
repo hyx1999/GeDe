@@ -1,5 +1,7 @@
+import json
 import os
 import math
+import random
 from solver import MathSolverTest2
 from scheduler import GradualWarmupScheduler
 from math_utils import DefaultDataset, compute_Expr_list
@@ -33,15 +35,25 @@ class MathTrainerTest2:
         self.cfg = cfg
         self.use_dev = use_dev
         self.raw_dataset = {
+            "raw_train": deepcopy(train_dataset),
             "train": deepcopy(train_dataset),
             "test": deepcopy(test_dataset),
         }
+        
         if self.use_dev:
             self.split_data()
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
     
+    def augment_data(self):
+        logger.info("data augumentation[shuffle,mix]")
+        shuffle_train_dataset = self.add_shuffle(self.raw_dataset["raw_train"])
+        mix_train_dataset = self.add_mix(self.raw_dataset["raw_train"])
+        self.raw_dataset["train"] = deepcopy(self.raw_dataset["raw_train"])
+        self.raw_dataset["train"].extend(shuffle_train_dataset)
+        self.raw_dataset["train"].extend(mix_train_dataset)
+
     def split_data(self):
         raw_train_dataset = self.raw_dataset["train"]
         val_ids = set(np.random.choice(len(raw_train_dataset), size=100, replace=False).tolist())
@@ -54,6 +66,55 @@ class MathTrainerTest2:
                 train_dataset.append(raw_train_dataset[i])
         self.raw_dataset["train"] = train_dataset
         self.raw_dataset["dev"] = dev_dataset
+
+    def add_shuffle(self, data: List[Dict], num: int = 1000):
+        indices = np.random.choice(range(len(data)), num, replace=False)
+        data = [data[i] for i in indices]
+        new_data = []
+        for obj in data:
+            obj = deepcopy(obj)
+            text: str = obj["seg_text"]
+            seg_text = text.split(".")
+            seg_text, q_text = seg_text[:-1], seg_text[-1:]
+            random.shuffle(seg_text)
+            seg_text = ".".join(seg_text + q_text)
+            obj["id"] = -1
+            obj["seg_text"] = seg_text
+            new_data.append(obj)
+        return new_data
+
+    def add_mix(self, data: List[Dict], num: int = 1000):
+        indices1 = np.random.choice(range(len(data)), num, replace=False)
+        indices2 = np.random.choice(range(len(data)), num, replace=False)
+        new_data = []
+        for i, j in zip(indices1, indices2):
+            if i == j:
+                continue
+            obj1 = data[i]
+            obj2 = data[j]
+            nums_size1 = len(obj1["nums"])
+            nums_size2 = len(obj2["nums"])
+            text1: str = obj1["seg_text"]
+            text2: str = obj2["seg_text"]
+            for i in range(nums_size2 - 1, -1, -1):
+                text2 = text2.replace(f"[num{i}]", f"[num{i+nums_size1}]")
+            seg_text1 = text1.split(".")
+            seg_text2 = text2.split(".")
+            ctx = seg_text1[:-1] + seg_text2[:-1]
+            q_text = seg_text1[-1:]
+            random.shuffle(ctx)
+            text = ".".join(ctx + q_text)
+            nums = obj1["nums"] + obj2["nums"]
+            obj = {
+                "id": -2,
+                "sample_id": obj1["sample_id"],
+                "seg_text": text,
+                "nums": nums,
+                "const_nums": obj1["const_nums"],
+                "Expr_list": obj1["Expr_list"]
+            }
+            new_data.append(obj)
+        return new_data
 
     def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[ExprDataInstance]:
         new_dataset = []
@@ -72,13 +133,7 @@ class MathTrainerTest2:
                     id=obj["sample_id"],
                     end=(i + 1 == len(expr_list))
                 ))
-        
-        if "svamp" in self.cfg.dataset_name:
-            new_dataset.extend(self.augment_dataset(dataset))
         return new_dataset
-
-    def augment_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[ExprDataInstance]:
-        return []
 
     def collate_fn(
         self, 
@@ -109,6 +164,11 @@ class MathTrainerTest2:
         )
         
         for epoch in range(self.cfg.num_epochs):
+            if "svamp" in self.cfg.dataset_name:
+                self.augment_data()
+                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
+                dataset.data = self.train_dataset
+                
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
             if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:

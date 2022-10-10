@@ -25,7 +25,7 @@ class MathConfig:
 
         self.batch_size = 8
         self.scheduler_step_size = 10
-        self.num_epochs = 200
+        self.num_epochs = 500
         self.bert_lr = 2e-5
         self.gru_lr = 2e-5
         self.weight_decay = 1e-2
@@ -40,6 +40,7 @@ class MathConfig:
         self.quant_size = 35
         self.const_quant_size = None
         self.ext_tokens = None
+        self.expr_size = 4
         self.beam_size = 4
         
         self.__dict__.update(kwargs)

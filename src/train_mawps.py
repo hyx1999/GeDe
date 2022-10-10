@@ -1,6 +1,6 @@
 from dataset import loadMAWPS
-from solver import MathSolverTest2
-from trainer import MathTrainerTest2
+from solver import MathSolverTest2, MathSolverTest
+from trainer import MathTrainerTest2, MathTrainerTest
 from cfg import MathConfig
 
 import datetime

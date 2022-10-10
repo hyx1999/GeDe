@@ -1,4 +1,5 @@
 from loguru import logger
+from copy import deepcopy
 import numpy as np
 import torch
 import decimal
@@ -17,6 +18,7 @@ Op = namedtuple('Op', ['arg0', 'arg1', 'arg2', 'op'])  # $(arg0) = $(arg1) $(op)
 
 Expr = namedtuple('Expr', ['arg0', 'expr_toks', 'expr_str'])
 
+
 class DefaultDataset(Dataset):
     
     def __init__(self, data: List[Dict]) -> None:
@@ -26,7 +28,7 @@ class DefaultDataset(Dataset):
         return len(self.data)
     
     def __getitem__(self, index) -> Dict:
-        return self.data[index]    
+        return self.data[index]   
 
 
 class ExprDataInstance:
@@ -39,7 +41,7 @@ class ExprDataInstance:
         expr_list: List[Expr],
         target: Optional[List[Expr]] = None,
         id: Optional[int] = None,
-        end: Optional[bool] = None
+        end: bool = True
     ) -> None:
         self.question = question
         self.nums = nums
@@ -49,33 +51,23 @@ class ExprDataInstance:
         self.id = id
         self.end = end
     
-    def parse_input(self, sep_token: str) -> str:
+    def parse_input(self, sep_token: str, use_expr: bool = True) -> str:
         input_text = [self.question]
-        # for i in range(len(self.const_nums)):
-        #     input_text.append("[c{}] = {}.".format(i, self.const_nums[i]))
-        for expr in self.expr_list:
-            input_text.append(sep_token)
-            input_text.append("[num{}] = {}"\
-                .format(expr.arg0, expr.expr_str))
+        if use_expr:
+            for expr in self.expr_list:
+                input_text.append(sep_token)
+                input_text.append("[num{}] = {}"\
+                    .format(expr.arg0, expr.expr_str))
         input_text = " ".join(input_text)
         return input_text
 
     def parse_output(self, bos_token: str, eos_token: str) -> str:
         output_text = []
-        if self.end is None:
-            for i, expr in enumerate(self.target):
-                output_text.extend(expr.expr_toks)
-                if i + 1 != len(self.target):
-                    output_text.append(bos_token)
-                else:
-                    output_text.append(eos_token)
-        else:
-            assert len(self.target) == 1
-            output_text.extend(self.target[0].expr_toks)
-            if self.end:
-                output_text.append(eos_token)
-            else:
-                output_text.append(bos_token)
+        for expr in self.target:
+            output_text.extend(expr.expr_toks)
+            output_text.append(bos_token)
+        if self.end:
+            output_text[-1] = eos_token
         output_text = " ".join(output_text)
         return output_text
 

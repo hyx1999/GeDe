@@ -252,8 +252,8 @@ class MathRepresenter(nn.Module):
         self.quant_id_embedding = nn.Embedding(self.cfg.quant_size, hidden_dim)
         self.position_embedding = nn.Embedding(self.cfg.expr_size , hidden_dim)
 
-        self.self_attn  = Attention(hidden_dim)
-        self.cross_attn = Attention(hidden_dim)
+        self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
+        self.attn = Attention(hidden_dim)
 
     def embedding(self,
         input_ids: Tensor, 
@@ -267,17 +267,16 @@ class MathRepresenter(nn.Module):
     
     def forward(self, 
         decoder_input_ids: Tensor,
+        hidden_state: Tensor,
         position_ids: Tensor,
         quant_id_ids: Tensor,
         quant_states: Tensor,
         quant_mask: Tensor,
-        rep_mask: Tensor,
     ) -> Tensor:
         input_states = self.embedding(decoder_input_ids, quant_states)
         input_states = input_states + self.position_embedding(position_ids) + self.quant_id_embedding(quant_id_ids)
-        inter_states = self.self_attn(input_states, input_states, rep_mask)
-        # output_states = self.cross_attn(inter_states, quant_states, quant_mask)
-        output_states = inter_states
+        inter_states, _ = self.gru(input_states, hidden_state.unsqueeze(0))
+        output_states = self.attn(inter_states, quant_states, quant_mask)
 
         return output_states
 
@@ -405,6 +404,13 @@ class MathSolverTest(nn.Module):
         shift_pt_labels[:, 1:].copy_(pt_labels[:, :-1])
         shift_pt_labels[:, 0] = self.expr_tok.bos_token_id
         pt_labels[pt_labels == self.expr_tok.pad_token_id] = -1
+        
+        for i in range(shift_pt_labels.shape[0]):
+            cnt = 0
+            for j in range(1, shift_pt_labels.shape[-1]):
+                if shift_pt_labels[i, j].item() == self.expr_tok.bos_token_id:
+                    shift_pt_labels[i, j] = self.expr_tok.convert_tokens_to_ids("[num{}]".format(quant_num[i] + cnt))
+                    cnt += 1
 
         batch_sep = []
         for labels in batch_labels:
@@ -436,9 +442,8 @@ class MathSolverTest(nn.Module):
         pt_range = torch.arange(self.cfg.quant_size, dtype=torch.long, device=self.cfg.device)\
             .expand(*(pt_quant_id.shape + (-1,)))  # [B, L, |Q|]
         pt_quant_mask = (pt_range < pt_quant_id.unsqueeze(-1))
-        pt_rep_mask = (pt_quant_id.unsqueeze(-1) >= pt_quant_id.unsqueeze(-2))  # [B, L, L]
         
-        return pt_labels, shift_pt_labels, pt_quant_id, pt_position, pt_quant_mask, pt_rep_mask, batch_quant_rng
+        return pt_labels, shift_pt_labels, pt_quant_id, pt_position, pt_quant_mask, batch_quant_rng
     
     def encode(
         self, 
@@ -457,36 +462,30 @@ class MathSolverTest(nn.Module):
 
     def represent(
         self,
+        hidden_state: Tensor,
         decoder_input_ids: Tensor,
         position_ids: Tensor,
         quant_id_ids: Tensor,
         quant_states: Tensor,
         quant_mask: Tensor,
-        rep_mask: Tensor,    
         batch_quant_rng: List[List[Tuple[int, int, int]]]
     ):
         memory_states = self.representer(
             decoder_input_ids=decoder_input_ids,
+            hidden_state=hidden_state,
             position_ids=position_ids,
             quant_id_ids=quant_id_ids,
             quant_states=quant_states,
             quant_mask=quant_mask,
-            rep_mask=rep_mask,
         )
-        # print("memory_states.shape = {}".format(memory_states.shape))
         batch_size = decoder_input_ids.shape[0]
         new_quant_states = torch.zeros(
             batch_size, self.cfg.quant_size, self.encoder.bert.config.hidden_size, dtype=torch.float, device=memory_states.device)
         for i, quant_rng in enumerate(batch_quant_rng):
             for j in range(len(quant_rng)):
                 quant_id, left, right = quant_rng[j]
-                indices = list(range(left, right - 1))
-                # print("i = {}".format(i))
-                # print("quant_id: {} range: ({}, {})".format(quant_id, left, right))
-                # print("indices = {}".format(indices))
+                indices = list(range(left, right))
                 new_quant_states[i, quant_id, :].copy_(torch.mean(memory_states[i, indices, :], dim=0))
-        # if hasattr(self.cfg, "print"):
-        #     print("new_quant_states:", new_quant_states[0, :5, :5])
         return quant_states + new_quant_states
 
     def decode(
@@ -498,30 +497,24 @@ class MathSolverTest(nn.Module):
     
     def forward(self, batch: List[ExprDataInstance]) -> Tensor:
         input_dict, quant_ids = self.prepare_input(
-            [I.parse_input_test() for I in batch]
+            [I.parse_input(sep_token="", use_expr=False) for I in batch]
         )
-        labels, decoder_input_ids, quant_id_ids, position_ids, quant_mask, rep_mask, batch_quant_rng = \
+        labels, decoder_input_ids, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
             self.prepare_output(
                 [I.parse_output(self.expr_tok.bos_token, self.expr_tok.eos_token) for I in batch],
                 [len(x) for x in quant_ids]
             )
         hidden_state, quant_states = self.encode(input_dict, quant_ids)
-        # print("input_text = ", batch[0].parse_input("#"))
-        # print("quant_mask = ", quant_mask)
-        # print("rep_mask = ", rep_mask)
-          
+
         quant_states = self.represent(
             decoder_input_ids=decoder_input_ids,
+            hidden_state=hidden_state,
             quant_id_ids=quant_id_ids,
             position_ids=position_ids,
             quant_states=quant_states,
             quant_mask=quant_mask,
-            rep_mask=rep_mask,
             batch_quant_rng=batch_quant_rng
         )
-        
-        # print("quant_states.shape = {}".format(quant_states.shape))
-        # print("quant_mask.shape = {}", quant_mask.shape)
         
         logits, _ = self.decode(
             decoder_input_ids=decoder_input_ids,
@@ -557,20 +550,29 @@ class MathSolverTest(nn.Module):
 
         if len(expr_list) > 0:
             inter_text = " ".join(sum([expr.expr_toks + [self.expr_tok.bos_token] for expr in expr_list], []))
-            _, decoder_input_ids, quant_id_ids, position_ids, quant_mask, rep_mask, batch_quant_rng = \
+            _, decoder_input_ids, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
                 self.prepare_output([inter_text], [len(quant_ids[0])])
             quant_states = self.represent(
                 decoder_input_ids=decoder_input_ids,
+                hidden_state=hidden_state,
                 quant_id_ids=quant_id_ids,
                 position_ids=position_ids,
                 quant_states=quant_states,
                 quant_mask=quant_mask,
-                rep_mask=rep_mask,
                 batch_quant_rng=batch_quant_rng
             )
-        
+
+        quant_num = len(quant_ids[0]) + len(expr_list)
+        search_quant_mask = torch.zeros((1, 1, self.cfg.quant_size), dtype=torch.bool, device=self.cfg.device)
+        search_quant_mask[..., :quant_num] = True        
+
+        if len(expr_list) == 0:
+            start_token_id = self.expr_tok.bos_token_id
+        else:
+            start_token_id = self.expr_tok.convert_tokens_to_ids("[num{}]".format(quant_num))
+
         decoder_input_id = torch.tensor(
-            self.expr_tok.bos_token_id,
+            start_token_id,
             dtype=torch.long,
             device=hidden_state.device
         ).view(1, 1)
@@ -579,10 +581,6 @@ class MathSolverTest(nn.Module):
             gru_hidden_state = hidden_state
         
         beams = [ExprBeam([], decoder_input_id, gru_hidden_state, 0.0)]
-        
-        quant_num = len(quant_ids[0]) + len(expr_list)
-        search_quant_mask = torch.zeros((1, 1, self.cfg.quant_size), dtype=torch.bool, device=self.cfg.device)
-        search_quant_mask[..., :quant_num] = True
         
         while len(beams) > 0:
             do_search = False
@@ -746,17 +744,28 @@ def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: 
     if end:
         tokens = tokens[:-1]
     pat = re.compile("\[num\d+\]|\[c\d+\]")
-    if len(tokens) > 0 and not pat.match(tokens[0]):
-        return False
-    for i, tok in enumerate(tokens):
-        if pat.match(tok):
-            if i > 0 and tokens[i - 1] not in '+-*/^':
+    n_stk = []
+    o_stk = []
+    try:
+        for i, tok in enumerate(tokens):
+            if pat.match(tok):
+                if i > 0 and tokens[i - 1] not in '+-*/^(':
+                    return False
+                n_stk.append('n')
+            elif tok in '+-*/^':
+                if i > 0 and tokens[i - 1] in '+-*/^(':
+                    return False
+                o_stk.append(tok)
+        if end:
+            while len(o_stk) > 0:
+                o_stk.pop()
+                n_stk.pop()
+                n_stk.pop()
+                n_stk.append('n')
+            if len(n_stk) != 1:
                 return False
-        elif tok in '+-*/^(':
-            if i > 0 and tokens[i - 1] in '+-*/^':
-                return False
-    if end and (len(tokens) == 0 or not pat.match(tokens[-1])):
-        return False
+    except:
+        return False 
     return True
 
 

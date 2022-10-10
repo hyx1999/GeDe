@@ -342,7 +342,7 @@ class MathSolverTest2(nn.Module):
         ).to(self.cfg.device)
         
         batch_quant_ids   = []
-        for ids in input_dict.input_ids:
+        for j, ids in enumerate(input_dict.input_ids):
             quant_map = {}
             quant_ids = []
             for i, token_id in enumerate(ids):

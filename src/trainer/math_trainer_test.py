@@ -1,5 +1,6 @@
 import os
 import math
+import random
 from solver import MathSolverTest
 from scheduler import GradualWarmupScheduler
 from math_utils import DefaultDataset, compute_Expr_list
@@ -55,6 +56,55 @@ class MathTrainerTest:
         self.raw_dataset["train"] = train_dataset
         self.raw_dataset["dev"] = dev_dataset
 
+    def add_shuffle(self, data: List[Dict], num: int = 1000):
+        indices = np.random.choice(range(len(data)), num, replace=False)
+        data = [data[i] for i in indices]
+        new_data = []
+        for obj in data:
+            obj = deepcopy(obj)
+            text: str = obj["seg_text"]
+            seg_text = text.split(".")
+            seg_text, q_text = seg_text[:-1], seg_text[-1:]
+            random.shuffle(seg_text)
+            seg_text = ".".join(seg_text + q_text)
+            obj["id"] = -1
+            obj["seg_text"] = seg_text
+            new_data.append(obj)
+        return new_data
+
+    def add_mix(self, data: List[Dict], num: int = 1000):
+        indices1 = np.random.choice(range(len(data)), num, replace=False)
+        indices2 = np.random.choice(range(len(data)), num, replace=False)
+        new_data = []
+        for i, j in zip(indices1, indices2):
+            if i == j:
+                continue
+            obj1 = data[i]
+            obj2 = data[j]
+            nums_size1 = len(obj1["nums"])
+            nums_size2 = len(obj2["nums"])
+            text1: str = obj1["seg_text"]
+            text2: str = obj2["seg_text"]
+            for i in range(nums_size2 - 1, -1, -1):
+                text2 = text2.replace(f"[num{i}]", f"[num{i+nums_size1}]")
+            seg_text1 = text1.split(".")
+            seg_text2 = text2.split(".")
+            ctx = seg_text1[:-1] + seg_text2[:-1]
+            q_text = seg_text1[-1:]
+            random.shuffle(ctx)
+            text = ".".join(ctx + q_text)
+            nums = obj1["nums"] + obj2["nums"]
+            obj = {
+                "id": -2,
+                "sample_id": obj1["sample_id"],
+                "seg_text": text,
+                "nums": nums,
+                "const_nums": obj1["const_nums"],
+                "Expr_list": obj1["Expr_list"]
+            }
+            new_data.append(obj)
+        return new_data
+
     def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[ExprDataInstance]:
         new_dataset = []
         for obj in dataset:
@@ -66,7 +116,7 @@ class MathTrainerTest:
                 question=question,
                 nums=nums,
                 const_nums=const_nums,
-                expr_list=expr_list[:-1],
+                expr_list=expr_list,
                 target=expr_list,
                 id=obj["sample_id"]
             ))
@@ -99,6 +149,11 @@ class MathTrainerTest:
         )
 
         for epoch in range(self.cfg.num_epochs):
+            if "svamp" in self.cfg.dataset_name:
+                self.augment_data()
+                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
+                dataset.data = self.train_dataset
+
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
             if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
@@ -136,7 +191,7 @@ class MathTrainerTest:
         for i, batch in enumerate(pbar):            
             if i < 5 and epoch == 0:
                 for x in [
-                    I.parse_input_test() \
+                    I.parse_input(sep_token="", use_expr=False) \
                     + " ---> " \
                     + I.parse_output(solver.expr_tok.bos_token, solver.expr_tok.eos_token) for I in batch
                 ]:
@@ -183,10 +238,6 @@ class MathTrainerTest:
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
-            # if self.cfg.debug:
-            #     print(">")
-            #     print("target:", [" ".join(x.expr_toks) for x in obj["Expr_list"]])
-            # output_Expr_list = solver.generate(input_text, nums, const_nums)
             output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
             target_Expr_list = obj["Expr_list"]
 
@@ -197,15 +248,6 @@ class MathTrainerTest:
                 output_value = None
                 target_value = None
             eps = 1e-5
-
-            # TEST USE
-            # if i < 20:
-            #     logger.info("i: {}".format(i))
-            #     logger.info("input_text: {}".format(input_text))
-            #     logger.info("output_Op_list: {}".format(output_Expr_list))
-            #     logger.info("target_Op_list: {}".format(target_Expr_list))
-            #     logger.info("output_value: {}".format(output_value))
-            #     logger.info("target_value: {}".format(target_value))
 
             if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
                 Acc.append(1)

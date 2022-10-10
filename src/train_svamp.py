@@ -1,6 +1,6 @@
 from dataset import loadSVAMP
-from solver import MathSolver, MathSolverTest2
-from trainer import MathTrainer, MathTrainerTest2
+from solver import MathSolverTest, MathSolverTest2
+from trainer import MathTrainerTest, MathTrainerTest2
 from cfg import MathConfig
 
 import datetime
@@ -39,6 +39,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model_type", type=str, default="test2")
     parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
@@ -56,10 +57,13 @@ def train_solver(
     train_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolver,
+    solver: Union[MathSolverTest, MathSolverTest2],
 ):
     # trainer = MathTrainer(cfg, train_dataset, test_dataset)
-    trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
+    if args.model_type == "test2":
+        trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
+    else:
+        trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)        
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-svamp")
@@ -81,7 +85,10 @@ def main(args: argparse.Namespace):
     cfg.const_quant_size = len(const_nums)
 
     # solver = MathSolver(cfg, const_nums)
-    solver = MathSolverTest2(cfg)
+    if args.model_type == "test2":
+        solver = MathSolverTest2(cfg)
+    else:
+        solver = MathSolverTest(cfg)
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
