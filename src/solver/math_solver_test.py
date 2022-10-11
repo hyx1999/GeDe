@@ -183,6 +183,7 @@ class MathDecoder(nn.Module):
         self.vocab_size = vocab_size
         
         self.fix_states = nn.Embedding(vocab_size - quant_size, hidden_dim)
+        self.mix_ffn = nn.Linear(2 * hidden_dim, hidden_dim)
         self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
         self.mem_attn   = Attention(hidden_dim)
         self.quant_attn = Attention(hidden_dim)
@@ -235,10 +236,13 @@ class MathDecoder(nn.Module):
         word_states = self.prepare_word_states(quant_states)
         input_states = self.embedding(decoder_input_ids, word_states)
         mixin_states = self.embedding(mixin_id_ids, word_states)
-        input_states = input_states + mixin_states
+        
+        input_states = self.mix_ffn(
+            torch.cat((input_states,mixin_states), dim=-1)
+        )
         inter_states, output_hidden_state = self.gru(input_states, hidden_state.unsqueeze(dim=0))
-        output_states = self.mem_attn(inter_states, memory_states)
-        output_states = self.quant_attn(output_states, quant_states, quant_mask)
+        # inter_states = self.mem_attn(inter_states, memory_states)
+        output_states = self.quant_attn(inter_states, quant_states, quant_mask)
 
         fix_mask   = torch.ones(quant_mask.shape[:2] + (self.vocab_size - self.quant_size,), dtype=torch.bool, device=self.cfg.device)
         vocab_mask = torch.cat((fix_mask, quant_mask), dim=-1)
@@ -291,8 +295,8 @@ class MathRepresenter(nn.Module):
         input_states = self.embedding(decoder_input_ids, quant_states)
         input_states = input_states + self.position_embedding(position_ids) + self.quant_id_embedding(quant_id_ids)
         inter_states, _ = self.gru(input_states, hidden_state.unsqueeze(0))
-        output_states = self.mem_attn(inter_states, memory_states)
-        output_states = self.quant_attn(output_states, quant_states, quant_mask)
+        # inter_states = self.mem_attn(inter_states, memory_states)
+        output_states = self.quant_attn(inter_states, quant_states, quant_mask)
         return output_states
 
 

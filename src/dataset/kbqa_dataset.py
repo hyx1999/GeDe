@@ -8,7 +8,7 @@ from collections import defaultdict
 from kbqa_utils import Expr, KBQADataset, RawDataInstance
 
 
-def loadWebQSP(path: AnyStr, head: int) -> Dict[AnyStr, KBQADataset]:
+def loadWebQSP(path: AnyStr, head: Optional[int] = None) -> Dict[AnyStr, KBQADataset]:
     dataset_dict: Dict[str, KBQADataset] = dict()
     rel_dict = defaultdict(set)
     for key in ["train", "test"]:
@@ -25,13 +25,17 @@ def loadWebQSP(path: AnyStr, head: int) -> Dict[AnyStr, KBQADataset]:
                 if S_expr is None:
                     filter_count += 1
                     continue
-                item = RawDataInstance(qid, query, S_expr, answer)
+                relations = []
+                for edge in raw_item["graph_query"]["edges"]:
+                    relations.append(edge["relation"])
+                relations = list(set(relations))
+                item = RawDataInstance(qid, query, S_expr, relations, answer)
                 if key == "train" and not item.check_exprs():
                     filter_count += 1
                     continue
-                data.append(item)               
-                for edge in raw_item["graph_query"]["edges"]:
-                    rel_dict[key].add(edge["relation"])
+                data.append(item)
+                for rel in relations:
+                    rel_dict[key].add(rel)
 
         if key == "train":
             dev_indexs = np.random.choice(len(data), 100, replace=False).tolist()
@@ -53,7 +57,7 @@ def loadWebQSP(path: AnyStr, head: int) -> Dict[AnyStr, KBQADataset]:
                 "test": KBQADataset(data),
             })
     
-    if head != -1:
+    if head is not None and head != -1:
         for key in dataset_dict.keys():
             dataset_dict[key].data = dataset_dict[key].data[:head]
     

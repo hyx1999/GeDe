@@ -4,7 +4,7 @@ set -e
 
 mod=${1}
 log='log:'${2}
-device=0
+device=3
 echo "mod: ${mod}"
 
 cd src
@@ -33,7 +33,7 @@ then
         --data_path '../data/SVAMP' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"max_step_size":5,"save_result":true}' \
+        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"max_step_size":5,"save_result":true,"batch_size":8}' \
         --head 1000 \
         --debug
 

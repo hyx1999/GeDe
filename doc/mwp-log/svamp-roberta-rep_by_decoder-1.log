@@ -1,0 +1,1410 @@
+[2022-10-10T22:00:43.488792+0800]-[INFO] train_svamp.py-main-78: log_text: log:roberta,svamp,test
+[2022-10-10T22:01:26.465079+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 0, loss-ave: 2.9031145927370656, mAcc: 0.6576558668119004
+[2022-10-10T22:01:53.584396+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 1, loss-ave: 0.8208301320823701, mAcc: 0.8330948913977043
+[2022-10-10T22:02:20.717200+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 2, loss-ave: 0.5511657011679802, mAcc: 0.8854429427600695
+[2022-10-10T22:02:47.629744+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 3, loss-ave: 0.4220843073256129, mAcc: 0.9139173751265645
+[2022-10-10T22:03:14.678984+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 4, loss-ave: 0.3514052132107839, mAcc: 0.9283750566817423
+[2022-10-10T22:03:41.686174+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 5, loss-ave: 0.31047624062202817, mAcc: 0.9385489101021648
+[2022-10-10T22:03:41.686860+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:04:24.704135+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 5 answer-mAcc: 0.314
+[2022-10-10T22:04:51.742451+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 6, loss-ave: 0.2551892221484359, mAcc: 0.9495954584832713
+[2022-10-10T22:05:18.744024+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 7, loss-ave: 0.251644552643225, mAcc: 0.9531042516686534
+[2022-10-10T22:05:45.691152+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 8, loss-ave: 0.2496465933739345, mAcc: 0.9563962770175691
+[2022-10-10T22:06:12.618765+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 9, loss-ave: 0.19145127901749506, mAcc: 0.9643273250443941
+[2022-10-10T22:06:39.585313+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 10, loss-ave: 0.22860277960721495, mAcc: 0.961400002013636
+[2022-10-10T22:06:39.585675+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:07:53.524705+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 10 answer-mAcc: 0.316
+[2022-10-10T22:08:20.412285+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 11, loss-ave: 0.19384796668018725, mAcc: 0.9664776889422467
+[2022-10-10T22:08:47.297933+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 12, loss-ave: 0.13977539176640477, mAcc: 0.9728859561393582
+[2022-10-10T22:09:14.084758+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 13, loss-ave: 0.1363432987421584, mAcc: 0.9722540060072454
+[2022-10-10T22:09:40.875944+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 14, loss-ave: 0.1561624992172342, mAcc: 0.9703618969019436
+[2022-10-10T22:10:07.666933+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 15, loss-ave: 0.15159964383113964, mAcc: 0.974124103253731
+[2022-10-10T22:10:07.667246+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:11:04.967332+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 15 answer-mAcc: 0.359
+[2022-10-10T22:11:32.386171+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 16, loss-ave: 0.14827303881150494, mAcc: 0.9742774355199197
+[2022-10-10T22:11:59.428162+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 17, loss-ave: 0.16673568956251042, mAcc: 0.9700585423231731
+[2022-10-10T22:12:26.506324+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 18, loss-ave: 0.1067458757830766, mAcc: 0.9790799366002167
+[2022-10-10T22:12:53.598048+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 19, loss-ave: 0.10989310420672445, mAcc: 0.9790779682819474
+[2022-10-10T22:13:20.659367+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 20, loss-ave: 0.11788292865021031, mAcc: 0.9784846496946029
+[2022-10-10T22:13:20.659799+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:14:14.664283+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 20 answer-mAcc: 0.365
+[2022-10-10T22:14:41.784281+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 21, loss-ave: 0.09285260309894082, mAcc: 0.9830241823621075
+[2022-10-10T22:15:08.893713+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 22, loss-ave: 0.08015234590065835, mAcc: 0.9833034111646599
+[2022-10-10T22:15:35.865516+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 23, loss-ave: 0.09666501644148445, mAcc: 0.9822457045999192
+[2022-10-10T22:16:02.723498+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 24, loss-ave: 0.11708956968447885, mAcc: 0.9795379995086417
+[2022-10-10T22:16:29.567299+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 25, loss-ave: 0.08326395985520015, mAcc: 0.9848760437722728
+[2022-10-10T22:16:29.567620+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:18:19.638631+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 25 answer-mAcc: 0.314
+[2022-10-10T22:18:46.599508+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 26, loss-ave: 0.1023029920617188, mAcc: 0.9820454862281567
+[2022-10-10T22:19:13.533599+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 27, loss-ave: 0.06786681871345165, mAcc: 0.9859672581573176
+[2022-10-10T22:19:40.447744+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 28, loss-ave: 0.08139347982113264, mAcc: 0.9846190934569478
+[2022-10-10T22:20:07.324125+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 29, loss-ave: 0.09662072028039759, mAcc: 0.9834211514196323
+[2022-10-10T22:20:34.259671+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 30, loss-ave: 0.06625729837177308, mAcc: 0.9868223755110918
+[2022-10-10T22:20:34.260097+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:21:32.634870+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 30 answer-mAcc: 0.37
+[2022-10-10T22:21:59.473660+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 31, loss-ave: 0.07729081062682076, mAcc: 0.9853647088883184
+[2022-10-10T22:22:26.293873+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 32, loss-ave: 0.061080315392842414, mAcc: 0.988447875163634
+[2022-10-10T22:22:53.208001+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 33, loss-ave: 0.05986800895178806, mAcc: 0.9871638910157686
+[2022-10-10T22:23:20.157615+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 34, loss-ave: 0.05762080335220731, mAcc: 0.9876047184752448
+[2022-10-10T22:23:47.113412+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 35, loss-ave: 0.05537196240104909, mAcc: 0.9878422118931933
+[2022-10-10T22:23:47.113734+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:24:40.858391+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 35 answer-mAcc: 0.371
+[2022-10-10T22:25:07.735387+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 36, loss-ave: 0.05935225114019279, mAcc: 0.988072691982939
+[2022-10-10T22:25:34.686060+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 37, loss-ave: 0.06480058020041483, mAcc: 0.9868853774689536
+[2022-10-10T22:26:01.623547+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 38, loss-ave: 0.05991495491936094, mAcc: 0.9867083002592771
+[2022-10-10T22:26:28.559317+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 39, loss-ave: 0.04581425412960563, mAcc: 0.9891640196623086
+[2022-10-10T22:26:55.490620+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 40, loss-ave: 0.05619998896492797, mAcc: 0.989016343770743
+[2022-10-10T22:26:55.490968+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:27:56.508013+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 40 answer-mAcc: 0.364
+[2022-10-10T22:28:23.369650+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 41, loss-ave: 0.08225605127613021, mAcc: 0.9861038642681889
+[2022-10-10T22:28:50.248254+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 42, loss-ave: 0.0521462635918652, mAcc: 0.9887713566991209
+[2022-10-10T22:29:17.191177+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 43, loss-ave: 0.03649668863310274, mAcc: 0.9908518768448866
+[2022-10-10T22:29:44.104139+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 44, loss-ave: 0.042259383079240126, mAcc: 0.9906077245416228
+[2022-10-10T22:30:11.022393+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 45, loss-ave: 0.05719351622784347, mAcc: 0.9884055837723439
+[2022-10-10T22:30:11.022720+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:31:06.764796+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 45 answer-mAcc: 0.365
+[2022-10-10T22:31:33.711187+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 46, loss-ave: 0.051793755837806474, mAcc: 0.9898273879638458
+[2022-10-10T22:32:00.623994+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 47, loss-ave: 0.039888688267417, mAcc: 0.9901641056737827
+[2022-10-10T22:32:27.538216+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 48, loss-ave: 0.036859297056478106, mAcc: 0.9907199538694387
+[2022-10-10T22:32:54.436802+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 49, loss-ave: 0.040104108097848125, mAcc: 0.9906346423328681
+[2022-10-10T22:33:21.270357+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 50, loss-ave: 0.04483979075353676, mAcc: 0.9907973372299252
+[2022-10-10T22:33:21.270685+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:34:24.655310+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 50 answer-mAcc: 0.397
+[2022-10-10T22:34:51.567654+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 51, loss-ave: 0.055321075776004446, mAcc: 0.9888356975623366
+[2022-10-10T22:35:21.024483+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 52, loss-ave: 0.05466449282848805, mAcc: 0.9879399224092033
+[2022-10-10T22:35:53.785386+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 53, loss-ave: 0.043594478066378284, mAcc: 0.9895235802077762
+[2022-10-10T22:36:26.581523+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 54, loss-ave: 0.03700834895319683, mAcc: 0.9910762705875718
+[2022-10-10T22:36:59.352443+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 55, loss-ave: 0.03624132539608676, mAcc: 0.9916252187493496
+[2022-10-10T22:36:59.352886+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:38:20.535691+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 55 answer-mAcc: 0.369
+[2022-10-10T22:38:47.525065+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 56, loss-ave: 0.030323804320038245, mAcc: 0.9922808662019007
+[2022-10-10T22:39:14.448744+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 57, loss-ave: 0.036735744460431964, mAcc: 0.9914729076487417
+[2022-10-10T22:39:41.389750+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 58, loss-ave: 0.03896159895794539, mAcc: 0.9911071780983728
+[2022-10-10T22:40:08.289921+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 59, loss-ave: 0.03941054021081643, mAcc: 0.9901681689512335
+[2022-10-10T22:40:35.262896+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 60, loss-ave: 0.03940063131144578, mAcc: 0.9911806486338453
+[2022-10-10T22:40:35.263261+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:41:53.944858+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 60 answer-mAcc: 0.373
+[2022-10-10T22:42:20.928388+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 61, loss-ave: 0.0627912055171878, mAcc: 0.9886371611638833
+[2022-10-10T22:42:47.905386+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 62, loss-ave: 0.029948109105272448, mAcc: 0.9927262506108854
+[2022-10-10T22:43:14.889111+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 63, loss-ave: 0.022114156889255672, mAcc: 0.9933255179844437
+[2022-10-10T22:43:41.899300+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 64, loss-ave: 0.01998492536444454, mAcc: 0.9940506639978055
+[2022-10-10T22:44:09.046366+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 65, loss-ave: 0.03670806650634898, mAcc: 0.9926427084071036
+[2022-10-10T22:44:09.046707+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:45:27.902714+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 65 answer-mAcc: 0.347
+[2022-10-10T22:46:00.629040+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 66, loss-ave: 0.04404547094333611, mAcc: 0.9908966681429447
+[2022-10-10T22:46:33.447182+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 67, loss-ave: 0.03131181526454931, mAcc: 0.9912454194694985
+[2022-10-10T22:47:06.258916+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 68, loss-ave: 0.04018977851771301, mAcc: 0.99130684364843
+[2022-10-10T22:47:39.108390+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 69, loss-ave: 0.03224041668383113, mAcc: 0.9931732404019693
+[2022-10-10T22:48:14.061677+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 70, loss-ave: 0.023861803001919347, mAcc: 0.9932283740917235
+[2022-10-10T22:48:14.062368+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:49:31.546998+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 70 answer-mAcc: 0.345
+[2022-10-10T22:49:58.623006+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 71, loss-ave: 0.020684653603946362, mAcc: 0.9936027708854384
+[2022-10-10T22:50:25.695720+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 72, loss-ave: 0.03122880010419447, mAcc: 0.9918404705348512
+[2022-10-10T22:50:52.782423+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 73, loss-ave: 0.04215257306399757, mAcc: 0.9906496190236118
+[2022-10-10T22:51:19.898045+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 74, loss-ave: 0.0304099722385664, mAcc: 0.9925802604842732
+[2022-10-10T22:51:46.795667+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 75, loss-ave: 0.022800483328492223, mAcc: 0.9937971793968259
+[2022-10-10T22:51:46.796073+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:53:02.047570+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 75 answer-mAcc: 0.387
+[2022-10-10T22:53:29.005349+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 76, loss-ave: 0.04027233198018192, mAcc: 0.9914468931787797
+[2022-10-10T22:53:55.977270+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 77, loss-ave: 0.025158341301218985, mAcc: 0.9934351694492893
+[2022-10-10T22:54:22.956023+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 78, loss-ave: 0.04458597562817116, mAcc: 0.990285518515201
+[2022-10-10T22:54:49.906132+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 79, loss-ave: 0.03576557424935981, mAcc: 0.9925210296956031
+[2022-10-10T22:55:16.861344+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 80, loss-ave: 0.027124322347859803, mAcc: 0.9930797458908334
+[2022-10-10T22:55:16.861766+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:56:14.137710+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 80 answer-mAcc: 0.403
+[2022-10-10T22:56:41.108788+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 81, loss-ave: 0.022946531960047825, mAcc: 0.993824697632826
+[2022-10-10T22:57:08.087974+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 82, loss-ave: 0.020092749533574265, mAcc: 0.9937644120087757
+[2022-10-10T22:57:35.042364+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 83, loss-ave: 0.02643776148073785, mAcc: 0.9934385452258374
+[2022-10-10T22:58:03.515561+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 84, loss-ave: 0.023241458647542176, mAcc: 0.994018326430527
+[2022-10-10T22:58:36.255332+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 85, loss-ave: 0.03577756379482587, mAcc: 0.9923623328597188
+[2022-10-10T22:58:36.255779+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T22:59:58.108324+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 85 answer-mAcc: 0.362
+[2022-10-10T23:00:25.158267+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 86, loss-ave: 0.033378010203428184, mAcc: 0.9931402969299685
+[2022-10-10T23:00:52.174731+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 87, loss-ave: 0.021026223731104424, mAcc: 0.9932274428639399
+[2022-10-10T23:01:19.340630+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 88, loss-ave: 0.019264067604307003, mAcc: 0.9941667975056869
+[2022-10-10T23:01:46.416517+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 89, loss-ave: 0.014688382611902567, mAcc: 0.9950724464033093
+[2022-10-10T23:02:13.399970+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 90, loss-ave: 0.0317980871016585, mAcc: 0.9922935419713571
+[2022-10-10T23:02:13.400294+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:03:48.842496+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 90 answer-mAcc: 0.336
+[2022-10-10T23:04:15.744511+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 91, loss-ave: 0.02808019703847364, mAcc: 0.9921647419456308
+[2022-10-10T23:04:42.918457+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 92, loss-ave: 0.022229673539909397, mAcc: 0.9937326776162358
+[2022-10-10T23:05:09.924795+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 93, loss-ave: 0.018037546616946693, mAcc: 0.9941106787468034
+[2022-10-10T23:05:36.946259+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 94, loss-ave: 0.0293089416824488, mAcc: 0.9926186020441031
+[2022-10-10T23:06:03.961722+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 95, loss-ave: 0.017497960756643356, mAcc: 0.9943256253807903
+[2022-10-10T23:06:03.962055+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:06:31.013450+0800]-[WARNING] math_utils.py-compute_Expr_list-400: decimal.Error: [Expr(arg0=4, expr_toks=['[num0]', '*', '[num2]'], expr_str='[num0]*[num2]'), Expr(arg0=5, expr_toks=['[num3]'], expr_str='[num3]'), Expr(arg0=6, expr_toks=['[num3]', '-', '[num5]'], expr_str='[num3]-[num5]'), Expr(arg0=7, expr_toks=['[num3]', '/', '[num6]'], expr_str='[num3]/[num6]')]
+[2022-10-10T23:07:20.331656+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 95 answer-mAcc: 0.378
+[2022-10-10T23:07:47.389494+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 96, loss-ave: 0.02567522269021795, mAcc: 0.9926204564613847
+[2022-10-10T23:08:14.442419+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 97, loss-ave: 0.02226107910849871, mAcc: 0.993511021440569
+[2022-10-10T23:08:41.493719+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 98, loss-ave: 0.034127467749683796, mAcc: 0.9926505698502519
+[2022-10-10T23:09:08.478161+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 99, loss-ave: 0.019379666320439297, mAcc: 0.9940703699303644
+[2022-10-10T23:09:35.485952+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 100, loss-ave: 0.02000709159540034, mAcc: 0.9943537892579426
+[2022-10-10T23:09:35.486284+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:10:47.402907+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 100 answer-mAcc: 0.364
+[2022-10-10T23:11:10.998752+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 101, loss-ave: 0.03219768715729282, mAcc: 0.9933445503693501
+[2022-10-10T23:11:34.337492+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 102, loss-ave: 0.02678515422914379, mAcc: 0.9927202585999292
+[2022-10-10T23:12:00.904148+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 103, loss-ave: 0.025748483368307366, mAcc: 0.9937221878054184
+[2022-10-10T23:12:27.878294+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 104, loss-ave: 0.016977922787632056, mAcc: 0.994595713591151
+[2022-10-10T23:12:54.862787+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 105, loss-ave: 0.019784649725975878, mAcc: 0.9940613100243585
+[2022-10-10T23:12:54.863115+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:13:57.941999+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 105 answer-mAcc: 0.39
+[2022-10-10T23:14:24.902179+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 106, loss-ave: 0.020890297905568633, mAcc: 0.9939022705755161
+[2022-10-10T23:14:51.862012+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 107, loss-ave: 0.024612666846861104, mAcc: 0.9938714581591482
+[2022-10-10T23:15:18.748658+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 108, loss-ave: 0.020119532917482235, mAcc: 0.9937737622030516
+[2022-10-10T23:15:45.660689+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 109, loss-ave: 0.014657087385525472, mAcc: 0.9950480949484362
+[2022-10-10T23:16:12.804018+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 110, loss-ave: 0.01824724107472867, mAcc: 0.9948744837564366
+[2022-10-10T23:16:12.804396+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:17:18.601352+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 110 answer-mAcc: 0.375
+[2022-10-10T23:17:45.708086+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 111, loss-ave: 0.031227951984240207, mAcc: 0.9930998070246088
+[2022-10-10T23:18:12.885057+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 112, loss-ave: 0.025987923179699283, mAcc: 0.9936935997191276
+[2022-10-10T23:18:39.982603+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 113, loss-ave: 0.0215264464632349, mAcc: 0.9939562044374208
+[2022-10-10T23:19:07.084938+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 114, loss-ave: 0.011721098523984069, mAcc: 0.995703554487107
+[2022-10-10T23:19:34.177617+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 115, loss-ave: 0.012656215269923467, mAcc: 0.9959780399429282
+[2022-10-10T23:19:34.178045+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:20:45.174319+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 115 answer-mAcc: 0.396
+[2022-10-10T23:21:12.346149+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 116, loss-ave: 0.017268954094237482, mAcc: 0.9940567650564451
+[2022-10-10T23:21:39.328206+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 117, loss-ave: 0.02762967406318823, mAcc: 0.9928172464285795
+[2022-10-10T23:22:06.222002+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 118, loss-ave: 0.021207536861111473, mAcc: 0.9945817736875616
+[2022-10-10T23:22:33.131860+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 119, loss-ave: 0.015237582966047068, mAcc: 0.9949994067502689
+[2022-10-10T23:23:00.138338+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 120, loss-ave: 0.011209512400784535, mAcc: 0.9946978301492356
+[2022-10-10T23:23:00.138730+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:24:21.152449+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 120 answer-mAcc: 0.392
+[2022-10-10T23:24:48.156359+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 121, loss-ave: 0.011174509796733565, mAcc: 0.9956743011947806
+[2022-10-10T23:25:15.141341+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 122, loss-ave: 0.03053593214804182, mAcc: 0.9938090668076474
+[2022-10-10T23:25:42.162144+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 123, loss-ave: 0.021573905874683382, mAcc: 0.9938423456126497
+[2022-10-10T23:26:09.178022+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 124, loss-ave: 0.02319325558940714, mAcc: 0.9940194771186692
+[2022-10-10T23:26:36.206471+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 125, loss-ave: 0.012508997580659978, mAcc: 0.9951142007461334
+[2022-10-10T23:26:36.206900+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:27:34.471310+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 125 answer-mAcc: 0.391
+[2022-10-10T23:28:01.329708+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 126, loss-ave: 0.01315378893471795, mAcc: 0.995433802216411
+[2022-10-10T23:28:28.207441+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 127, loss-ave: 0.029532212634175346, mAcc: 0.9932188036787601
+[2022-10-10T23:28:55.187794+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 128, loss-ave: 0.01599364480865434, mAcc: 0.9947603751381542
+[2022-10-10T23:29:22.183211+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 129, loss-ave: 0.014500147099586894, mAcc: 0.9952947222852828
+[2022-10-10T23:29:49.168914+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 130, loss-ave: 0.014048299359269557, mAcc: 0.9957201981362496
+[2022-10-10T23:29:49.169238+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:31:05.237411+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 130 answer-mAcc: 0.358
+[2022-10-10T23:31:32.213139+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 131, loss-ave: 0.014146705425807574, mAcc: 0.9957117185034521
+[2022-10-10T23:31:59.154352+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 132, loss-ave: 0.023093065010772778, mAcc: 0.9949417337206484
+[2022-10-10T23:32:26.138428+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 133, loss-ave: 0.025193003321311996, mAcc: 0.994248491813815
+[2022-10-10T23:32:53.116579+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 134, loss-ave: 0.014322226240209531, mAcc: 0.9952787922235542
+[2022-10-10T23:33:20.058121+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 135, loss-ave: 0.012999052872290685, mAcc: 0.995396476665526
+[2022-10-10T23:33:20.058442+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:34:29.281284+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 135 answer-mAcc: 0.381
+[2022-10-10T23:34:56.314510+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 136, loss-ave: 0.012784837910493634, mAcc: 0.9953129411350377
+[2022-10-10T23:35:23.361377+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 137, loss-ave: 0.024187551460061133, mAcc: 0.9948089238038197
+[2022-10-10T23:35:50.375265+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 138, loss-ave: 0.022357924764082028, mAcc: 0.9939334607912991
+[2022-10-10T23:36:17.443162+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 139, loss-ave: 0.01617011260815617, mAcc: 0.9952899599803313
+[2022-10-10T23:36:44.500703+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 140, loss-ave: 0.021923842186068066, mAcc: 0.9951365725078049
+[2022-10-10T23:36:44.501024+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:37:51.175885+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 140 answer-mAcc: 0.381
+[2022-10-10T23:38:18.224634+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 141, loss-ave: 0.01185521193203241, mAcc: 0.9959510636086986
+[2022-10-10T23:38:45.283764+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 142, loss-ave: 0.015740602229284802, mAcc: 0.995549824098291
+[2022-10-10T23:39:12.225557+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 143, loss-ave: 0.0260424917238557, mAcc: 0.9939041346994065
+[2022-10-10T23:39:39.121486+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 144, loss-ave: 0.01712692792760785, mAcc: 0.9948291120335042
+[2022-10-10T23:40:06.756314+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 145, loss-ave: 0.015552160809855716, mAcc: 0.9950268088102947
+[2022-10-10T23:40:06.756796+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:41:39.477922+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 145 answer-mAcc: 0.413
+[2022-10-10T23:42:06.540460+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 146, loss-ave: 0.01229407603970308, mAcc: 0.9961392269789717
+[2022-10-10T23:42:33.643463+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 147, loss-ave: 0.009853497302046004, mAcc: 0.9957322387294915
+[2022-10-10T23:43:00.768887+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 148, loss-ave: 0.01804410910627451, mAcc: 0.9954003905522004
+[2022-10-10T23:43:27.840444+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 149, loss-ave: 0.023007629301977656, mAcc: 0.9951530453812985
+[2022-10-10T23:43:54.944268+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 150, loss-ave: 0.011977036818606951, mAcc: 0.9958408382406065
+[2022-10-10T23:43:54.944593+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:45:08.392914+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 150 answer-mAcc: 0.369
+[2022-10-10T23:45:35.416639+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 151, loss-ave: 0.01279674952463115, mAcc: 0.9961511242480678
+[2022-10-10T23:46:02.324397+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 152, loss-ave: 0.0226069527832861, mAcc: 0.9943134954564141
+[2022-10-10T23:46:29.261298+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 153, loss-ave: 0.02235109026010934, mAcc: 0.9953419968068752
+[2022-10-10T23:46:56.227137+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 154, loss-ave: 0.011986531826824645, mAcc: 0.9957186685870318
+[2022-10-10T23:47:23.202046+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 155, loss-ave: 0.008261515742001594, mAcc: 0.9966358452959522
+[2022-10-10T23:47:23.202370+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:48:56.336279+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 155 answer-mAcc: 0.379
+[2022-10-10T23:49:23.364795+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 156, loss-ave: 0.01021461464309993, mAcc: 0.9964665024335148
+[2022-10-10T23:49:50.502400+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 157, loss-ave: 0.008721516550504313, mAcc: 0.9969519141672828
+[2022-10-10T23:50:17.653162+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 158, loss-ave: 0.009903680488111905, mAcc: 0.9962357916601439
+[2022-10-10T23:50:44.770846+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 159, loss-ave: 0.009601468688896529, mAcc: 0.996419880984697
+[2022-10-10T23:51:11.887332+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 160, loss-ave: 0.022363379032784035, mAcc: 0.9943103687150484
+[2022-10-10T23:51:11.887672+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:52:48.275953+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 160 answer-mAcc: 0.378
+[2022-10-10T23:53:15.252288+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 161, loss-ave: 0.011255493401384816, mAcc: 0.9960471764775632
+[2022-10-10T23:53:42.223488+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 162, loss-ave: 0.02398573904100135, mAcc: 0.9944322245721599
+[2022-10-10T23:54:14.824281+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 163, loss-ave: 0.019927407785029813, mAcc: 0.9950195917949725
+[2022-10-10T23:54:47.581804+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 164, loss-ave: 0.011646636133061267, mAcc: 0.9961243358277182
+[2022-10-10T23:55:20.337468+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 165, loss-ave: 0.00783581603863795, mAcc: 0.996944747353328
+[2022-10-10T23:55:20.338076+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-10T23:56:32.951937+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 165 answer-mAcc: 0.398
+[2022-10-10T23:57:04.006294+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 166, loss-ave: 0.012324661867088556, mAcc: 0.9962493335927716
+[2022-10-10T23:57:36.637204+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 167, loss-ave: 0.02128536173197493, mAcc: 0.9945581585699669
+[2022-10-10T23:58:09.357722+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 168, loss-ave: 0.009783807327414518, mAcc: 0.996236783857564
+[2022-10-10T23:58:42.060668+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 169, loss-ave: 0.007923831295752288, mAcc: 0.9966964160516365
+[2022-10-10T23:59:14.751893+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 170, loss-ave: 0.009473033954996215, mAcc: 0.9966988974551815
+[2022-10-10T23:59:14.752343+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:00:36.368848+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 170 answer-mAcc: 0.393
+[2022-10-11T00:01:03.249308+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 171, loss-ave: 0.011028179925816757, mAcc: 0.9968905811394747
+[2022-10-11T00:01:30.088237+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 172, loss-ave: 0.013485130535276954, mAcc: 0.9959926488441972
+[2022-10-11T00:01:57.034808+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 173, loss-ave: 0.017442959512822265, mAcc: 0.995402721351643
+[2022-10-11T00:02:24.270035+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 174, loss-ave: 0.011793693758522537, mAcc: 0.9962354830203165
+[2022-10-11T00:02:51.808354+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 175, loss-ave: 0.02844489550573127, mAcc: 0.9936015818258581
+[2022-10-11T00:02:51.808729+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:04:01.532176+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 175 answer-mAcc: 0.361
+[2022-10-11T00:04:28.282076+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 176, loss-ave: 0.014364303751366865, mAcc: 0.9954015115138531
+[2022-10-11T00:04:55.062591+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 177, loss-ave: 0.011250282971460307, mAcc: 0.9962050979980682
+[2022-10-11T00:05:21.908807+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 178, loss-ave: 0.011282321950747881, mAcc: 0.9959983326703234
+[2022-10-11T00:05:48.691637+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 179, loss-ave: 0.010374909104120438, mAcc: 0.9959521046424943
+[2022-10-11T00:06:15.564666+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 180, loss-ave: 0.020818795509187363, mAcc: 0.994704141719954
+[2022-10-11T00:06:15.564992+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:07:25.380642+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 180 answer-mAcc: 0.374
+[2022-10-11T00:07:52.512975+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 181, loss-ave: 0.011124097881010356, mAcc: 0.9960646862898771
+[2022-10-11T00:08:19.622269+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 182, loss-ave: 0.009310447358642011, mAcc: 0.9965351732025923
+[2022-10-11T00:08:46.507690+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 183, loss-ave: 0.015904134198359468, mAcc: 0.9955807167458474
+[2022-10-11T00:09:13.398134+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 184, loss-ave: 0.007404551990985126, mAcc: 0.996717218830992
+[2022-10-11T00:09:40.215526+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 185, loss-ave: 0.006318308218555517, mAcc: 0.99712020219434
+[2022-10-11T00:09:40.215847+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:10:39.768684+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 185 answer-mAcc: 0.386
+[2022-10-11T00:11:06.677467+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 186, loss-ave: 0.018150084729384043, mAcc: 0.9958658153167511
+[2022-10-11T00:11:34.322995+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 187, loss-ave: 0.00824122423004439, mAcc: 0.9968052536779991
+[2022-10-11T00:12:07.005595+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 188, loss-ave: 0.012241724044661806, mAcc: 0.99583808414202
+[2022-10-11T00:12:39.742547+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 189, loss-ave: 0.009365611207004548, mAcc: 0.9962798977322858
+[2022-10-11T00:13:12.443528+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 190, loss-ave: 0.018837994275551752, mAcc: 0.9949497817126849
+[2022-10-11T00:13:12.443961+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:14:08.549880+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 190 answer-mAcc: 0.416
+[2022-10-11T00:14:35.456911+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 191, loss-ave: 0.014465727974896845, mAcc: 0.9958105167663128
+[2022-10-11T00:15:02.326357+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 192, loss-ave: 0.013079840249061994, mAcc: 0.995943477287244
+[2022-10-11T00:15:29.149903+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 193, loss-ave: 0.010324204423301469, mAcc: 0.9967004835757287
+[2022-10-11T00:15:58.002351+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 194, loss-ave: 0.010050018803139516, mAcc: 0.9966223740395699
+[2022-10-11T00:16:30.712638+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 195, loss-ave: 0.010334851934730131, mAcc: 0.9963205444600443
+[2022-10-11T00:16:30.713233+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:17:32.751140+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 195 answer-mAcc: 0.392
+[2022-10-11T00:17:59.636258+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 196, loss-ave: 0.010166762458853945, mAcc: 0.9962950979783638
+[2022-10-11T00:18:26.586169+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 197, loss-ave: 0.013104336579407043, mAcc: 0.9959403011028397
+[2022-10-11T00:18:53.488131+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 198, loss-ave: 0.012714366725645599, mAcc: 0.996111775627573
+[2022-10-11T00:19:20.343529+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 199, loss-ave: 0.016587239398148827, mAcc: 0.9960143731447273
+[2022-10-11T00:19:47.205190+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 200, loss-ave: 0.011171867632099467, mAcc: 0.996354137516507
+[2022-10-11T00:19:47.205526+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:21:06.861702+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 200 answer-mAcc: 0.391
+[2022-10-11T00:21:33.702703+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 201, loss-ave: 0.009583012687029683, mAcc: 0.9970345121000256
+[2022-10-11T00:22:00.531190+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 202, loss-ave: 0.009903671645607444, mAcc: 0.9966877662498532
+[2022-10-11T00:22:27.429635+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 203, loss-ave: 0.009991893553217186, mAcc: 0.9964276447550942
+[2022-10-11T00:22:54.356753+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 204, loss-ave: 0.007541878567761082, mAcc: 0.9969415599456574
+[2022-10-11T00:23:21.243703+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 205, loss-ave: 0.009811436818166808, mAcc: 0.9962514206653333
+[2022-10-11T00:23:21.244018+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:24:32.991011+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 205 answer-mAcc: 0.402
+[2022-10-11T00:24:59.896243+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 206, loss-ave: 0.011932391945868934, mAcc: 0.995993874000229
+[2022-10-11T00:25:26.756838+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 207, loss-ave: 0.015413955072083832, mAcc: 0.9959044382165709
+[2022-10-11T00:25:53.599746+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 208, loss-ave: 0.01277097150376257, mAcc: 0.9958157099536964
+[2022-10-11T00:26:20.448980+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 209, loss-ave: 0.016484940393975946, mAcc: 0.9957683013595697
+[2022-10-11T00:26:47.227625+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 210, loss-ave: 0.013900781721396364, mAcc: 0.9960720335860895
+[2022-10-11T00:26:47.227943+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:27:57.107691+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 210 answer-mAcc: 0.389
+[2022-10-11T00:28:24.022093+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 211, loss-ave: 0.0077893450729007805, mAcc: 0.9969502029224813
+[2022-10-11T00:28:50.931306+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 212, loss-ave: 0.007498287232804396, mAcc: 0.9970411329172343
+[2022-10-11T00:29:17.796332+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 213, loss-ave: 0.009897065449819374, mAcc: 0.9968050516592031
+[2022-10-11T00:29:44.699821+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 214, loss-ave: 0.011235431780973493, mAcc: 0.9963625009733302
+[2022-10-11T00:30:11.562394+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 215, loss-ave: 0.007482075360589304, mAcc: 0.9969132515310332
+[2022-10-11T00:30:11.562724+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:31:31.028222+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 215 answer-mAcc: 0.396
+[2022-10-11T00:31:57.868413+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 216, loss-ave: 0.009138500931644257, mAcc: 0.9972572325143498
+[2022-10-11T00:32:24.652029+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 217, loss-ave: 0.006753814620510848, mAcc: 0.9973794854324283
+[2022-10-11T00:32:51.482308+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 218, loss-ave: 0.02191600722388922, mAcc: 0.9949185558554478
+[2022-10-11T00:33:18.383984+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 219, loss-ave: 0.011155164244486752, mAcc: 0.9965546948612495
+[2022-10-11T00:33:45.286884+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 220, loss-ave: 0.010412156272008392, mAcc: 0.9969276937516288
+[2022-10-11T00:33:45.287202+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:34:40.686042+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 220 answer-mAcc: 0.381
+[2022-10-11T00:35:07.601707+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 221, loss-ave: 0.007492411508945775, mAcc: 0.9969314846373697
+[2022-10-11T00:35:34.519532+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 222, loss-ave: 0.008743418298264473, mAcc: 0.9964203784483989
+[2022-10-11T00:36:01.463715+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 223, loss-ave: 0.008455073960610099, mAcc: 0.9969100597250553
+[2022-10-11T00:36:28.424453+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 224, loss-ave: 0.011853515652086963, mAcc: 0.9962935531109041
+[2022-10-11T00:36:55.355532+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 225, loss-ave: 0.013697950461237245, mAcc: 0.9959689677519956
+[2022-10-11T00:36:55.355938+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:38:38.121570+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 225 answer-mAcc: 0.367
+[2022-10-11T00:39:05.003710+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 226, loss-ave: 0.011249044093998736, mAcc: 0.9962847498233688
+[2022-10-11T00:39:31.917643+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 227, loss-ave: 0.006737113061294477, mAcc: 0.9971622794335732
+[2022-10-11T00:39:58.843767+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 228, loss-ave: 0.007743017662011833, mAcc: 0.9967983330175774
+[2022-10-11T00:40:25.757756+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 229, loss-ave: 0.026919525750701143, mAcc: 0.9949052861628641
+[2022-10-11T00:40:52.686119+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 230, loss-ave: 0.009319420987907097, mAcc: 0.996374185455361
+[2022-10-11T00:40:52.686488+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:42:34.936954+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 230 answer-mAcc: 0.374
+[2022-10-11T00:43:01.883165+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 231, loss-ave: 0.008022857506230663, mAcc: 0.9967008917082963
+[2022-10-11T00:43:28.760981+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 232, loss-ave: 0.00759299531702546, mAcc: 0.9970264706296168
+[2022-10-11T00:43:55.605742+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 233, loss-ave: 0.007584843202143156, mAcc: 0.9970286520382831
+[2022-10-11T00:44:22.510000+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 234, loss-ave: 0.00864434033563352, mAcc: 0.9972579929664844
+[2022-10-11T00:44:49.523028+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 235, loss-ave: 0.009681894957173911, mAcc: 0.9965511329908104
+[2022-10-11T00:44:49.523361+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:46:13.292745+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 235 answer-mAcc: 0.378
+[2022-10-11T00:46:46.695716+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 236, loss-ave: 0.013189686840488496, mAcc: 0.9958104536733554
+[2022-10-11T00:47:21.672167+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 237, loss-ave: 0.00807120653950199, mAcc: 0.9970715441776596
+[2022-10-11T00:47:56.665941+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 238, loss-ave: 0.008224946473517136, mAcc: 0.9969960287327074
+[2022-10-11T00:48:31.657690+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 239, loss-ave: 0.012179139788301915, mAcc: 0.9970095436688294
+[2022-10-11T00:49:06.652810+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 240, loss-ave: 0.008658568496749662, mAcc: 0.9963753273468892
+[2022-10-11T00:49:06.653397+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:50:11.117430+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 240 answer-mAcc: 0.386
+[2022-10-11T00:50:38.064938+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 241, loss-ave: 0.019117176047232277, mAcc: 0.9960224311467042
+[2022-10-11T00:51:05.049071+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 242, loss-ave: 0.007987479221843152, mAcc: 0.9973501660138293
+[2022-10-11T00:51:32.055730+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 243, loss-ave: 0.010074984090778302, mAcc: 0.9963745206366968
+[2022-10-11T00:51:59.080691+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 244, loss-ave: 0.013639901154136378, mAcc: 0.9963175931959661
+[2022-10-11T00:52:26.048680+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 245, loss-ave: 0.01018267576872335, mAcc: 0.996339370124516
+[2022-10-11T00:52:26.049048+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:53:50.155175+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 245 answer-mAcc: 0.383
+[2022-10-11T00:54:17.136636+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 246, loss-ave: 0.010414341280115704, mAcc: 0.9967443292377559
+[2022-10-11T00:54:44.104845+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 247, loss-ave: 0.008627046048783199, mAcc: 0.9968104097072709
+[2022-10-11T00:55:11.097412+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 248, loss-ave: 0.008791153698136421, mAcc: 0.9970609701923439
+[2022-10-11T00:55:38.086360+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 249, loss-ave: 0.008140922004457828, mAcc: 0.9969261617757589
+[2022-10-11T00:56:04.954690+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 250, loss-ave: 0.009253466509934555, mAcc: 0.9968031517421926
+[2022-10-11T00:56:04.955023+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T00:57:22.898576+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 250 answer-mAcc: 0.389
+[2022-10-11T00:57:49.885847+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 251, loss-ave: 0.020216750141470233, mAcc: 0.9934644329032218
+[2022-10-11T00:58:16.835424+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 252, loss-ave: 0.009857383340776661, mAcc: 0.9967952108261846
+[2022-10-11T00:58:43.819636+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 253, loss-ave: 0.007101773737394179, mAcc: 0.9968239951679725
+[2022-10-11T00:59:10.776744+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 254, loss-ave: 0.012167356554110238, mAcc: 0.9964068058792871
+[2022-10-11T00:59:39.238338+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 255, loss-ave: 0.01042394735347546, mAcc: 0.9966946257889726
+[2022-10-11T00:59:39.238783+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:00:56.642991+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 255 answer-mAcc: 0.396
+[2022-10-11T01:01:23.546422+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 256, loss-ave: 0.007396908727573234, mAcc: 0.996995364739998
+[2022-10-11T01:01:50.399468+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 257, loss-ave: 0.010294099789405065, mAcc: 0.9967511849852312
+[2022-10-11T01:02:17.232636+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 258, loss-ave: 0.011205685990337555, mAcc: 0.9964488706819277
+[2022-10-11T01:02:45.857406+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 259, loss-ave: 0.012361608187753064, mAcc: 0.9965347192669642
+[2022-10-11T01:03:16.056781+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 260, loss-ave: 0.008125330728794877, mAcc: 0.9972942833985384
+[2022-10-11T01:03:16.057171+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:04:44.951963+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 260 answer-mAcc: 0.376
+[2022-10-11T01:05:11.972112+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 261, loss-ave: 0.008348950392155267, mAcc: 0.9971982674440961
+[2022-10-11T01:05:39.037286+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 262, loss-ave: 0.007077229279508003, mAcc: 0.9970436502655651
+[2022-10-11T01:06:06.099081+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 263, loss-ave: 0.009042498635144955, mAcc: 0.9970255579050564
+[2022-10-11T01:06:33.173063+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 264, loss-ave: 0.00922440929398883, mAcc: 0.9967836212869212
+[2022-10-11T01:07:00.298459+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 265, loss-ave: 0.0073732625673836975, mAcc: 0.9972129001568899
+[2022-10-11T01:07:00.298782+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:08:15.487303+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 265 answer-mAcc: 0.389
+[2022-10-11T01:08:42.523840+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 266, loss-ave: 0.006642860677138954, mAcc: 0.9973561774380031
+[2022-10-11T01:09:09.556088+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 267, loss-ave: 0.00741047088927518, mAcc: 0.9973309493550211
+[2022-10-11T01:09:41.072650+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 268, loss-ave: 0.017193381851928233, mAcc: 0.9967467410267158
+[2022-10-11T01:10:13.988157+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 269, loss-ave: 0.008629365065072673, mAcc: 0.9970291940917192
+[2022-10-11T01:10:46.886391+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 270, loss-ave: 0.012346160560706256, mAcc: 0.9967077121176489
+[2022-10-11T01:10:46.886846+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:12:10.264074+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 270 answer-mAcc: 0.357
+[2022-10-11T01:12:37.284917+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 271, loss-ave: 0.012777716383938252, mAcc: 0.9967948622982618
+[2022-10-11T01:13:04.417475+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 272, loss-ave: 0.008166455702578653, mAcc: 0.9968452403563579
+[2022-10-11T01:13:31.337948+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 273, loss-ave: 0.0067742342129919544, mAcc: 0.9975721896756393
+[2022-10-11T01:13:58.274548+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 274, loss-ave: 0.00951302325216498, mAcc: 0.9962054251411185
+[2022-10-11T01:14:25.232123+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 275, loss-ave: 0.00814687419878096, mAcc: 0.9966816301564224
+[2022-10-11T01:14:25.232443+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:15:53.390392+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 275 answer-mAcc: 0.384
+[2022-10-11T01:16:20.576917+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 276, loss-ave: 0.006007616400146891, mAcc: 0.9970145008642861
+[2022-10-11T01:16:47.673913+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 277, loss-ave: 0.00685608373190801, mAcc: 0.9972054498796245
+[2022-10-11T01:17:14.665669+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 278, loss-ave: 0.011434824962860895, mAcc: 0.9964335882330062
+[2022-10-11T01:17:41.690365+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 279, loss-ave: 0.006946868521483045, mAcc: 0.9972836150771183
+[2022-10-11T01:18:08.780928+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 280, loss-ave: 0.008531407788122095, mAcc: 0.9970600316846037
+[2022-10-11T01:18:08.781265+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:19:24.755429+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 280 answer-mAcc: 0.38
+[2022-10-11T01:19:52.619283+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 281, loss-ave: 0.012056905707282193, mAcc: 0.9964238535660217
+[2022-10-11T01:20:27.063011+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 282, loss-ave: 0.008127361289372125, mAcc: 0.9973337595699397
+[2022-10-11T01:20:59.803951+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 283, loss-ave: 0.007153592923344043, mAcc: 0.9972502244944488
+[2022-10-11T01:21:32.669950+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 284, loss-ave: 0.007995618066919627, mAcc: 0.9973127848016093
+[2022-10-11T01:22:05.492793+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 285, loss-ave: 0.005513018596260532, mAcc: 0.9975626265426325
+[2022-10-11T01:22:05.493412+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:23:23.816799+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 285 answer-mAcc: 0.373
+[2022-10-11T01:23:50.859692+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 286, loss-ave: 0.006146188880623999, mAcc: 0.9970509130839477
+[2022-10-11T01:24:17.966175+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 287, loss-ave: 0.008243127182626174, mAcc: 0.9966639460801472
+[2022-10-11T01:24:45.005304+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 288, loss-ave: 0.010698500979337756, mAcc: 0.996348712583838
+[2022-10-11T01:25:12.078650+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 289, loss-ave: 0.011431694402388216, mAcc: 0.996463304864238
+[2022-10-11T01:25:39.122729+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 290, loss-ave: 0.01017892314766077, mAcc: 0.9964461438831785
+[2022-10-11T01:25:39.123167+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:26:50.142771+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 290 answer-mAcc: 0.392
+[2022-10-11T01:27:17.225818+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 291, loss-ave: 0.010331296654932026, mAcc: 0.9966956634861216
+[2022-10-11T01:27:44.237864+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 292, loss-ave: 0.008864606016001189, mAcc: 0.996577040991407
+[2022-10-11T01:28:11.664426+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 293, loss-ave: 0.0076509170264967745, mAcc: 0.9968438874977539
+[2022-10-11T01:28:39.398411+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 294, loss-ave: 0.006580409484563236, mAcc: 0.9973116033253172
+[2022-10-11T01:29:07.093023+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 295, loss-ave: 0.005246508956181486, mAcc: 0.997780394918136
+[2022-10-11T01:29:07.093460+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:30:15.163366+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 295 answer-mAcc: 0.398
+[2022-10-11T01:30:43.061100+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 296, loss-ave: 0.006235513949871823, mAcc: 0.9975181898391278
+[2022-10-11T01:31:10.763886+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 297, loss-ave: 0.0085125440283351, mAcc: 0.9966039882058102
+[2022-10-11T01:31:37.950730+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 298, loss-ave: 0.007438325449612111, mAcc: 0.9972789422549667
+[2022-10-11T01:32:04.913572+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 299, loss-ave: 0.009547837556687356, mAcc: 0.9966688435192933
+[2022-10-11T01:32:31.874439+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 300, loss-ave: 0.008097921964519784, mAcc: 0.9971955341237192
+[2022-10-11T01:32:31.874782+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:33:57.323899+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 300 answer-mAcc: 0.38
+[2022-10-11T01:34:24.277099+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 301, loss-ave: 0.01201670548105471, mAcc: 0.9960512035068968
+[2022-10-11T01:34:51.224457+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 302, loss-ave: 0.0061004103546976945, mAcc: 0.997273673083036
+[2022-10-11T01:35:18.262251+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 303, loss-ave: 0.006009456377847595, mAcc: 0.9974880926784971
+[2022-10-11T01:35:45.328627+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 304, loss-ave: 0.00719787067284481, mAcc: 0.9972268238322426
+[2022-10-11T01:36:12.379882+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 305, loss-ave: 0.005223094506589177, mAcc: 0.9976360838831836
+[2022-10-11T01:36:12.380214+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:37:18.177590+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 305 answer-mAcc: 0.395
+[2022-10-11T01:37:45.318087+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 306, loss-ave: 0.006150414555176642, mAcc: 0.9977927165480364
+[2022-10-11T01:38:12.263760+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 307, loss-ave: 0.0060940594856423395, mAcc: 0.9974333022083641
+[2022-10-11T01:38:39.205599+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 308, loss-ave: 0.005941748254991858, mAcc: 0.9974185974543331
+[2022-10-11T01:39:06.133233+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 309, loss-ave: 0.007112727742546022, mAcc: 0.9970684729459631
+[2022-10-11T01:39:33.100615+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 310, loss-ave: 0.005924683337324437, mAcc: 0.9972434503431539
+[2022-10-11T01:39:33.100984+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:40:42.479006+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 310 answer-mAcc: 0.399
+[2022-10-11T01:41:09.675483+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 311, loss-ave: 0.00631401017128258, mAcc: 0.9975040966014522
+[2022-10-11T01:41:36.756585+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 312, loss-ave: 0.005790354938619079, mAcc: 0.9974618681514537
+[2022-10-11T01:42:03.752443+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 313, loss-ave: 0.005911451700879162, mAcc: 0.9972694441865722
+[2022-10-11T01:42:30.814188+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 314, loss-ave: 0.0074430123628715225, mAcc: 0.9969990716029062
+[2022-10-11T01:42:58.001469+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 315, loss-ave: 0.008494648028257716, mAcc: 0.9973978940160523
+[2022-10-11T01:42:58.001884+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:44:09.034669+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 315 answer-mAcc: 0.412
+[2022-10-11T01:44:36.434371+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 316, loss-ave: 0.0171003383359985, mAcc: 0.9950311625276813
+[2022-10-11T01:45:03.846421+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 317, loss-ave: 0.013811770972663819, mAcc: 0.9960366074972177
+[2022-10-11T01:45:35.029706+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 318, loss-ave: 0.008790546239045623, mAcc: 0.9966298240135038
+[2022-10-11T01:46:08.351900+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 319, loss-ave: 0.00584534168590306, mAcc: 0.9974948289133514
+[2022-10-11T01:46:41.281823+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 320, loss-ave: 0.007827172257769929, mAcc: 0.9971220613132603
+[2022-10-11T01:46:41.282316+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:48:00.517394+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 320 answer-mAcc: 0.386
+[2022-10-11T01:48:27.837927+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 321, loss-ave: 0.007065890695097305, mAcc: 0.9972342240598062
+[2022-10-11T01:48:54.928167+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 322, loss-ave: 0.005618645165441266, mAcc: 0.9977884204636397
+[2022-10-11T01:49:22.281185+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 323, loss-ave: 0.005482298519023629, mAcc: 0.9975490733867384
+[2022-10-11T01:49:49.248448+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 324, loss-ave: 0.004995916092704355, mAcc: 0.9980125246763836
+[2022-10-11T01:50:16.461745+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 325, loss-ave: 0.006210812386784736, mAcc: 0.9970133519961331
+[2022-10-11T01:50:16.462080+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:51:27.126968+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 325 answer-mAcc: 0.38
+[2022-10-11T01:51:54.182690+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 326, loss-ave: 0.008502398914534453, mAcc: 0.996857807078131
+[2022-10-11T01:52:21.655485+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 327, loss-ave: 0.006875098151998011, mAcc: 0.9970667682227894
+[2022-10-11T01:52:48.683879+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 328, loss-ave: 0.011589071749395035, mAcc: 0.996805804831381
+[2022-10-11T01:53:15.718927+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 329, loss-ave: 0.01079796105642212, mAcc: 0.9967814818896713
+[2022-10-11T01:53:43.138128+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 330, loss-ave: 0.008301973851809695, mAcc: 0.9969062228845883
+[2022-10-11T01:53:43.138448+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:55:07.622026+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 330 answer-mAcc: 0.406
+[2022-10-11T01:55:34.608808+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 331, loss-ave: 0.00762035491983852, mAcc: 0.9969473321929233
+[2022-10-11T01:56:02.729094+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 332, loss-ave: 0.006300478022663687, mAcc: 0.9974523923779262
+[2022-10-11T01:56:35.527012+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 333, loss-ave: 0.005744750860836888, mAcc: 0.9975593387322268
+[2022-10-11T01:57:09.003118+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 334, loss-ave: 0.009157461389573608, mAcc: 0.9968944518014068
+[2022-10-11T01:57:43.885332+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 335, loss-ave: 0.008773412649866296, mAcc: 0.9974524889890171
+[2022-10-11T01:57:43.885965+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T01:58:53.254525+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 335 answer-mAcc: 0.412
+[2022-10-11T01:59:26.107308+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 336, loss-ave: 0.006131659409967276, mAcc: 0.9975613701434536
+[2022-10-11T02:00:00.931089+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 337, loss-ave: 0.006464131121655983, mAcc: 0.997375244099372
+[2022-10-11T02:00:35.819610+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 338, loss-ave: 0.005158320614752208, mAcc: 0.9974268177386761
+[2022-10-11T02:01:10.689622+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 339, loss-ave: 0.00446656932155143, mAcc: 0.998102086190959
+[2022-10-11T02:01:45.541492+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 340, loss-ave: 0.0051326875527942266, mAcc: 0.9978398800502903
+[2022-10-11T02:01:45.542045+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:03:02.121399+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 340 answer-mAcc: 0.405
+[2022-10-11T02:03:31.095545+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 341, loss-ave: 0.005735493427465069, mAcc: 0.9975907270234959
+[2022-10-11T02:04:04.264505+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 342, loss-ave: 0.005401867235893813, mAcc: 0.9977749162957869
+[2022-10-11T02:04:37.085947+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 343, loss-ave: 0.005483450418363728, mAcc: 0.9973512555806692
+[2022-10-11T02:05:09.898681+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 344, loss-ave: 0.011274020776140519, mAcc: 0.9963331345383447
+[2022-10-11T02:05:42.739755+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 345, loss-ave: 0.01173661777408784, mAcc: 0.997227890042555
+[2022-10-11T02:05:42.740323+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:06:54.580425+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 345 answer-mAcc: 0.42
+[2022-10-11T02:07:21.613426+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 346, loss-ave: 0.010540025129200386, mAcc: 0.997228198834048
+[2022-10-11T02:07:48.671287+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 347, loss-ave: 0.0070702512366378045, mAcc: 0.9974622873556219
+[2022-10-11T02:08:15.522185+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 348, loss-ave: 0.007691622495288607, mAcc: 0.9971904396707472
+[2022-10-11T02:08:42.404573+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 349, loss-ave: 0.007340070466670572, mAcc: 0.9973100231197347
+[2022-10-11T02:09:09.345388+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 350, loss-ave: 0.00626045780753706, mAcc: 0.9973178241999094
+[2022-10-11T02:09:09.345722+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:10:12.747960+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 350 answer-mAcc: 0.404
+[2022-10-11T02:10:39.829831+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 351, loss-ave: 0.005520908238854147, mAcc: 0.997257610920428
+[2022-10-11T02:11:06.854216+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 352, loss-ave: 0.005821055641804212, mAcc: 0.9975204877270997
+[2022-10-11T02:11:33.874172+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 353, loss-ave: 0.005141704288637343, mAcc: 0.9978827097033727
+[2022-10-11T02:12:01.009860+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 354, loss-ave: 0.0049388215726010164, mAcc: 0.997686867192198
+[2022-10-11T02:12:28.208714+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 355, loss-ave: 0.006633300139214849, mAcc: 0.997237047621312
+[2022-10-11T02:12:28.209042+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:13:37.326956+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 355 answer-mAcc: 0.398
+[2022-10-11T02:14:04.221751+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 356, loss-ave: 0.005826266942462627, mAcc: 0.9973826347719925
+[2022-10-11T02:14:31.135283+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 357, loss-ave: 0.00513999750632365, mAcc: 0.9979596576314542
+[2022-10-11T02:14:58.287193+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 358, loss-ave: 0.005632717163999097, mAcc: 0.9976279960030514
+[2022-10-11T02:15:25.339691+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 359, loss-ave: 0.008584548125806817, mAcc: 0.9967714093113673
+[2022-10-11T02:15:52.449620+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 360, loss-ave: 0.008742125183599701, mAcc: 0.996679810773932
+[2022-10-11T02:15:52.449968+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:16:59.075731+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 360 answer-mAcc: 0.393
+[2022-10-11T02:17:26.173995+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 361, loss-ave: 0.009955282497494968, mAcc: 0.9966080684698265
+[2022-10-11T02:17:53.221114+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 362, loss-ave: 0.006192990351476589, mAcc: 0.9973924869799432
+[2022-10-11T02:18:20.300282+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 363, loss-ave: 0.004850891420805902, mAcc: 0.9975682025344014
+[2022-10-11T02:18:47.464819+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 364, loss-ave: 0.006690535050680616, mAcc: 0.9975360448427176
+[2022-10-11T02:19:14.564570+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 365, loss-ave: 0.006909906052276992, mAcc: 0.9975815629231111
+[2022-10-11T02:19:14.564929+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:20:26.353640+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 365 answer-mAcc: 0.397
+[2022-10-11T02:20:53.247533+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 366, loss-ave: 0.005022019065488324, mAcc: 0.9978341117463343
+[2022-10-11T02:21:20.092023+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 367, loss-ave: 0.006333407076373606, mAcc: 0.9973937248758991
+[2022-10-11T02:21:46.985828+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 368, loss-ave: 0.005999705654768971, mAcc: 0.9973159429377879
+[2022-10-11T02:22:13.957415+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 369, loss-ave: 0.0062835872836759345, mAcc: 0.9976309826052523
+[2022-10-11T02:22:40.930203+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 370, loss-ave: 0.009032563255096085, mAcc: 0.9973135848385081
+[2022-10-11T02:22:40.930554+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:23:54.842969+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 370 answer-mAcc: 0.396
+[2022-10-11T02:24:22.320784+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 371, loss-ave: 0.006240635722236396, mAcc: 0.9974825567264897
+[2022-10-11T02:24:50.161415+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 372, loss-ave: 0.004993643158055801, mAcc: 0.9978168954072715
+[2022-10-11T02:25:17.894185+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 373, loss-ave: 0.005005840740975735, mAcc: 0.997829915761341
+[2022-10-11T02:25:45.731341+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 374, loss-ave: 0.005437771055735554, mAcc: 0.9976337963084835
+[2022-10-11T02:26:13.658543+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 375, loss-ave: 0.007365027812091874, mAcc: 0.997278800144147
+[2022-10-11T02:26:13.659077+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:27:28.225649+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 375 answer-mAcc: 0.374
+[2022-10-11T02:27:55.965889+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 376, loss-ave: 0.0059631347189429175, mAcc: 0.9974756428910272
+[2022-10-11T02:28:23.273615+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 377, loss-ave: 0.007471865533003643, mAcc: 0.9976877482186141
+[2022-10-11T02:28:51.259548+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 378, loss-ave: 0.005129362936181055, mAcc: 0.9975067090442162
+[2022-10-11T02:29:18.799637+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 379, loss-ave: 0.0059733631177905306, mAcc: 0.9978096105973533
+[2022-10-11T02:29:46.928765+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 380, loss-ave: 0.006682126113553985, mAcc: 0.9975904807182973
+[2022-10-11T02:29:46.929270+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:30:56.226274+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 380 answer-mAcc: 0.402
+[2022-10-11T02:31:24.010816+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 381, loss-ave: 0.0055191414577945, mAcc: 0.9977574237733701
+[2022-10-11T02:31:51.911955+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 382, loss-ave: 0.004765984545174803, mAcc: 0.9979914498086497
+[2022-10-11T02:32:19.844547+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 383, loss-ave: 0.00550124382003332, mAcc: 0.9974950178888918
+[2022-10-11T02:32:47.466532+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 384, loss-ave: 0.00873735178459054, mAcc: 0.9971249965007675
+[2022-10-11T02:33:14.786672+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 385, loss-ave: 0.006642354454633395, mAcc: 0.9977004271730515
+[2022-10-11T02:33:14.787007+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:34:32.966079+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 385 answer-mAcc: 0.408
+[2022-10-11T02:35:00.251590+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 386, loss-ave: 0.00687244819311301, mAcc: 0.9974285100252573
+[2022-10-11T02:35:27.165492+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 387, loss-ave: 0.012300987369286646, mAcc: 0.9970605725247138
+[2022-10-11T02:35:54.090279+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 388, loss-ave: 0.005439508883302224, mAcc: 0.9976335533399315
+[2022-10-11T02:36:21.025237+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 389, loss-ave: 0.005406364216230001, mAcc: 0.9976963455440434
+[2022-10-11T02:36:48.080865+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 390, loss-ave: 0.006963958608969215, mAcc: 0.9974526574896796
+[2022-10-11T02:36:48.081190+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:38:11.934448+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 390 answer-mAcc: 0.394
+[2022-10-11T02:38:38.959701+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 391, loss-ave: 0.005032553931997011, mAcc: 0.9978499925166899
+[2022-10-11T02:39:05.997276+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 392, loss-ave: 0.00560789736960263, mAcc: 0.9974140814545803
+[2022-10-11T02:39:33.003986+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 393, loss-ave: 0.006456133168547837, mAcc: 0.9973092669142415
+[2022-10-11T02:39:59.981569+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 394, loss-ave: 0.014575929930483438, mAcc: 0.9966667397634977
+[2022-10-11T02:40:26.799564+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 395, loss-ave: 0.008263498865492661, mAcc: 0.9972361270101319
+[2022-10-11T02:40:26.799888+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:41:47.081430+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 395 answer-mAcc: 0.375
+[2022-10-11T02:42:14.114185+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 396, loss-ave: 0.004379901851427421, mAcc: 0.9978461640178399
+[2022-10-11T02:42:41.363477+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 397, loss-ave: 0.007118673342157318, mAcc: 0.9971018833968476
+[2022-10-11T02:43:06.121433+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 398, loss-ave: 0.0059082006096191865, mAcc: 0.9974375399014422
+[2022-10-11T02:43:29.480255+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 399, loss-ave: 0.004736381140783356, mAcc: 0.9974831501946194
+[2022-10-11T02:43:52.917371+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 400, loss-ave: 0.005200788592321413, mAcc: 0.9974165117467633
+[2022-10-11T02:43:52.917720+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:45:09.091743+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 400 answer-mAcc: 0.394
+[2022-10-11T02:45:32.439740+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 401, loss-ave: 0.005054954371036547, mAcc: 0.9977686126116881
+[2022-10-11T02:45:55.745882+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 402, loss-ave: 0.004274867526695768, mAcc: 0.9980245100632879
+[2022-10-11T02:46:19.083190+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 403, loss-ave: 0.004259135504567549, mAcc: 0.9978142914577901
+[2022-10-11T02:46:42.443557+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 404, loss-ave: 0.005356583349505439, mAcc: 0.9976205564940552
+[2022-10-11T02:47:05.803439+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 405, loss-ave: 0.005169001899582342, mAcc: 0.997528722571356
+[2022-10-11T02:47:05.803875+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:48:29.497919+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 405 answer-mAcc: 0.4
+[2022-10-11T02:48:52.860431+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 406, loss-ave: 0.005375969715880017, mAcc: 0.9976592931431971
+[2022-10-11T02:49:16.336822+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 407, loss-ave: 0.012130334001108965, mAcc: 0.9966451741053555
+[2022-10-11T02:49:39.754565+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 408, loss-ave: 0.005445677392668204, mAcc: 0.9977312819041672
+[2022-10-11T02:50:03.278196+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 409, loss-ave: 0.007325245699645905, mAcc: 0.9973730461591376
+[2022-10-11T02:50:26.777568+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 410, loss-ave: 0.004385951146579009, mAcc: 0.9978524998550803
+[2022-10-11T02:50:26.777997+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:51:43.157432+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 410 answer-mAcc: 0.409
+[2022-10-11T02:52:06.476104+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 411, loss-ave: 0.005302879320780047, mAcc: 0.9975372276840015
+[2022-10-11T02:52:29.788328+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 412, loss-ave: 0.005300550658001826, mAcc: 0.9980424192115551
+[2022-10-11T02:52:53.121406+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 413, loss-ave: 0.00465967256403284, mAcc: 0.9979057609276614
+[2022-10-11T02:53:16.503644+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 414, loss-ave: 0.005581772808841364, mAcc: 0.9972256708691138
+[2022-10-11T02:53:39.864412+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 415, loss-ave: 0.005181028136020388, mAcc: 0.9977624260135582
+[2022-10-11T02:53:39.864851+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:54:57.667885+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 415 answer-mAcc: 0.399
+[2022-10-11T02:55:20.949729+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 416, loss-ave: 0.004966224358688659, mAcc: 0.9976474198372917
+[2022-10-11T02:55:44.277508+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 417, loss-ave: 0.005364307415958502, mAcc: 0.9975773438849218
+[2022-10-11T02:56:07.636688+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 418, loss-ave: 0.005194341358957286, mAcc: 0.9976449622452714
+[2022-10-11T02:56:33.903334+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 419, loss-ave: 0.005331046221964319, mAcc: 0.9976922065853769
+[2022-10-11T02:57:06.669835+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 420, loss-ave: 0.00524389727798934, mAcc: 0.9977780674553403
+[2022-10-11T02:57:06.670441+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T02:58:10.400280+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 420 answer-mAcc: 0.41
+[2022-10-11T02:58:37.332119+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 421, loss-ave: 0.005025679297080657, mAcc: 0.9978027084401546
+[2022-10-11T02:59:04.216256+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 422, loss-ave: 0.012503270127736684, mAcc: 0.9960547459641182
+[2022-10-11T02:59:31.181683+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 423, loss-ave: 0.011093147622366111, mAcc: 0.9968469329462707
+[2022-10-11T02:59:58.141481+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 424, loss-ave: 0.008955385939383673, mAcc: 0.9974682526734039
+[2022-10-11T03:00:25.080683+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 425, loss-ave: 0.00659375748833776, mAcc: 0.9972814444367212
+[2022-10-11T03:00:25.081000+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:01:44.972832+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 425 answer-mAcc: 0.386
+[2022-10-11T03:02:11.916090+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 426, loss-ave: 0.004881574346146964, mAcc: 0.9980052944661401
+[2022-10-11T03:02:38.868670+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 427, loss-ave: 0.005664658733307628, mAcc: 0.9977127325747153
+[2022-10-11T03:03:05.839722+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 428, loss-ave: 0.0066575739297768215, mAcc: 0.9973538059921362
+[2022-10-11T03:03:32.730903+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 429, loss-ave: 0.005419047224358827, mAcc: 0.9977904573348338
+[2022-10-11T03:03:59.632842+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 430, loss-ave: 0.0069268867821132485, mAcc: 0.9973872664927222
+[2022-10-11T03:03:59.633196+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:05:04.163923+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 430 answer-mAcc: 0.402
+[2022-10-11T03:05:31.129602+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 431, loss-ave: 0.006212448755779522, mAcc: 0.9975367638900989
+[2022-10-11T03:05:58.026545+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 432, loss-ave: 0.004773992483584705, mAcc: 0.9976903756762886
+[2022-10-11T03:06:24.931107+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 433, loss-ave: 0.004823085692989816, mAcc: 0.9976051687890943
+[2022-10-11T03:06:51.884910+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 434, loss-ave: 0.004228245245867809, mAcc: 0.9979720857307202
+[2022-10-11T03:07:18.829876+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 435, loss-ave: 0.006702027065504876, mAcc: 0.9973448091790876
+[2022-10-11T03:07:18.830309+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:08:22.926782+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 435 answer-mAcc: 0.407
+[2022-10-11T03:08:50.053398+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 436, loss-ave: 0.005939673504803214, mAcc: 0.9973131944508347
+[2022-10-11T03:09:17.137046+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 437, loss-ave: 0.0054370914365267035, mAcc: 0.9975857901512515
+[2022-10-11T03:09:44.242662+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 438, loss-ave: 0.005306521183687632, mAcc: 0.9977069086094242
+[2022-10-11T03:10:11.168918+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 439, loss-ave: 0.009701863492224502, mAcc: 0.997239102540732
+[2022-10-11T03:10:38.062141+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 440, loss-ave: 0.0057240638733896225, mAcc: 0.9976804350471982
+[2022-10-11T03:10:38.062536+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:12:10.921161+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 440 answer-mAcc: 0.397
+[2022-10-11T03:12:37.904977+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 441, loss-ave: 0.006463808732595241, mAcc: 0.9974221113983911
+[2022-10-11T03:13:04.871585+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 442, loss-ave: 0.009143563278115243, mAcc: 0.9971568305377135
+[2022-10-11T03:13:31.825791+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 443, loss-ave: 0.004679171680282435, mAcc: 0.9977976620652294
+[2022-10-11T03:13:58.825740+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 444, loss-ave: 0.004488809325503114, mAcc: 0.9976864241765049
+[2022-10-11T03:14:25.793107+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 445, loss-ave: 0.00667588445267263, mAcc: 0.9978158599851089
+[2022-10-11T03:14:25.793455+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:15:19.632935+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 445 answer-mAcc: 0.395
+[2022-10-11T03:15:46.728625+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 446, loss-ave: 0.004953513757683982, mAcc: 0.9976287305203406
+[2022-10-11T03:16:13.701462+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 447, loss-ave: 0.004668294968583785, mAcc: 0.997689411233703
+[2022-10-11T03:16:40.572458+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 448, loss-ave: 0.00706534037868752, mAcc: 0.9970121740081535
+[2022-10-11T03:17:07.476263+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 449, loss-ave: 0.005188873251813251, mAcc: 0.9974446019143549
+[2022-10-11T03:17:34.482073+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 450, loss-ave: 0.00496624480696402, mAcc: 0.9975798122452112
+[2022-10-11T03:17:34.482396+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:18:39.831346+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 450 answer-mAcc: 0.405
+[2022-10-11T03:19:06.817952+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 451, loss-ave: 0.0053271240721374956, mAcc: 0.9973994801365995
+[2022-10-11T03:19:33.760270+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 452, loss-ave: 0.00454995505000799, mAcc: 0.998098549193705
+[2022-10-11T03:20:00.747958+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 453, loss-ave: 0.0044697664194684305, mAcc: 0.997989621022882
+[2022-10-11T03:20:27.716838+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 454, loss-ave: 0.005113745479987424, mAcc: 0.9976651576032469
+[2022-10-11T03:20:54.724018+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 455, loss-ave: 0.0050552340366524715, mAcc: 0.9974706154743224
+[2022-10-11T03:20:54.724347+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:21:46.949535+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 455 answer-mAcc: 0.401
+[2022-10-11T03:22:16.526744+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 456, loss-ave: 0.004568951597567546, mAcc: 0.9978505873498116
+[2022-10-11T03:22:49.202564+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 457, loss-ave: 0.004796998562383651, mAcc: 0.9977566707528578
+[2022-10-11T03:23:21.941598+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 458, loss-ave: 0.004797867121979258, mAcc: 0.9976880852199389
+[2022-10-11T03:23:54.680858+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 459, loss-ave: 0.00952989375364454, mAcc: 0.9969311523376834
+[2022-10-11T03:24:27.408408+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 460, loss-ave: 0.0059468636148789535, mAcc: 0.9974554040049779
+[2022-10-11T03:24:27.408855+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:25:45.556360+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 460 answer-mAcc: 0.382
+[2022-10-11T03:26:12.492469+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 461, loss-ave: 0.006709078059679279, mAcc: 0.997553944284376
+[2022-10-11T03:26:39.427907+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 462, loss-ave: 0.004901640116033208, mAcc: 0.9977027391659394
+[2022-10-11T03:27:06.365045+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 463, loss-ave: 0.005087060413170624, mAcc: 0.9975659211779976
+[2022-10-11T03:27:33.210864+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 464, loss-ave: 0.0044084265907551705, mAcc: 0.9980520548407965
+[2022-10-11T03:28:00.036519+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 465, loss-ave: 0.004502932275156648, mAcc: 0.9977772178237372
+[2022-10-11T03:28:00.036854+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:29:22.082376+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 465 answer-mAcc: 0.385
+[2022-10-11T03:29:49.028323+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 466, loss-ave: 0.004928983918204795, mAcc: 0.9978575838431147
+[2022-10-11T03:30:16.001192+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 467, loss-ave: 0.005331444959072419, mAcc: 0.9973025575242274
+[2022-10-11T03:30:42.946941+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 468, loss-ave: 0.004250032849333411, mAcc: 0.9979080641239351
+[2022-10-11T03:31:09.908226+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 469, loss-ave: 0.005773185956039859, mAcc: 0.9974307991166151
+[2022-10-11T03:31:36.837819+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 470, loss-ave: 0.0046575833219508886, mAcc: 0.9979311182298733
+[2022-10-11T03:31:36.838145+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:32:45.017227+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 470 answer-mAcc: 0.4
+[2022-10-11T03:33:11.944926+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 471, loss-ave: 0.005916545659941496, mAcc: 0.9974719105482708
+[2022-10-11T03:33:41.321982+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 472, loss-ave: 0.008830225131617981, mAcc: 0.9974928715150169
+[2022-10-11T03:34:14.026783+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 473, loss-ave: 0.0054092510571628685, mAcc: 0.9976153990997916
+[2022-10-11T03:34:46.757839+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 474, loss-ave: 0.00564163377341938, mAcc: 0.9975881578054744
+[2022-10-11T03:35:19.526471+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 475, loss-ave: 0.005555021866252288, mAcc: 0.9977545119423903
+[2022-10-11T03:35:19.526921+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:36:49.155787+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 475 answer-mAcc: 0.38
+[2022-10-11T03:37:16.155858+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 476, loss-ave: 0.004904832039341397, mAcc: 0.9975429931063082
+[2022-10-11T03:37:43.126795+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 477, loss-ave: 0.005017976054474178, mAcc: 0.9975434690334718
+[2022-10-11T03:38:10.049433+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 478, loss-ave: 0.007914976480357936, mAcc: 0.9978089437229942
+[2022-10-11T03:38:36.982217+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 479, loss-ave: 0.005234274359995679, mAcc: 0.9976022084250705
+[2022-10-11T03:39:03.839304+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 480, loss-ave: 0.005427337438322427, mAcc: 0.9976475446582144
+[2022-10-11T03:39:03.839639+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:40:10.285407+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 480 answer-mAcc: 0.408
+[2022-10-11T03:40:37.230028+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 481, loss-ave: 0.006742529979917286, mAcc: 0.9971744710859148
+[2022-10-11T03:41:04.204287+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 482, loss-ave: 0.005117470184026942, mAcc: 0.9978534072713391
+[2022-10-11T03:41:32.649580+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 483, loss-ave: 0.005139714211970917, mAcc: 0.9977542222607834
+[2022-10-11T03:42:05.370162+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 484, loss-ave: 0.004618412140325166, mAcc: 0.9975360433260599
+[2022-10-11T03:42:38.114113+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 485, loss-ave: 0.004668976674757103, mAcc: 0.997580870568904
+[2022-10-11T03:42:38.114568+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:43:40.867717+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 485 answer-mAcc: 0.408
+[2022-10-11T03:44:07.815365+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 486, loss-ave: 0.004539414093680811, mAcc: 0.9976053976527304
+[2022-10-11T03:44:34.689724+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 487, loss-ave: 0.004596258870703106, mAcc: 0.9978776992732332
+[2022-10-11T03:45:01.570595+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 488, loss-ave: 0.004863111161870701, mAcc: 0.997678280483372
+[2022-10-11T03:45:28.460303+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 489, loss-ave: 0.005337221348943033, mAcc: 0.9973801005887621
+[2022-10-11T03:45:55.388391+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 490, loss-ave: 0.005644050697231649, mAcc: 0.9974174761893488
+[2022-10-11T03:45:55.388753+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:46:56.108322+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 490 answer-mAcc: 0.411
+[2022-10-11T03:47:23.722432+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 491, loss-ave: 0.00460677899675838, mAcc: 0.9978280203943034
+[2022-10-11T03:47:56.502917+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 492, loss-ave: 0.004785901522055679, mAcc: 0.9977027001878385
+[2022-10-11T03:48:29.294284+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 493, loss-ave: 0.006692331948892782, mAcc: 0.9978974150640667
+[2022-10-11T03:49:02.096532+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 494, loss-ave: 0.007704666642571339, mAcc: 0.9973756322120589
+[2022-10-11T03:49:34.892605+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 495, loss-ave: 0.004848795192652278, mAcc: 0.9977279044592957
+[2022-10-11T03:49:34.893096+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:50:51.800683+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 495 answer-mAcc: 0.391
+[2022-10-11T03:51:18.727730+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 496, loss-ave: 0.004892425850746794, mAcc: 0.9978546020942183
+[2022-10-11T03:51:45.678080+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 497, loss-ave: 0.0049816634311578775, mAcc: 0.9978307082149516
+[2022-10-11T03:52:12.659365+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 498, loss-ave: 0.004504956493215785, mAcc: 0.9975702366756118
+[2022-10-11T03:52:39.661552+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 499, loss-ave: 0.004586158805862391, mAcc: 0.9979874006361148
+[2022-10-11T03:53:06.659986+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 500, loss-ave: 0.004757759431341862, mAcc: 0.9976661423690446
+[2022-10-11T03:53:06.660316+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:54:17.550164+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 500 answer-mAcc: 0.393
+[2022-10-11T03:54:44.579053+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 501, loss-ave: 0.004650058082189665, mAcc: 0.9978132402623883
+[2022-10-11T03:55:13.468052+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 502, loss-ave: 0.004647054145748006, mAcc: 0.9976996066612749
+[2022-10-11T03:55:46.273569+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 503, loss-ave: 0.005051801137770515, mAcc: 0.9976160456509384
+[2022-10-11T03:56:18.997588+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 504, loss-ave: 0.004621698619106315, mAcc: 0.9975666437136914
+[2022-10-11T03:56:51.691127+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 505, loss-ave: 0.004272338740795194, mAcc: 0.9980218172376696
+[2022-10-11T03:56:51.691576+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T03:58:10.204534+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 505 answer-mAcc: 0.377
+[2022-10-11T03:58:37.212561+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 506, loss-ave: 0.006886383685623149, mAcc: 0.9973887264273549
+[2022-10-11T03:59:04.235917+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 507, loss-ave: 0.007953949935855813, mAcc: 0.9969827056537754
+[2022-10-11T03:59:31.271429+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 508, loss-ave: 0.006999218156656009, mAcc: 0.9973835192867211
+[2022-10-11T03:59:58.306002+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 509, loss-ave: 0.004826622056652742, mAcc: 0.997900721074364
+[2022-10-11T04:00:25.358750+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 510, loss-ave: 0.004465165227910825, mAcc: 0.9979022001188826
+[2022-10-11T04:00:25.359078+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:01:41.754642+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 510 answer-mAcc: 0.39
+[2022-10-11T04:02:08.726708+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 511, loss-ave: 0.005710876408130573, mAcc: 0.9977864562403458
+[2022-10-11T04:02:35.647330+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 512, loss-ave: 0.004246749342909188, mAcc: 0.9980073839653539
+[2022-10-11T04:03:02.592091+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 513, loss-ave: 0.005197944536994565, mAcc: 0.9979239637008454
+[2022-10-11T04:03:29.594315+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 514, loss-ave: 0.004491547883297832, mAcc: 0.997671529385273
+[2022-10-11T04:03:56.618674+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 515, loss-ave: 0.004720439602339261, mAcc: 0.9978356152090407
+[2022-10-11T04:03:56.619001+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:05:01.385122+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 515 answer-mAcc: 0.394
+[2022-10-11T04:05:28.437999+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 516, loss-ave: 0.004791750326655321, mAcc: 0.9976837442424764
+[2022-10-11T04:05:55.474407+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 517, loss-ave: 0.006573161512610325, mAcc: 0.9974695002759686
+[2022-10-11T04:06:22.522282+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 518, loss-ave: 0.009646977015193826, mAcc: 0.9973640309945317
+[2022-10-11T04:06:49.546921+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 519, loss-ave: 0.005630667234236027, mAcc: 0.9973790750248741
+[2022-10-11T04:07:16.536570+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 520, loss-ave: 0.004360955777227606, mAcc: 0.9977156868721085
+[2022-10-11T04:07:16.536927+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:08:25.290444+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 520 answer-mAcc: 0.389
+[2022-10-11T04:08:52.265884+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 521, loss-ave: 0.004797749596314549, mAcc: 0.997958806786525
+[2022-10-11T04:09:19.375508+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 522, loss-ave: 0.004580706860876731, mAcc: 0.997615306735342
+[2022-10-11T04:09:46.488162+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 523, loss-ave: 0.004712872367818988, mAcc: 0.9975886953089377
+[2022-10-11T04:10:13.596428+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 524, loss-ave: 0.004802543213301921, mAcc: 0.9977553153159358
+[2022-10-11T04:10:40.744600+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 525, loss-ave: 0.004587320091101029, mAcc: 0.9979808780983204
+[2022-10-11T04:10:40.745001+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:11:51.711791+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 525 answer-mAcc: 0.395
+[2022-10-11T04:12:18.809700+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 526, loss-ave: 0.004719932196577607, mAcc: 0.9977887741481984
+[2022-10-11T04:12:45.895226+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 527, loss-ave: 0.004449573289524584, mAcc: 0.9975075360776208
+[2022-10-11T04:13:13.012961+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 528, loss-ave: 0.005081874054396601, mAcc: 0.9976244778123521
+[2022-10-11T04:13:40.109341+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 529, loss-ave: 0.005465079910176149, mAcc: 0.9981208789439602
+[2022-10-11T04:14:07.242500+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 530, loss-ave: 0.007132408474320205, mAcc: 0.997238151141402
+[2022-10-11T04:14:07.242843+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:15:06.575960+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 530 answer-mAcc: 0.398
+[2022-10-11T04:15:33.482877+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 531, loss-ave: 0.005345923049981806, mAcc: 0.9975135455301396
+[2022-10-11T04:16:00.456384+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 532, loss-ave: 0.005160691878244833, mAcc: 0.9976690218952169
+[2022-10-11T04:16:27.425136+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 533, loss-ave: 0.00646090232477811, mAcc: 0.9973761683505303
+[2022-10-11T04:16:54.457298+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 534, loss-ave: 0.004842288323279535, mAcc: 0.9978129975971678
+[2022-10-11T04:17:21.500040+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 535, loss-ave: 0.004589049053293137, mAcc: 0.9976755163748452
+[2022-10-11T04:17:21.500364+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:18:23.329524+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 535 answer-mAcc: 0.382
+[2022-10-11T04:18:50.391405+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 536, loss-ave: 0.005986347210049876, mAcc: 0.9976973222715557
+[2022-10-11T04:19:17.444534+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 537, loss-ave: 0.004633291679211541, mAcc: 0.9977172975625094
+[2022-10-11T04:19:44.496512+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 538, loss-ave: 0.004293227626843499, mAcc: 0.9979423213247731
+[2022-10-11T04:20:11.552558+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 539, loss-ave: 0.0046421953144762254, mAcc: 0.9976740453686119
+[2022-10-11T04:20:38.519218+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 540, loss-ave: 0.00440703404431791, mAcc: 0.998025970907915
+[2022-10-11T04:20:38.519558+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:21:43.625710+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 540 answer-mAcc: 0.385
+[2022-10-11T04:22:10.696863+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 541, loss-ave: 0.0045357599391149155, mAcc: 0.9978531979725864
+[2022-10-11T04:22:37.750814+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 542, loss-ave: 0.006534586715541295, mAcc: 0.9978084414059879
+[2022-10-11T04:23:04.768455+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 543, loss-ave: 0.005050402595464026, mAcc: 0.9974595722351366
+[2022-10-11T04:23:31.815965+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 544, loss-ave: 0.004807794236482779, mAcc: 0.997542276485579
+[2022-10-11T04:23:58.847432+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 545, loss-ave: 0.00439182561277487, mAcc: 0.9976613204594483
+[2022-10-11T04:23:58.847873+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:25:11.728458+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 545 answer-mAcc: 0.368
+[2022-10-11T04:25:38.749621+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 546, loss-ave: 0.004649711766212508, mAcc: 0.9976672663640127
+[2022-10-11T04:26:05.742648+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 547, loss-ave: 0.004652435963968919, mAcc: 0.9977668364539402
+[2022-10-11T04:26:32.662754+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 548, loss-ave: 0.004915402931420942, mAcc: 0.9976758973592413
+[2022-10-11T04:26:59.623754+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 549, loss-ave: 0.004092136185465451, mAcc: 0.9978285198296603
+[2022-10-11T04:27:26.595985+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 550, loss-ave: 0.0043520333534400255, mAcc: 0.9978138940934916
+[2022-10-11T04:27:26.596393+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:28:36.778075+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 550 answer-mAcc: 0.384
+[2022-10-11T04:29:03.781362+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 551, loss-ave: 0.004527958628698371, mAcc: 0.9977336057269847
+[2022-10-11T04:29:30.756257+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 552, loss-ave: 0.004826975223304278, mAcc: 0.9978903007264659
+[2022-10-11T04:29:57.739267+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 553, loss-ave: 0.004612883252673947, mAcc: 0.9977589566592345
+[2022-10-11T04:30:24.734657+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 554, loss-ave: 0.004824639187350943, mAcc: 0.9978040129173803
+[2022-10-11T04:30:51.753303+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 555, loss-ave: 0.0043600702012374275, mAcc: 0.9979772411533288
+[2022-10-11T04:30:51.753641+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:32:04.915356+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 555 answer-mAcc: 0.399
+[2022-10-11T04:32:31.851776+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 556, loss-ave: 0.004471157053517, mAcc: 0.9980834396437531
+[2022-10-11T04:32:58.766739+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 557, loss-ave: 0.00782768975378654, mAcc: 0.9971892453028652
+[2022-10-11T04:33:25.760861+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 558, loss-ave: 0.00546234376704403, mAcc: 0.9975021061399814
+[2022-10-11T04:33:52.780345+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 559, loss-ave: 0.004233727099657599, mAcc: 0.9978789993521519
+[2022-10-11T04:34:19.794160+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 560, loss-ave: 0.004429234040839513, mAcc: 0.9978816249898372
+[2022-10-11T04:34:19.794500+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:35:34.327224+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 560 answer-mAcc: 0.384
+[2022-10-11T04:36:01.500063+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 561, loss-ave: 0.004498157856013066, mAcc: 0.9980934838605594
+[2022-10-11T04:36:28.621108+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 562, loss-ave: 0.004488659712013963, mAcc: 0.9980103349261005
+[2022-10-11T04:36:55.715727+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 563, loss-ave: 0.004260866967302632, mAcc: 0.9979769984881083
+[2022-10-11T04:37:22.855665+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 564, loss-ave: 0.004772868980693501, mAcc: 0.9976972770751584
+[2022-10-11T04:37:49.978925+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 565, loss-ave: 0.005651051681134458, mAcc: 0.9977940822982303
+[2022-10-11T04:37:49.979251+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:39:09.291090+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 565 answer-mAcc: 0.384
+[2022-10-11T04:39:36.287052+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 566, loss-ave: 0.0056153392910405974, mAcc: 0.9979234665404749
+[2022-10-11T04:40:03.247620+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 567, loss-ave: 0.005774865716273173, mAcc: 0.9978270001387172
+[2022-10-11T04:40:30.226547+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 568, loss-ave: 0.007139393881322152, mAcc: 0.997717664138658
+[2022-10-11T04:40:57.219891+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 569, loss-ave: 0.005082716357986707, mAcc: 0.9981798499291786
+[2022-10-11T04:41:24.197764+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 570, loss-ave: 0.004271740364569062, mAcc: 0.9978473477691184
+[2022-10-11T04:41:24.198088+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:42:44.585560+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 570 answer-mAcc: 0.379
+[2022-10-11T04:43:11.729516+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 571, loss-ave: 0.0042096934267057545, mAcc: 0.9980748967663325
+[2022-10-11T04:43:38.862748+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 572, loss-ave: 0.0042896287808529086, mAcc: 0.9981331540124714
+[2022-10-11T04:44:05.999893+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 573, loss-ave: 0.005743802483625693, mAcc: 0.9975452603577961
+[2022-10-11T04:44:32.974575+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 574, loss-ave: 0.00438473147199479, mAcc: 0.9979306705125416
+[2022-10-11T04:44:59.872762+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 575, loss-ave: 0.005066435248938751, mAcc: 0.997630001327767
+[2022-10-11T04:44:59.873071+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:46:14.962421+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 575 answer-mAcc: 0.38
+[2022-10-11T04:46:41.964944+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 576, loss-ave: 0.004138256617854007, mAcc: 0.99777743212746
+[2022-10-11T04:47:08.960536+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 577, loss-ave: 0.004740761420023615, mAcc: 0.9975168785369427
+[2022-10-11T04:47:35.961706+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 578, loss-ave: 0.004650746254320186, mAcc: 0.9979430635770162
+[2022-10-11T04:48:02.964061+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 579, loss-ave: 0.004047927616437209, mAcc: 0.9982723391996389
+[2022-10-11T04:48:29.973269+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 580, loss-ave: 0.004623429782405065, mAcc: 0.997915855497501
+[2022-10-11T04:48:29.973589+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:49:29.882030+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 580 answer-mAcc: 0.387
+[2022-10-11T04:49:56.909359+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 581, loss-ave: 0.004674950753949846, mAcc: 0.9977013447509164
+[2022-10-11T04:50:23.826831+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 582, loss-ave: 0.005610482923660733, mAcc: 0.9976010697185235
+[2022-10-11T04:50:50.718015+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 583, loss-ave: 0.004016151065536719, mAcc: 0.9981137658196855
+[2022-10-11T04:51:17.670361+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 584, loss-ave: 0.0051635797187971596, mAcc: 0.9979780263269827
+[2022-10-11T04:51:44.652866+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 585, loss-ave: 0.005623570874692941, mAcc: 0.9977551542468956
+[2022-10-11T04:51:44.653283+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:53:11.111848+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 585 answer-mAcc: 0.365
+[2022-10-11T04:53:38.096646+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 586, loss-ave: 0.004563130259501372, mAcc: 0.9976553989730719
+[2022-10-11T04:54:05.074308+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 587, loss-ave: 0.004458606230748477, mAcc: 0.997825394756618
+[2022-10-11T04:54:32.076170+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 588, loss-ave: 0.0042428207590544924, mAcc: 0.9978277792457406
+[2022-10-11T04:54:59.101258+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 589, loss-ave: 0.004366894596933058, mAcc: 0.9977883329524946
+[2022-10-11T04:55:26.093101+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 590, loss-ave: 0.004640687542351525, mAcc: 0.9978645334716971
+[2022-10-11T04:55:26.093463+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T04:56:53.912984+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 590 answer-mAcc: 0.367
+[2022-10-11T04:57:20.885159+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 591, loss-ave: 0.004895274715417986, mAcc: 0.9977815008648783
+[2022-10-11T04:57:47.840656+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 592, loss-ave: 0.0042510427492883475, mAcc: 0.997847893462533
+[2022-10-11T04:58:14.806561+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 593, loss-ave: 0.004454590053101725, mAcc: 0.9980476935401218
+[2022-10-11T04:58:41.792173+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 594, loss-ave: 0.0045121401727399885, mAcc: 0.9980064945973209
+[2022-10-11T04:59:08.757154+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 595, loss-ave: 0.004264615036801941, mAcc: 0.9979754722755374
+[2022-10-11T04:59:08.757475+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:00:30.118910+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 595 answer-mAcc: 0.378
+[2022-10-11T05:00:57.207477+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 596, loss-ave: 0.004587060512986358, mAcc: 0.9977363209991358
+[2022-10-11T05:01:24.352666+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 597, loss-ave: 0.004583438937327155, mAcc: 0.9978094715198488
+[2022-10-11T05:01:51.320052+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 598, loss-ave: 0.004016761584068405, mAcc: 0.9981593071049406
+[2022-10-11T05:02:18.234135+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 599, loss-ave: 0.004575545393156807, mAcc: 0.9977241522483243
+[2022-10-11T05:02:45.151605+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 600, loss-ave: 0.00435710887669693, mAcc: 0.9977702540902388
+[2022-10-11T05:02:45.151938+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:04:05.808786+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 600 answer-mAcc: 0.391
+[2022-10-11T05:04:32.802367+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 601, loss-ave: 0.004356767108684605, mAcc: 0.9975198191844173
+[2022-10-11T05:04:59.807685+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 602, loss-ave: 0.004642925636654378, mAcc: 0.9980051723752009
+[2022-10-11T05:05:26.813169+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 603, loss-ave: 0.004433139094038539, mAcc: 0.9977171546933609
+[2022-10-11T05:05:53.799081+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 604, loss-ave: 0.004350766332572903, mAcc: 0.9980902018134528
+[2022-10-11T05:06:20.770038+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 605, loss-ave: 0.00398822775177393, mAcc: 0.9980660155225953
+[2022-10-11T05:06:20.770379+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:07:44.353804+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 605 answer-mAcc: 0.388
+[2022-10-11T05:08:11.244901+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 606, loss-ave: 0.0044102380934667685, mAcc: 0.9979329615755542
+[2022-10-11T05:08:38.190952+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 607, loss-ave: 0.004579487515622586, mAcc: 0.9976837977804907
+[2022-10-11T05:09:05.153283+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 608, loss-ave: 0.0045345401346440686, mAcc: 0.9977445895131914
+[2022-10-11T05:09:32.132355+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 609, loss-ave: 0.004319789798779943, mAcc: 0.9979757918352996
+[2022-10-11T05:09:59.112618+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 610, loss-ave: 0.00454204757329777, mAcc: 0.9980817188440085
+[2022-10-11T05:09:59.112956+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:11:16.493829+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 610 answer-mAcc: 0.401
+[2022-10-11T05:11:43.489991+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 611, loss-ave: 0.00449683052923431, mAcc: 0.9981233647458123
+[2022-10-11T05:12:10.492296+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 612, loss-ave: 0.004230999635677527, mAcc: 0.997968864046587
+[2022-10-11T05:12:37.503261+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 613, loss-ave: 0.004946586261162009, mAcc: 0.9974628268307402
+[2022-10-11T05:13:04.445967+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 614, loss-ave: 0.004573133836216527, mAcc: 0.9981048421095345
+[2022-10-11T05:13:31.363538+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 615, loss-ave: 0.004273966785941821, mAcc: 0.9980030197830297
+[2022-10-11T05:13:31.363874+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:14:49.511956+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 615 answer-mAcc: 0.387
+[2022-10-11T05:15:16.553198+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 616, loss-ave: 0.005001307207173911, mAcc: 0.9980280795170151
+[2022-10-11T05:15:43.568201+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 617, loss-ave: 0.004714383203568367, mAcc: 0.9976276597600553
+[2022-10-11T05:16:10.570149+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 618, loss-ave: 0.004555515259019537, mAcc: 0.9978742510004505
+[2022-10-11T05:16:37.603476+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 619, loss-ave: 0.007274885910965414, mAcc: 0.9973791140029752
+[2022-10-11T05:17:04.637575+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 620, loss-ave: 0.005027233990779427, mAcc: 0.9977937929199548
+[2022-10-11T05:17:04.637901+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:18:29.463989+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 620 answer-mAcc: 0.379
+[2022-10-11T05:18:56.349396+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 621, loss-ave: 0.004380818259600237, mAcc: 0.9980342624751666
+[2022-10-11T05:19:23.237762+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 622, loss-ave: 0.00434903334515563, mAcc: 0.9979377804518352
+[2022-10-11T05:19:50.173049+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 623, loss-ave: 0.00466076366575492, mAcc: 0.9979555719074705
+[2022-10-11T05:20:17.151135+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 624, loss-ave: 0.004640865101138998, mAcc: 0.9978247350105499
+[2022-10-11T05:20:44.179934+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 625, loss-ave: 0.004495305281089742, mAcc: 0.9976925252351445
+[2022-10-11T05:20:44.180272+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:21:57.083180+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 625 answer-mAcc: 0.374
+[2022-10-11T05:22:24.098913+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 626, loss-ave: 0.004320911243022301, mAcc: 0.9977513582045189
+[2022-10-11T05:22:51.085744+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 627, loss-ave: 0.004259360541153478, mAcc: 0.9977969427145165
+[2022-10-11T05:23:18.092862+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 628, loss-ave: 0.004328504053159654, mAcc: 0.9979397310252105
+[2022-10-11T05:23:45.104219+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 629, loss-ave: 0.00438308522448389, mAcc: 0.998030530284076
+[2022-10-11T05:24:12.083299+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 630, loss-ave: 0.0042626158630687866, mAcc: 0.9979274570183596
+[2022-10-11T05:24:12.083634+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:25:28.381369+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 630 answer-mAcc: 0.376
+[2022-10-11T05:25:55.386185+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 631, loss-ave: 0.0043267473425616255, mAcc: 0.9978837472488559
+[2022-10-11T05:26:22.354260+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 632, loss-ave: 0.004446885814430893, mAcc: 0.9977233223332703
+[2022-10-11T05:26:49.337828+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 633, loss-ave: 0.0041639603505553915, mAcc: 0.9979210180484005
+[2022-10-11T05:27:16.307921+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 634, loss-ave: 0.0041338902085192525, mAcc: 0.9980878544824421
+[2022-10-11T05:27:48.817102+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 635, loss-ave: 0.0041141593373212595, mAcc: 0.9978513408253211
+[2022-10-11T05:27:48.817540+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:29:11.920208+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 635 answer-mAcc: 0.372
+[2022-10-11T05:29:38.951820+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 636, loss-ave: 0.006257162273811688, mAcc: 0.9978413146567405
+[2022-10-11T05:30:05.767915+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 637, loss-ave: 0.004695420892931074, mAcc: 0.9977246183172134
+[2022-10-11T05:30:32.540778+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 638, loss-ave: 0.0045430197570296114, mAcc: 0.9978266017127583
+[2022-10-11T05:30:59.363422+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 639, loss-ave: 0.004380637761931603, mAcc: 0.9980291730271648
+[2022-10-11T05:31:26.241541+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 640, loss-ave: 0.004536375127680391, mAcc: 0.9978155687868443
+[2022-10-11T05:31:26.241868+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:32:38.066790+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 640 answer-mAcc: 0.369
+[2022-10-11T05:33:04.969684+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 641, loss-ave: 0.00487829848765314, mAcc: 0.9977138269948596
+[2022-10-11T05:33:31.863499+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 642, loss-ave: 0.004293384102626468, mAcc: 0.9977694584516472
+[2022-10-11T05:33:58.776343+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 643, loss-ave: 0.004338162060522099, mAcc: 0.9977378816398349
+[2022-10-11T05:34:25.691871+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 644, loss-ave: 0.004204556894612705, mAcc: 0.9980423424686791
+[2022-10-11T05:34:52.577038+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 645, loss-ave: 0.004160775741153363, mAcc: 0.9979392602546828
+[2022-10-11T05:34:52.577358+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:36:05.201140+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 645 answer-mAcc: 0.366
+[2022-10-11T05:36:32.017513+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 646, loss-ave: 0.00464640903151412, mAcc: 0.9975238340804898
+[2022-10-11T05:36:58.882445+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 647, loss-ave: 0.004532910347641736, mAcc: 0.9979017425432763
+[2022-10-11T05:37:25.792899+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 648, loss-ave: 0.004562296606794193, mAcc: 0.9978589116768679
+[2022-10-11T05:37:52.693907+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 649, loss-ave: 0.004306977360759298, mAcc: 0.9979013758154619
+[2022-10-11T05:38:19.580984+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 650, loss-ave: 0.004035199942539479, mAcc: 0.9980704098864063
+[2022-10-11T05:38:19.581299+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:39:40.193851+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 650 answer-mAcc: 0.362
+[2022-10-11T05:40:07.089272+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 651, loss-ave: 0.005119459821035623, mAcc: 0.998057477650145
+[2022-10-11T05:40:33.985819+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 652, loss-ave: 0.004272339321508195, mAcc: 0.9981265979565433
+[2022-10-11T05:41:00.883302+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 653, loss-ave: 0.0043099026029422985, mAcc: 0.9981734353774073
+[2022-10-11T05:41:27.723206+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 654, loss-ave: 0.004197723177170226, mAcc: 0.998090172845292
+[2022-10-11T05:41:54.514504+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 655, loss-ave: 0.0043912068375117725, mAcc: 0.9979533069309691
+[2022-10-11T05:41:54.514812+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:43:08.104692+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 655 answer-mAcc: 0.369
+[2022-10-11T05:43:35.012326+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 656, loss-ave: 0.003977055805314274, mAcc: 0.9982450201007853
+[2022-10-11T05:44:01.889266+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 657, loss-ave: 0.005023071436782389, mAcc: 0.9975774846307497
+[2022-10-11T05:44:28.770909+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 658, loss-ave: 0.00441754792628912, mAcc: 0.99809235956226
+[2022-10-11T05:44:55.628356+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 659, loss-ave: 0.003993490099177302, mAcc: 0.9978200156270093
+[2022-10-11T05:45:22.495324+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 660, loss-ave: 0.003956135045049127, mAcc: 0.998053989185935
+[2022-10-11T05:45:22.495646+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:46:26.472469+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 660 answer-mAcc: 0.386
+[2022-10-11T05:46:53.382023+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 661, loss-ave: 0.004108521272461416, mAcc: 0.9979918846343917
+[2022-10-11T05:47:20.136069+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 662, loss-ave: 0.00472667210636093, mAcc: 0.998088429902346
+[2022-10-11T05:47:46.902489+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 663, loss-ave: 0.0038276032630054644, mAcc: 0.9978767677421182
+[2022-10-11T05:48:13.751814+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 664, loss-ave: 0.004150032059253078, mAcc: 0.9980160791152003
+[2022-10-11T05:48:40.637789+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 665, loss-ave: 0.004337312921615361, mAcc: 0.9978228008170771
+[2022-10-11T05:48:40.638201+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:50:01.515828+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 665 answer-mAcc: 0.377
+[2022-10-11T05:50:28.419327+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 666, loss-ave: 0.004187694690592242, mAcc: 0.9982978134361539
+[2022-10-11T05:50:55.293647+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 667, loss-ave: 0.004626544364343278, mAcc: 0.9977658893012515
+[2022-10-11T05:51:22.173220+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 668, loss-ave: 0.00422885595947113, mAcc: 0.9976903749179598
+[2022-10-11T05:51:49.061407+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 669, loss-ave: 0.004458980256951516, mAcc: 0.9979513574192542
+[2022-10-11T05:52:15.948374+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 670, loss-ave: 0.004425810371535499, mAcc: 0.9980942807124771
+[2022-10-11T05:52:15.948736+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:53:33.853194+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 670 answer-mAcc: 0.379
+[2022-10-11T05:54:00.738361+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 671, loss-ave: 0.0042280702213198474, mAcc: 0.9982968320070029
+[2022-10-11T05:54:27.733789+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 672, loss-ave: 0.004643013512763756, mAcc: 0.9976740109404838
+[2022-10-11T05:54:54.916448+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 673, loss-ave: 0.004880210858031069, mAcc: 0.9976985947473055
+[2022-10-11T05:55:21.846064+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 674, loss-ave: 0.004513036510777141, mAcc: 0.9977504791497578
+[2022-10-11T05:55:48.761744+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 675, loss-ave: 0.004031613729253838, mAcc: 0.9977697352416642
+[2022-10-11T05:55:48.762093+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T05:57:08.921699+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 675 answer-mAcc: 0.372
+[2022-10-11T05:57:35.816080+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 676, loss-ave: 0.004073709517115506, mAcc: 0.9978576671076185
+[2022-10-11T05:58:02.673809+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 677, loss-ave: 0.004485299778464438, mAcc: 0.99824395828878
+[2022-10-11T05:58:29.515579+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 678, loss-ave: 0.004836344854969548, mAcc: 0.9978008191397475
+[2022-10-11T05:58:56.332916+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 679, loss-ave: 0.004017510960274196, mAcc: 0.9979496660426677
+[2022-10-11T05:59:23.527822+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 680, loss-ave: 0.0043181771687490055, mAcc: 0.9977723813542276
+[2022-10-11T05:59:23.528144+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:00:37.886778+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 680 answer-mAcc: 0.382
+[2022-10-11T06:01:07.060934+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 681, loss-ave: 0.0037674578170079076, mAcc: 0.9982583164865431
+[2022-10-11T06:01:39.818188+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 682, loss-ave: 0.004374297194183326, mAcc: 0.9976624618959791
+[2022-10-11T06:02:12.569504+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 683, loss-ave: 0.004116924248582658, mAcc: 0.9977323443228355
+[2022-10-11T06:02:45.374219+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 684, loss-ave: 0.003868011876956659, mAcc: 0.9982047839322467
+[2022-10-11T06:03:18.144102+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 685, loss-ave: 0.004242855359938804, mAcc: 0.9979332791636615
+[2022-10-11T06:03:18.144536+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:04:31.428312+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 685 answer-mAcc: 0.386
+[2022-10-11T06:04:58.282061+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 686, loss-ave: 0.0039680375040852455, mAcc: 0.9978282219581022
+[2022-10-11T06:05:25.239372+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 687, loss-ave: 0.004909194412990188, mAcc: 0.9978367017425653
+[2022-10-11T06:05:52.136255+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 688, loss-ave: 0.004148452595243084, mAcc: 0.9979867712231992
+[2022-10-11T06:06:19.051772+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 689, loss-ave: 0.003985530749757913, mAcc: 0.9983294886790463
+[2022-10-11T06:06:49.471686+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 690, loss-ave: 0.004090313661408028, mAcc: 0.9981897459685347
+[2022-10-11T06:06:49.472124+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:08:04.667460+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 690 answer-mAcc: 0.384
+[2022-10-11T06:08:31.651009+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 691, loss-ave: 0.004124197943812606, mAcc: 0.9979150028325826
+[2022-10-11T06:08:58.581433+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 692, loss-ave: 0.0040264720786739195, mAcc: 0.9982314739215161
+[2022-10-11T06:09:25.543646+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 693, loss-ave: 0.004180318049341343, mAcc: 0.9981010169473313
+[2022-10-11T06:09:52.419865+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 694, loss-ave: 0.0046592681109661575, mAcc: 0.9977286705230636
+[2022-10-11T06:10:19.250306+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 695, loss-ave: 0.004347542885004303, mAcc: 0.9979632249618607
+[2022-10-11T06:10:19.250621+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:11:33.386903+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 695 answer-mAcc: 0.374
+[2022-10-11T06:12:00.323618+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 696, loss-ave: 0.004267955582318555, mAcc: 0.9981279770533243
+[2022-10-11T06:12:27.233603+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 697, loss-ave: 0.004069688723185529, mAcc: 0.9980876849201192
+[2022-10-11T06:12:54.168848+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 698, loss-ave: 0.004353622836990275, mAcc: 0.9980213564770822
+[2022-10-11T06:13:21.111295+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 699, loss-ave: 0.004720981219432984, mAcc: 0.9978372627542219
+[2022-10-11T06:13:48.082675+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 700, loss-ave: 0.005016401042254989, mAcc: 0.9979073546314967
+[2022-10-11T06:13:48.082991+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:14:59.802265+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 700 answer-mAcc: 0.362
+[2022-10-11T06:15:26.605492+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 701, loss-ave: 0.004100931575623929, mAcc: 0.9981581441318715
+[2022-10-11T06:15:53.432005+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 702, loss-ave: 0.003755950587595474, mAcc: 0.9979399479072513
+[2022-10-11T06:16:22.553831+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 703, loss-ave: 0.004734832943379297, mAcc: 0.9978367329857125
+[2022-10-11T06:16:55.241536+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 704, loss-ave: 0.00415517769122874, mAcc: 0.997647624889403
+[2022-10-11T06:17:28.054066+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 705, loss-ave: 0.0038922275494731704, mAcc: 0.9982543856133032
+[2022-10-11T06:17:28.054519+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:18:42.965860+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 705 answer-mAcc: 0.378
+[2022-10-11T06:19:10.053522+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 706, loss-ave: 0.0039716675180673814, mAcc: 0.9982404842328176
+[2022-10-11T06:19:37.148936+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 707, loss-ave: 0.004166440317934695, mAcc: 0.997889548767614
+[2022-10-11T06:20:04.263833+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 708, loss-ave: 0.004269517518570223, mAcc: 0.998059903999018
+[2022-10-11T06:20:31.368838+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 709, loss-ave: 0.004285355828364406, mAcc: 0.9978084866023852
+[2022-10-11T06:20:58.523775+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 710, loss-ave: 0.0055021259267669835, mAcc: 0.9976813109169783
+[2022-10-11T06:20:58.524194+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:22:17.944017+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 710 answer-mAcc: 0.389
+[2022-10-11T06:22:44.961668+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 711, loss-ave: 0.004093701731138947, mAcc: 0.9980226145445845
+[2022-10-11T06:23:11.987979+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 712, loss-ave: 0.005375780257292776, mAcc: 0.9977528430123366
+[2022-10-11T06:23:39.012865+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 713, loss-ave: 0.004152046520596824, mAcc: 0.9978808273795907
+[2022-10-11T06:24:06.033057+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 714, loss-ave: 0.003908634389510382, mAcc: 0.9980579179358543
+[2022-10-11T06:24:33.021528+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 715, loss-ave: 0.003927342646053234, mAcc: 0.9979891948420886
+[2022-10-11T06:24:33.021851+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:25:55.857316+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 715 answer-mAcc: 0.377
+[2022-10-11T06:26:22.873200+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 716, loss-ave: 0.00404342870489828, mAcc: 0.9979686018164832
+[2022-10-11T06:26:54.142605+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 717, loss-ave: 0.0040389828782720445, mAcc: 0.9979862391797034
+[2022-10-11T06:27:26.785323+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 718, loss-ave: 0.004238295827738287, mAcc: 0.9981174881525016
+[2022-10-11T06:27:59.438250+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 719, loss-ave: 0.004139175296323882, mAcc: 0.9980256334515928
+[2022-10-11T06:28:32.177451+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 720, loss-ave: 0.004199317029663029, mAcc: 0.997902698644245
+[2022-10-11T06:28:32.177900+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:29:52.107672+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 720 answer-mAcc: 0.376
+[2022-10-11T06:30:19.102310+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 721, loss-ave: 0.003935696983134513, mAcc: 0.9981629815113757
+[2022-10-11T06:30:46.087887+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 722, loss-ave: 0.0040586279702438145, mAcc: 0.997733174541221
+[2022-10-11T06:31:13.081476+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 723, loss-ave: 0.004029720867112922, mAcc: 0.9978129657473577
+[2022-10-11T06:31:40.085928+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 724, loss-ave: 0.004228114825850116, mAcc: 0.9980022572075744
+[2022-10-11T06:32:07.072933+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 725, loss-ave: 0.004184352201522299, mAcc: 0.9978877319634416
+[2022-10-11T06:32:07.073271+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:33:25.466850+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 725 answer-mAcc: 0.381
+[2022-10-11T06:33:52.428989+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 726, loss-ave: 0.004243602982546555, mAcc: 0.9979256781306279
+[2022-10-11T06:34:19.418479+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 727, loss-ave: 0.003845682866040742, mAcc: 0.9981416371335814
+[2022-10-11T06:34:46.397735+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 728, loss-ave: 0.004250078664849208, mAcc: 0.9976854304624271
+[2022-10-11T06:35:13.430018+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 729, loss-ave: 0.004245026487902752, mAcc: 0.998016703978143
+[2022-10-11T06:35:40.427907+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 730, loss-ave: 0.00436938038820561, mAcc: 0.9979577043280954
+[2022-10-11T06:35:40.428235+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:36:56.087299+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 730 answer-mAcc: 0.382
+[2022-10-11T06:37:23.083763+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 731, loss-ave: 0.004247099459413123, mAcc: 0.9978458233765367
+[2022-10-11T06:37:50.059980+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 732, loss-ave: 0.003961756862060119, mAcc: 0.9980853516940246
+[2022-10-11T06:38:17.052194+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 733, loss-ave: 0.004126409113188911, mAcc: 0.9979609238889078
+[2022-10-11T06:38:43.946268+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 734, loss-ave: 0.004093469286377988, mAcc: 0.9981137993378191
+[2022-10-11T06:39:10.821298+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 735, loss-ave: 0.004106363845367858, mAcc: 0.9980775571354776
+[2022-10-11T06:39:10.821633+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:40:23.362450+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 735 answer-mAcc: 0.384
+[2022-10-11T06:40:50.362315+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 736, loss-ave: 0.004241447715174716, mAcc: 0.9979177372146198
+[2022-10-11T06:41:17.294876+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 737, loss-ave: 0.004220570305138243, mAcc: 0.9979436076021073
+[2022-10-11T06:41:44.262528+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 738, loss-ave: 0.004052929775299902, mAcc: 0.9980767163004888
+[2022-10-11T06:42:11.201078+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 739, loss-ave: 0.004103789750950349, mAcc: 0.9979715724937789
+[2022-10-11T06:42:38.153208+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 740, loss-ave: 0.004233887719627819, mAcc: 0.9976627838823935
+[2022-10-11T06:42:38.153545+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:43:57.379268+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 740 answer-mAcc: 0.386
+[2022-10-11T06:44:24.257228+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 741, loss-ave: 0.004376243640835368, mAcc: 0.997867364009828
+[2022-10-11T06:44:51.113084+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 742, loss-ave: 0.004042431472559269, mAcc: 0.9976500738364746
+[2022-10-11T06:45:18.041470+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 743, loss-ave: 0.004108924181935245, mAcc: 0.9978579096211732
+[2022-10-11T06:45:45.013046+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 744, loss-ave: 0.004068524698690537, mAcc: 0.9977006592216686
+[2022-10-11T06:46:11.963730+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 745, loss-ave: 0.004094614807830317, mAcc: 0.9976854764171532
+[2022-10-11T06:46:11.964064+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:47:34.000248+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 745 answer-mAcc: 0.383
+[2022-10-11T06:48:00.988840+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 746, loss-ave: 0.004321320960503284, mAcc: 0.9976297805024164
+[2022-10-11T06:48:27.988431+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 747, loss-ave: 0.003941794406540344, mAcc: 0.9978542033649279
+[2022-10-11T06:48:55.088737+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 748, loss-ave: 0.004574302183610108, mAcc: 0.9978907881802275
+[2022-10-11T06:49:22.171704+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 749, loss-ave: 0.004162098420659405, mAcc: 0.9979200813606495
+[2022-10-11T06:49:49.194424+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 750, loss-ave: 0.004129205912250455, mAcc: 0.9981507263110794
+[2022-10-11T06:49:49.194743+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:51:10.522927+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 750 answer-mAcc: 0.388
+[2022-10-11T06:51:37.437362+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 751, loss-ave: 0.0040460658765846865, mAcc: 0.9980327603774519
+[2022-10-11T06:52:04.357471+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 752, loss-ave: 0.004256601247873353, mAcc: 0.9977841836805562
+[2022-10-11T06:52:37.971489+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 753, loss-ave: 0.004528869252368163, mAcc: 0.9978951121711246
+[2022-10-11T06:53:19.449509+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 754, loss-ave: 0.003915756885414252, mAcc: 0.9980916174616826
+[2022-10-11T06:54:00.916662+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 755, loss-ave: 0.004176692681937932, mAcc: 0.9977206747040493
+[2022-10-11T06:54:00.917267+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T06:55:21.458765+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 755 answer-mAcc: 0.384
+[2022-10-11T06:55:55.531088+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 756, loss-ave: 0.004185425644264136, mAcc: 0.998060737099053
+[2022-10-11T06:56:36.724562+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 757, loss-ave: 0.004194789427405496, mAcc: 0.9979161747539317
+[2022-10-11T06:57:18.066746+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 758, loss-ave: 0.004579232298924328, mAcc: 0.9977263644451403
+[2022-10-11T06:57:59.400520+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 759, loss-ave: 0.004193311914684395, mAcc: 0.9980302210375857
+[2022-10-11T06:58:40.731164+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 760, loss-ave: 0.0039031831954447808, mAcc: 0.9981473508378629
+[2022-10-11T06:58:40.731677+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:00:16.511374+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 760 answer-mAcc: 0.384
+[2022-10-11T07:00:48.733884+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 761, loss-ave: 0.004072195948153369, mAcc: 0.9978504018625837
+[2022-10-11T07:01:20.879914+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 762, loss-ave: 0.003996736975867288, mAcc: 0.9979057351444817
+[2022-10-11T07:01:52.939088+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 763, loss-ave: 0.003962429408894553, mAcc: 0.9979845095833446
+[2022-10-11T07:02:25.034918+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 764, loss-ave: 0.004239877593851911, mAcc: 0.9982851798297795
+[2022-10-11T07:02:57.160956+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 765, loss-ave: 0.004018955260194485, mAcc: 0.9980497454262265
+[2022-10-11T07:02:57.161375+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:04:44.580246+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 765 answer-mAcc: 0.374
+[2022-10-11T07:05:16.793764+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 766, loss-ave: 0.003820734588480817, mAcc: 0.9980935610584327
+[2022-10-11T07:05:48.987983+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 767, loss-ave: 0.004070902212088006, mAcc: 0.998026858304293
+[2022-10-11T07:06:21.166798+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 768, loss-ave: 0.004023152422693433, mAcc: 0.9980661075837133
+[2022-10-11T07:06:53.373079+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 769, loss-ave: 0.004126481178896457, mAcc: 0.9978389291059576
+[2022-10-11T07:07:25.514249+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 770, loss-ave: 0.004303369677838316, mAcc: 0.9975944997093453
+[2022-10-11T07:07:25.514670+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:09:07.862395+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 770 answer-mAcc: 0.378
+[2022-10-11T07:09:40.103394+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 771, loss-ave: 0.0041890424861405935, mAcc: 0.9978728796386234
+[2022-10-11T07:10:12.326193+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 772, loss-ave: 0.004314446682865379, mAcc: 0.9978077592133869
+[2022-10-11T07:10:44.550323+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 773, loss-ave: 0.003927749407671507, mAcc: 0.9979667998755555
+[2022-10-11T07:11:16.749153+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 774, loss-ave: 0.0039686322381758095, mAcc: 0.9982510908262724
+[2022-10-11T07:11:48.966077+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 775, loss-ave: 0.0041167012220515295, mAcc: 0.9980490659636092
+[2022-10-11T07:11:48.966499+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:13:33.869007+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 775 answer-mAcc: 0.387
+[2022-10-11T07:14:06.059706+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 776, loss-ave: 0.0041945997804874536, mAcc: 0.9978782437533216
+[2022-10-11T07:14:38.091955+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 777, loss-ave: 0.0039753026606730545, mAcc: 0.9980062313055568
+[2022-10-11T07:15:10.162873+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 778, loss-ave: 0.004169478117423298, mAcc: 0.9980798554784469
+[2022-10-11T07:15:42.320541+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 779, loss-ave: 0.003838418332233075, mAcc: 0.9982572886476686
+[2022-10-11T07:16:14.476339+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 780, loss-ave: 0.004120177925505193, mAcc: 0.9978753649854781
+[2022-10-11T07:16:14.476777+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:18:00.574445+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 780 answer-mAcc: 0.368
+[2022-10-11T07:18:32.785920+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 781, loss-ave: 0.004189495378707073, mAcc: 0.9980071182469376
+[2022-10-11T07:19:05.030331+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 782, loss-ave: 0.004211839005730035, mAcc: 0.9980200918879522
+[2022-10-11T07:19:37.194855+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 783, loss-ave: 0.004152938114010724, mAcc: 0.9978991270671971
+[2022-10-11T07:20:09.395858+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 784, loss-ave: 0.004084251769541013, mAcc: 0.9978431945538703
+[2022-10-11T07:20:41.576758+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 785, loss-ave: 0.003898740935449807, mAcc: 0.9979773565709743
+[2022-10-11T07:20:41.577154+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:22:30.178327+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 785 answer-mAcc: 0.372
+[2022-10-11T07:23:02.401965+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 786, loss-ave: 0.004054902220351076, mAcc: 0.9978675754319014
+[2022-10-11T07:23:34.592014+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 787, loss-ave: 0.0038033792627431315, mAcc: 0.998208138475588
+[2022-10-11T07:24:06.716969+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 788, loss-ave: 0.0039668640112537, mAcc: 0.998018023015282
+[2022-10-11T07:24:38.905660+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 789, loss-ave: 0.004068380797069145, mAcc: 0.9978377385297198
+[2022-10-11T07:25:11.117202+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 790, loss-ave: 0.004022644485795495, mAcc: 0.9980156110746563
+[2022-10-11T07:25:11.117631+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:26:57.162031+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 790 answer-mAcc: 0.381
+[2022-10-11T07:27:29.237751+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 791, loss-ave: 0.00396832002211784, mAcc: 0.9979817366782036
+[2022-10-11T07:28:01.320739+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 792, loss-ave: 0.003945046124427492, mAcc: 0.9978603926930415
+[2022-10-11T07:28:33.502103+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 793, loss-ave: 0.004213830280215377, mAcc: 0.9977500983170274
+[2022-10-11T07:29:05.704251+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 794, loss-ave: 0.004141799575707809, mAcc: 0.9980915108406513
+[2022-10-11T07:29:37.917332+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 795, loss-ave: 0.004051244434067908, mAcc: 0.9978565273394111
+[2022-10-11T07:29:37.917775+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:31:21.526798+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 795 answer-mAcc: 0.373
+[2022-10-11T07:31:53.740666+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 796, loss-ave: 0.0039215291374253645, mAcc: 0.9981762410423531
+[2022-10-11T07:32:25.952933+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 797, loss-ave: 0.00393497391105336, mAcc: 0.9981353906274751
+[2022-10-11T07:32:58.103343+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 798, loss-ave: 0.004020016190877545, mAcc: 0.9978485755034682
+[2022-10-11T07:33:30.191220+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 799, loss-ave: 0.0039753322098547445, mAcc: 0.9981349501901
+[2022-10-11T07:34:02.224473+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 800, loss-ave: 0.004296480029379102, mAcc: 0.9978182619157941
+[2022-10-11T07:34:02.224908+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:35:43.983884+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 800 answer-mAcc: 0.378
+[2022-10-11T07:36:16.106671+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 801, loss-ave: 0.004011835635226913, mAcc: 0.9980043538350792
+[2022-10-11T07:36:48.280692+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 802, loss-ave: 0.0046620591007119575, mAcc: 0.9979065100048637
+[2022-10-11T07:37:20.666275+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 803, loss-ave: 0.006276754622836747, mAcc: 0.9977908898855894
+[2022-10-11T07:37:53.424202+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 804, loss-ave: 0.0038930633459014264, mAcc: 0.997969553215813
+[2022-10-11T07:38:26.168360+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 805, loss-ave: 0.0039482958725915495, mAcc: 0.9981064553782534
+[2022-10-11T07:38:26.168946+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:39:51.378194+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 805 answer-mAcc: 0.378
+[2022-10-11T07:40:18.250183+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 806, loss-ave: 0.003954579419510971, mAcc: 0.9979036106104766
+[2022-10-11T07:40:45.202727+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 807, loss-ave: 0.003904574195934333, mAcc: 0.9979968011834239
+[2022-10-11T07:41:12.092643+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 808, loss-ave: 0.0040638696064655075, mAcc: 0.9978581336315048
+[2022-10-11T07:41:39.021373+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 809, loss-ave: 0.0037480506226864356, mAcc: 0.997949979687465
+[2022-10-11T07:42:05.953179+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 810, loss-ave: 0.0039133681998715355, mAcc: 0.9981081928612319
+[2022-10-11T07:42:05.953525+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:43:29.328304+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 810 answer-mAcc: 0.381
+[2022-10-11T07:43:56.187939+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 811, loss-ave: 0.0038284682890727777, mAcc: 0.9980267977896538
+[2022-10-11T07:44:23.082839+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 812, loss-ave: 0.004034079525175687, mAcc: 0.9978908477848722
+[2022-10-11T07:44:50.016487+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 813, loss-ave: 0.003849455116769438, mAcc: 0.9980061795875317
+[2022-10-11T07:45:16.841501+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 814, loss-ave: 0.004178990194868884, mAcc: 0.9980070554573117
+[2022-10-11T07:45:43.636774+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 815, loss-ave: 0.003985317826698611, mAcc: 0.9980936833010375
+[2022-10-11T07:45:43.637092+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:47:05.539298+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 815 answer-mAcc: 0.378
+[2022-10-11T07:47:32.480624+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 816, loss-ave: 0.003999592863048933, mAcc: 0.9979761653880733
+[2022-10-11T07:47:59.355351+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 817, loss-ave: 0.004144997496377936, mAcc: 0.9980003443989741
+[2022-10-11T07:48:26.262057+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 818, loss-ave: 0.0039020823837562515, mAcc: 0.9978727731692578
+[2022-10-11T07:48:53.165317+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 819, loss-ave: 0.0038512179999515513, mAcc: 0.9982545186241771
+[2022-10-11T07:49:20.052158+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 820, loss-ave: 0.004162153086528378, mAcc: 0.9977889666120514
+[2022-10-11T07:49:20.052476+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:50:44.075363+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 820 answer-mAcc: 0.38
+[2022-10-11T07:51:10.878618+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 821, loss-ave: 0.003912930138854118, mAcc: 0.9978406216958704
+[2022-10-11T07:51:37.677612+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 822, loss-ave: 0.0041243509978103245, mAcc: 0.9978578237783514
+[2022-10-11T07:52:04.504885+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 823, loss-ave: 0.004069451972469443, mAcc: 0.9980331800366176
+[2022-10-11T07:52:31.424219+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 824, loss-ave: 0.003993873233410251, mAcc: 0.998151848637724
+[2022-10-11T07:52:59.847163+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 825, loss-ave: 0.003911306746448202, mAcc: 0.9981937171848676
+[2022-10-11T07:52:59.847485+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:54:25.968983+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 825 answer-mAcc: 0.385
+[2022-10-11T07:54:52.947819+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 826, loss-ave: 0.004013384981692846, mAcc: 0.9979309542791838
+[2022-10-11T07:55:19.875172+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 827, loss-ave: 0.003716238791828843, mAcc: 0.9980383535074521
+[2022-10-11T07:55:46.780168+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 828, loss-ave: 0.003949335271729998, mAcc: 0.9979337905806136
+[2022-10-11T07:56:13.731889+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 829, loss-ave: 0.004079145718036744, mAcc: 0.9978554662857347
+[2022-10-11T07:56:40.632713+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 830, loss-ave: 0.004036469228484685, mAcc: 0.9979558009227724
+[2022-10-11T07:56:40.633031+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T07:58:04.362695+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 830 answer-mAcc: 0.389
+[2022-10-11T07:58:31.268359+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 831, loss-ave: 0.004169639016578301, mAcc: 0.9979338829450631
+[2022-10-11T07:58:58.176191+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 832, loss-ave: 0.003954230208894264, mAcc: 0.9979333226917354
+[2022-10-11T07:59:25.087659+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 833, loss-ave: 0.003999447469560854, mAcc: 0.9980630257354135
+[2022-10-11T07:59:51.995720+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 834, loss-ave: 0.0039444566920727965, mAcc: 0.997895491638863
+[2022-10-11T08:00:18.918026+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 835, loss-ave: 0.0039851290948426646, mAcc: 0.9978340668532685
+[2022-10-11T08:00:18.918347+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:01:44.202100+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 835 answer-mAcc: 0.376
+[2022-10-11T08:02:11.087401+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 836, loss-ave: 0.0038088118132227735, mAcc: 0.9981060763655122
+[2022-10-11T08:02:37.921427+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 837, loss-ave: 0.0038206716682361447, mAcc: 0.9981625762604575
+[2022-10-11T08:03:04.708105+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 838, loss-ave: 0.0040850050311783065, mAcc: 0.9979141028479462
+[2022-10-11T08:03:31.557074+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 839, loss-ave: 0.00408649110114167, mAcc: 0.9980543644070322
+[2022-10-11T08:03:58.468234+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 840, loss-ave: 0.00413341942310035, mAcc: 0.9978583307969965
+[2022-10-11T08:03:58.468561+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:05:24.112287+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 840 answer-mAcc: 0.382
+[2022-10-11T08:05:51.055769+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 841, loss-ave: 0.003995207739485425, mAcc: 0.9979466498656431
+[2022-10-11T08:06:17.982790+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 842, loss-ave: 0.004577987665271026, mAcc: 0.9977737515027286
+[2022-10-11T08:06:44.920574+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 843, loss-ave: 0.003824703264989746, mAcc: 0.9979680761429494
+[2022-10-11T08:07:11.823088+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 844, loss-ave: 0.0037525762751236874, mAcc: 0.9980558123600696
+[2022-10-11T08:07:38.766118+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 845, loss-ave: 0.00399386360725359, mAcc: 0.9981080810835646
+[2022-10-11T08:07:38.766439+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:08:59.733601+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 845 answer-mAcc: 0.384
+[2022-10-11T08:09:26.689898+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 846, loss-ave: 0.004013073572832864, mAcc: 0.9977988857046035
+[2022-10-11T08:09:53.564101+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 847, loss-ave: 0.004146136741559115, mAcc: 0.9978360322898884
+[2022-10-11T08:10:20.473884+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 848, loss-ave: 0.003993045441431729, mAcc: 0.9981798610007794
+[2022-10-11T08:10:47.375787+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 849, loss-ave: 0.0038720639054599126, mAcc: 0.997908772554713
+[2022-10-11T08:11:14.297704+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 850, loss-ave: 0.003876228459193373, mAcc: 0.9980254109579189
+[2022-10-11T08:11:14.298036+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:12:35.556541+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 850 answer-mAcc: 0.384
+[2022-10-11T08:13:02.465400+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 851, loss-ave: 0.0038910888750003556, mAcc: 0.9979163743460755
+[2022-10-11T08:13:29.347940+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 852, loss-ave: 0.003739621351657303, mAcc: 0.9982134972819845
+[2022-10-11T08:13:56.208618+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 853, loss-ave: 0.003948218824191764, mAcc: 0.9981425186149947
+[2022-10-11T08:14:23.048020+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 854, loss-ave: 0.0039947020982061725, mAcc: 0.9981162250800291
+[2022-10-11T08:14:49.937494+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 855, loss-ave: 0.0037861143365584557, mAcc: 0.9981104764926221
+[2022-10-11T08:14:49.937827+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:16:11.633853+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 855 answer-mAcc: 0.387
+[2022-10-11T08:16:38.564752+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 856, loss-ave: 0.0037637521887834736, mAcc: 0.9981317359375893
+[2022-10-11T08:17:05.475091+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 857, loss-ave: 0.003948001247727946, mAcc: 0.9980330844871871
+[2022-10-11T08:17:32.412165+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 858, loss-ave: 0.003861868782442423, mAcc: 0.9979335184922352
+[2022-10-11T08:17:59.333878+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 859, loss-ave: 0.004139611596423039, mAcc: 0.9981417132697943
+[2022-10-11T08:18:26.271953+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 860, loss-ave: 0.003916537702843505, mAcc: 0.9979330462050499
+[2022-10-11T08:18:26.272277+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:19:49.568627+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 860 answer-mAcc: 0.384
+[2022-10-11T08:20:16.405667+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 861, loss-ave: 0.004352846974364949, mAcc: 0.9981067288316237
+[2022-10-11T08:20:43.288655+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 862, loss-ave: 0.003966642122306837, mAcc: 0.997887802639687
+[2022-10-11T08:21:10.212779+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 863, loss-ave: 0.003992076587465274, mAcc: 0.9976616620107461
+[2022-10-11T08:21:39.618649+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 864, loss-ave: 0.003906355321788706, mAcc: 0.9980975938510652
+[2022-10-11T08:22:12.396700+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 865, loss-ave: 0.00379703859281269, mAcc: 0.9980997974029328
+[2022-10-11T08:22:12.397262+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:23:34.476961+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 865 answer-mAcc: 0.378
+[2022-10-11T08:24:01.345747+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 866, loss-ave: 0.004019168248848001, mAcc: 0.9981185731693685
+[2022-10-11T08:24:28.201322+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 867, loss-ave: 0.0038461464961539443, mAcc: 0.9981593826344906
+[2022-10-11T08:24:55.056882+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 868, loss-ave: 0.0038801349395517215, mAcc: 0.9979601648017651
+[2022-10-11T08:25:21.877054+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 869, loss-ave: 0.004003060022547993, mAcc: 0.9978927834950028
+[2022-10-11T08:25:48.653216+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 870, loss-ave: 0.003992198588428751, mAcc: 0.997885284836359
+[2022-10-11T08:25:48.653589+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:27:12.458043+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 870 answer-mAcc: 0.376
+[2022-10-11T08:27:39.435147+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 871, loss-ave: 0.003960727407034849, mAcc: 0.9981765029691254
+[2022-10-11T08:28:06.458531+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 872, loss-ave: 0.003816550669746434, mAcc: 0.99806220188699
+[2022-10-11T08:28:33.460323+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 873, loss-ave: 0.003934206692093, mAcc: 0.9981670933218706
+[2022-10-11T08:29:00.441464+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 874, loss-ave: 0.0039110714398153425, mAcc: 0.9983126014546887
+[2022-10-11T08:29:27.451070+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 875, loss-ave: 0.004011994364134626, mAcc: 0.9979105679740129
+[2022-10-11T08:29:27.451502+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:30:51.625905+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 875 answer-mAcc: 0.384
+[2022-10-11T08:31:18.621418+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 876, loss-ave: 0.004025915181989415, mAcc: 0.9978132011326215
+[2022-10-11T08:31:45.522553+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 877, loss-ave: 0.003996837035520792, mAcc: 0.9977945847669024
+[2022-10-11T08:32:17.259763+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 878, loss-ave: 0.003942467764252057, mAcc: 0.9980102046452103
+[2022-10-11T08:32:49.902945+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 879, loss-ave: 0.003773227121347417, mAcc: 0.9980706487599826
+[2022-10-11T08:33:22.585664+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 880, loss-ave: 0.003850531134725658, mAcc: 0.9979712982820798
+[2022-10-11T08:33:22.586103+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:34:48.164188+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 880 answer-mAcc: 0.381
+[2022-10-11T08:35:14.990491+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 881, loss-ave: 0.0037273676739902678, mAcc: 0.998184981236931
+[2022-10-11T08:35:41.795861+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 882, loss-ave: 0.004298652236727029, mAcc: 0.9975140570987575
+[2022-10-11T08:36:08.623903+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 883, loss-ave: 0.004103485068329355, mAcc: 0.9984242620358941
+[2022-10-11T08:36:35.449179+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 884, loss-ave: 0.004021636345142803, mAcc: 0.9979461721184902
+[2022-10-11T08:37:02.275204+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 885, loss-ave: 0.0038892303648449273, mAcc: 0.9982254144192956
+[2022-10-11T08:37:02.275518+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:38:26.203480+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 885 answer-mAcc: 0.378
+[2022-10-11T08:38:53.026999+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 886, loss-ave: 0.004003985696960231, mAcc: 0.9980769665489974
+[2022-10-11T08:39:19.835282+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 887, loss-ave: 0.003960954111557993, mAcc: 0.9979142009756947
+[2022-10-11T08:39:46.679859+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 888, loss-ave: 0.003846468076513943, mAcc: 0.9979309025611586
+[2022-10-11T08:40:13.536083+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 889, loss-ave: 0.003954837501676737, mAcc: 0.9979094530789907
+[2022-10-11T08:40:40.356372+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 890, loss-ave: 0.003988710439661152, mAcc: 0.9980072881125919
+[2022-10-11T08:40:40.356676+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:42:04.799730+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 890 answer-mAcc: 0.378
+[2022-10-11T08:42:31.628185+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 891, loss-ave: 0.004036870470922667, mAcc: 0.9978665604846169
+[2022-10-11T08:42:58.412730+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 892, loss-ave: 0.003968377304702688, mAcc: 0.9980655656819428
+[2022-10-11T08:43:25.213135+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 893, loss-ave: 0.003964715918608595, mAcc: 0.9977347702167113
+[2022-10-11T08:43:51.984228+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 894, loss-ave: 0.00407751157312547, mAcc: 0.9978158296519564
+[2022-10-11T08:44:18.851606+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 895, loss-ave: 0.0037675975095961024, mAcc: 0.9982000463488144
+[2022-10-11T08:44:18.851926+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:45:45.572708+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 895 answer-mAcc: 0.372
+[2022-10-11T08:46:12.445230+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 896, loss-ave: 0.003884269780164819, mAcc: 0.9979563346345917
+[2022-10-11T08:46:39.299261+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 897, loss-ave: 0.00395458715522464, mAcc: 0.9980277352357335
+[2022-10-11T08:47:06.141262+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 898, loss-ave: 0.003780493306373505, mAcc: 0.998050960572318
+[2022-10-11T08:47:32.956466+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 899, loss-ave: 0.0037789661242079824, mAcc: 0.9979720440226354
+[2022-10-11T08:47:59.817543+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 900, loss-ave: 0.0038513476650999796, mAcc: 0.9979334111128751
+[2022-10-11T08:47:59.817851+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:49:16.771656+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 900 answer-mAcc: 0.376
+[2022-10-11T08:49:43.521763+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 901, loss-ave: 0.003928958806779642, mAcc: 0.9982139865557352
+[2022-10-11T08:50:10.333599+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 902, loss-ave: 0.003900222477849624, mAcc: 0.9980585930001644
+[2022-10-11T08:50:37.157124+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 903, loss-ave: 0.003939924059226291, mAcc: 0.997688346691714
+[2022-10-11T08:51:04.000598+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 904, loss-ave: 0.0037409848534015297, mAcc: 0.9979103746001654
+[2022-10-11T08:51:30.842349+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 905, loss-ave: 0.003731273324798482, mAcc: 0.9982871507263669
+[2022-10-11T08:51:30.842657+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:52:49.658279+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 905 answer-mAcc: 0.379
+[2022-10-11T08:53:16.658287+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 906, loss-ave: 0.0037271108920438026, mAcc: 0.9981523147066131
+[2022-10-11T08:53:43.650696+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 907, loss-ave: 0.004048202117215034, mAcc: 0.9981049372039679
+[2022-10-11T08:54:10.594093+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 908, loss-ave: 0.003840875998021527, mAcc: 0.9981379032741673
+[2022-10-11T08:54:37.560465+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 909, loss-ave: 0.004118802316153467, mAcc: 0.9979165478517081
+[2022-10-11T08:55:04.332913+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 910, loss-ave: 0.003832349186953134, mAcc: 0.997933172694296
+[2022-10-11T08:55:04.333224+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:56:24.893774+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 910 answer-mAcc: 0.378
+[2022-10-11T08:56:51.767437+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 911, loss-ave: 0.00381906729830119, mAcc: 0.9982124336499901
+[2022-10-11T08:57:18.624657+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 912, loss-ave: 0.00393406171185821, mAcc: 0.9978202105175145
+[2022-10-11T08:57:45.491147+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 913, loss-ave: 0.003921407630661787, mAcc: 0.9978415535303169
+[2022-10-11T08:58:12.385064+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 914, loss-ave: 0.003968119392354095, mAcc: 0.9981906260849562
+[2022-10-11T08:58:39.369150+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 915, loss-ave: 0.0036394577646619956, mAcc: 0.9981057656023642
+[2022-10-11T08:58:39.369473+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T08:59:54.136000+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 915 answer-mAcc: 0.386
+[2022-10-11T09:00:21.134229+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 916, loss-ave: 0.0037105653048863, mAcc: 0.9979600034293934
+[2022-10-11T09:00:48.033549+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 917, loss-ave: 0.004138953277666966, mAcc: 0.9980813747143927
+[2022-10-11T09:01:14.821381+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 918, loss-ave: 0.0035862690391912726, mAcc: 0.9980918510269573
+[2022-10-11T09:01:41.611031+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 919, loss-ave: 0.0037864613875136306, mAcc: 0.9982328179835059
+[2022-10-11T09:02:08.480303+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 920, loss-ave: 0.003808501612102454, mAcc: 0.9980968713153713
+[2022-10-11T09:02:08.480614+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:03:22.755659+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 920 answer-mAcc: 0.377
+[2022-10-11T09:03:49.673019+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 921, loss-ave: 0.0039565867624936695, mAcc: 0.9979761180683553
+[2022-10-11T09:04:16.572815+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 922, loss-ave: 0.0038207619057008587, mAcc: 0.9982482108451028
+[2022-10-11T09:04:43.508565+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 923, loss-ave: 0.0040272354999917916, mAcc: 0.9977414976549512
+[2022-10-11T09:05:10.442248+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 924, loss-ave: 0.0040637289872204295, mAcc: 0.997877516515989
+[2022-10-11T09:05:37.313513+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 925, loss-ave: 0.0039243189893124015, mAcc: 0.9979257398585933
+[2022-10-11T09:05:37.313840+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:06:51.382900+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 925 answer-mAcc: 0.375
+[2022-10-11T09:07:18.233709+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 926, loss-ave: 0.003967127103553235, mAcc: 0.9980125126947883
+[2022-10-11T09:07:45.115597+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 927, loss-ave: 0.0036779883924809, mAcc: 0.9981740913318313
+[2022-10-11T09:08:12.051507+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 928, loss-ave: 0.0039775925006747745, mAcc: 0.9979892163786269
+[2022-10-11T09:08:38.987568+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 929, loss-ave: 0.003702973638536036, mAcc: 0.9980937683855304
+[2022-10-11T09:09:05.898107+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 930, loss-ave: 0.0038991048105393262, mAcc: 0.9978882171422168
+[2022-10-11T09:09:05.898422+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:10:20.227907+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 930 answer-mAcc: 0.382
+[2022-10-11T09:10:47.128921+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 931, loss-ave: 0.003838082532838776, mAcc: 0.998085527171312
+[2022-10-11T09:11:14.058940+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 932, loss-ave: 0.004010182050137841, mAcc: 0.9979884554714951
+[2022-10-11T09:11:40.983437+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 933, loss-ave: 0.003980661191466563, mAcc: 0.9980375599921811
+[2022-10-11T09:12:07.866471+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 934, loss-ave: 0.003928602306540728, mAcc: 0.9979183631392229
+[2022-10-11T09:12:34.699837+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 935, loss-ave: 0.0037262362732226936, mAcc: 0.9980132400837867
+[2022-10-11T09:12:34.700151+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:13:50.723398+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 935 answer-mAcc: 0.38
+[2022-10-11T09:14:17.603332+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 936, loss-ave: 0.003691575314222396, mAcc: 0.9983068160125014
+[2022-10-11T09:14:44.461927+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 937, loss-ave: 0.0038616345009295, mAcc: 0.9983830042467773
+[2022-10-11T09:15:11.347443+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 938, loss-ave: 0.003856091576176925, mAcc: 0.9980574185004975
+[2022-10-11T09:15:38.340246+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 939, loss-ave: 0.0038852793169462884, mAcc: 0.9978424603399126
+[2022-10-11T09:16:05.405316+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 940, loss-ave: 0.003805705878916275, mAcc: 0.9979371539205691
+[2022-10-11T09:16:05.405635+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:17:22.668406+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 940 answer-mAcc: 0.376
+[2022-10-11T09:17:49.775307+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 941, loss-ave: 0.004030239500750045, mAcc: 0.9979851649311056
+[2022-10-11T09:18:16.806268+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 942, loss-ave: 0.0037752920663169133, mAcc: 0.9981887373912122
+[2022-10-11T09:18:43.585176+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 943, loss-ave: 0.0038423870293386583, mAcc: 0.997916078597838
+[2022-10-11T09:19:10.344929+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 944, loss-ave: 0.0039536730558482995, mAcc: 0.99792717674003
+[2022-10-11T09:19:37.176390+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 945, loss-ave: 0.0037567885235680735, mAcc: 0.9982683414417975
+[2022-10-11T09:19:37.176740+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:20:51.901765+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 945 answer-mAcc: 0.377
+[2022-10-11T09:21:18.790274+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 946, loss-ave: 0.003797983217742157, mAcc: 0.9980548661173755
+[2022-10-11T09:21:45.674708+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 947, loss-ave: 0.003779482817246305, mAcc: 0.998115590207146
+[2022-10-11T09:22:12.603343+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 948, loss-ave: 0.0039546409008680596, mAcc: 0.9978475990792874
+[2022-10-11T09:22:39.485215+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 949, loss-ave: 0.0038244004861811417, mAcc: 0.9979355439884972
+[2022-10-11T09:23:06.370367+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 950, loss-ave: 0.0037437059772750412, mAcc: 0.9980627310488364
+[2022-10-11T09:23:06.370785+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:24:20.754129+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 950 answer-mAcc: 0.376
+[2022-10-11T09:24:48.931132+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 951, loss-ave: 0.003813775241329437, mAcc: 0.9981741723213488
+[2022-10-11T09:25:21.610099+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 952, loss-ave: 0.0039816035958158014, mAcc: 0.99827889191892
+[2022-10-11T09:25:54.351734+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 953, loss-ave: 0.00386482434488246, mAcc: 0.9980250539367133
+[2022-10-11T09:26:27.047190+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 954, loss-ave: 0.003911671048183839, mAcc: 0.9981114987198633
+[2022-10-11T09:26:59.720005+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 955, loss-ave: 0.003967527628660978, mAcc: 0.9981219712407837
+[2022-10-11T09:26:59.720434+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:28:16.566846+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 955 answer-mAcc: 0.378
+[2022-10-11T09:28:43.391545+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 956, loss-ave: 0.003715328116262017, mAcc: 0.9982285956086699
+[2022-10-11T09:29:10.227724+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 957, loss-ave: 0.0038062736840007785, mAcc: 0.9982106044092252
+[2022-10-11T09:29:37.088815+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 958, loss-ave: 0.003913693140613233, mAcc: 0.9978768453949887
+[2022-10-11T09:30:03.830086+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 959, loss-ave: 0.004058686095875143, mAcc: 0.9980072329062541
+[2022-10-11T09:30:30.550979+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 960, loss-ave: 0.003919401396276053, mAcc: 0.9982850278606852
+[2022-10-11T09:30:30.551306+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:31:48.025772+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 960 answer-mAcc: 0.37
+[2022-10-11T09:32:14.858731+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 961, loss-ave: 0.0036365600235580904, mAcc: 0.9981613503460969
+[2022-10-11T09:32:41.690421+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 962, loss-ave: 0.0038139479151980222, mAcc: 0.998213061546248
+[2022-10-11T09:33:08.488768+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 963, loss-ave: 0.0038245815561205104, mAcc: 0.9978654710694427
+[2022-10-11T09:33:35.301036+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 964, loss-ave: 0.0038363680307884444, mAcc: 0.9982041715058965
+[2022-10-11T09:34:02.126227+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 965, loss-ave: 0.0037997751694975163, mAcc: 0.9981246015801077
+[2022-10-11T09:34:02.126550+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:35:19.625107+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 965 answer-mAcc: 0.372
+[2022-10-11T09:35:46.388837+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 966, loss-ave: 0.0038556075175104777, mAcc: 0.9978776992732332
+[2022-10-11T09:36:13.147939+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 967, loss-ave: 0.003675194402020909, mAcc: 0.9982594777912888
+[2022-10-11T09:36:39.945124+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 968, loss-ave: 0.0036249182674455605, mAcc: 0.9985803948103926
+[2022-10-11T09:37:06.764711+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 969, loss-ave: 0.0037974681764043833, mAcc: 0.9981871913104263
+[2022-10-11T09:37:33.614935+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 970, loss-ave: 0.0037562689385359283, mAcc: 0.9980650444067162
+[2022-10-11T09:37:33.615250+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:38:50.922358+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 970 answer-mAcc: 0.378
+[2022-10-11T09:39:17.763289+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 971, loss-ave: 0.0038479206808646788, mAcc: 0.9980487034824361
+[2022-10-11T09:39:44.611756+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 972, loss-ave: 0.004004823026926798, mAcc: 0.9978184602946119
+[2022-10-11T09:40:11.488812+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 973, loss-ave: 0.0037926628635125328, mAcc: 0.9979413984386065
+[2022-10-11T09:40:38.383011+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 974, loss-ave: 0.003754341507729484, mAcc: 0.9978452020019065
+[2022-10-11T09:41:05.232596+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 975, loss-ave: 0.003962526800536018, mAcc: 0.9978901040159716
+[2022-10-11T09:41:05.232911+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:42:22.542838+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 975 answer-mAcc: 0.375
+[2022-10-11T09:42:49.553769+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 976, loss-ave: 0.0038281501692396186, mAcc: 0.9978764210341844
+[2022-10-11T09:43:16.616973+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 977, loss-ave: 0.003785333425292196, mAcc: 0.9979559362086328
+[2022-10-11T09:43:43.637153+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 978, loss-ave: 0.003781669223358433, mAcc: 0.998119139337661
+[2022-10-11T09:44:10.687811+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 979, loss-ave: 0.0038983390234115273, mAcc: 0.9979430183806188
+[2022-10-11T09:44:37.693147+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 980, loss-ave: 0.003720620921198406, mAcc: 0.9981260163183431
+[2022-10-11T09:44:37.693473+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:45:55.352821+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 980 answer-mAcc: 0.375
+[2022-10-11T09:46:22.379906+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 981, loss-ave: 0.003889430488135785, mAcc: 0.9981311891825144
+[2022-10-11T09:46:49.400479+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 982, loss-ave: 0.0038022044393408944, mAcc: 0.9981828544279394
+[2022-10-11T09:47:19.867007+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 983, loss-ave: 0.0035210265844894573, mAcc: 0.9981214093191326
+[2022-10-11T09:47:54.064194+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 984, loss-ave: 0.003741639694949355, mAcc: 0.997884861537215
+[2022-10-11T09:48:26.702806+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 985, loss-ave: 0.0038600200545419886, mAcc: 0.9981318833567108
+[2022-10-11T09:48:26.703246+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:49:45.019054+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 985 answer-mAcc: 0.376
+[2022-10-11T09:50:11.975337+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 986, loss-ave: 0.0037413848505275958, mAcc: 0.9981510319175915
+[2022-10-11T09:50:38.923482+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 987, loss-ave: 0.003709272075478353, mAcc: 0.998090294329568
+[2022-10-11T09:51:05.881089+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 988, loss-ave: 0.0036137792298898677, mAcc: 0.9980326587613909
+[2022-10-11T09:51:32.862127+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 989, loss-ave: 0.003758164233152744, mAcc: 0.9980082831916615
+[2022-10-11T09:51:59.782949+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 990, loss-ave: 0.00396166416680171, mAcc: 0.9978276796013344
+[2022-10-11T09:51:59.783273+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:53:18.321864+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 990 answer-mAcc: 0.376
+[2022-10-11T09:53:45.217474+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 991, loss-ave: 0.0035574387385150187, mAcc: 0.9983792483958276
+[2022-10-11T09:54:12.085338+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 992, loss-ave: 0.003704996694811401, mAcc: 0.9981876361461086
+[2022-10-11T09:54:38.995428+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 993, loss-ave: 0.003936999524835598, mAcc: 0.9979837019631578
+[2022-10-11T09:55:05.934984+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 994, loss-ave: 0.003867695213330175, mAcc: 0.9980745567316924
+[2022-10-11T09:55:32.897464+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 995, loss-ave: 0.0037753220361599633, mAcc: 0.9981788574284269
+[2022-10-11T09:55:32.897784+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:56:51.422156+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 995 answer-mAcc: 0.376
+[2022-10-11T09:57:18.393255+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 996, loss-ave: 0.003709439546649679, mAcc: 0.9982132849499166
+[2022-10-11T09:57:18.393619+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T09:58:36.995184+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 996 answer-mAcc: 0.376
+[2022-10-11T09:59:03.952478+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 997, loss-ave: 0.0037667056896530083, mAcc: 0.9980460786030796
+[2022-10-11T09:59:03.952878+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T10:00:22.220892+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 997 answer-mAcc: 0.376
+[2022-10-11T10:00:50.358960+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 998, loss-ave: 0.0036262908168885827, mAcc: 0.9982219647815209
+[2022-10-11T10:00:50.359425+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T10:02:08.352809+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 998 answer-mAcc: 0.376
+[2022-10-11T10:02:35.198174+0800]-[INFO] math_trainer_test.py-train_one_epoch-222: epoch: 999, loss-ave: 0.003913765531588222, mAcc: 0.9977863635725648
+[2022-10-11T10:02:35.198535+0800]-[INFO] math_trainer_test.py-train-173: [evaluate test-data]
+[2022-10-11T10:03:52.966481+0800]-[INFO] math_trainer_test.py-evaluate-281: epoch: 999 answer-mAcc: 0.376
+[2022-10-11T10:03:56.273420+0800]-[INFO] train_svamp.py-train_solver-70: [finish train solver]
+[2022-10-11T10:03:56.273869+0800]-[INFO] train_svamp.py-train_solver-71: best test acc: 0.42

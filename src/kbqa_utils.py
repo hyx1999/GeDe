@@ -35,10 +35,12 @@ class RawDataInstance:
         qid: str,
         query: str,
         S_expr: str,  # target query graph
+        relations: List[str],
         answer: List[str]
     ) -> None:
         self.qid = qid
         self.query = query
+        self.relations = relations
         self.answer = answer
         
         self.parse(S_expr)
