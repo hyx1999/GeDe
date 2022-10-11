@@ -53,10 +53,11 @@ class ExprTokenizer:
         self.bos_token = "[bos]"
         self.eos_token = "[eos]"
         self.pad_token = "[pad]"
+        self.null_token = "[null]"
         self.bos_token_id = 0
         self.eos_token_id = 1
         self.pad_token_id = 2
-        self.as_token_id  = 3
+        self.null_token_id = 3
         self.tokens = \
             [self.bos_token, self.eos_token, self.pad_token] + \
             ["+", "-", "*", "/"] + ext_tokens + \
@@ -65,8 +66,11 @@ class ExprTokenizer:
         self.token_id = {
             token: index for index, token in enumerate(self.tokens)
         }
+        self.qunat_id = {
+            i: self.token_id[f"[num{i}]"] for i in range(quant_size)
+        }
         self.voacb_size = len(self.tokens)
-            
+
     def __call__(self, 
         batch_text: List[str], 
         padding: bool = True
@@ -178,26 +182,32 @@ class MathDecoder(nn.Module):
         self.quant_size = quant_size
         self.vocab_size = vocab_size
         
-        self.attn = Attention(hidden_dim)
-        self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
         self.fix_states = nn.Embedding(vocab_size - quant_size, hidden_dim)
-        
+        self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
+        self.mem_attn   = Attention(hidden_dim)
+        self.quant_attn = Attention(hidden_dim)
+
         self.transform = nn.Sequential(
             nn.Linear(hidden_dim, hidden_dim),
             nn.GELU(),
             nn.LayerNorm(hidden_dim)
         )
     
-    def embedding(self, 
-        input_ids: Tensor, 
+    def prepare_word_states(self,
         quant_states: Tensor
-    ) -> Tensor:
-        input_ids = input_ids.unsqueeze(-1).repeat([1, 1, quant_states.shape[-1]])
+    ):
         fix_states = self.fix_states.weight.unsqueeze(0).repeat([quant_states.shape[0], 1, 1])
         word_states = torch.cat((fix_states, quant_states), dim=1)  # [N, |W|, H]
-        input_states = torch.gather(word_states, dim=1, index=input_ids)
-        return word_states, input_states
+        return word_states
     
+    def embedding(self,
+        input_ids: Tensor,
+        word_states: Tensor,
+    ):
+        input_ids = input_ids.unsqueeze(-1).repeat([1, 1, word_states.shape[-1]])
+        input_states = torch.gather(word_states, dim=1, index=input_ids)
+        return input_states
+        
     def compute_logits(self, 
         output_states: Tensor, 
         word_states: Tensor,
@@ -215,19 +225,22 @@ class MathDecoder(nn.Module):
     
     def forward(
         self,
-        decoder_input_ids: Tensor,  # [N] or [N, L1]
+        decoder_input_ids: Tensor,  # [N, L1]
+        mixin_id_ids: Tensor,  # [N, L1]
         hidden_state: Tensor,  # [N, H],
         quant_states: Tensor,  # [N, |Q|, H],
         quant_mask: Tensor,  # [N, L, |Q|]
+        memory_states: Tensor,
     ) -> Tensor:
-        if len(decoder_input_ids.shape) == 1:
-            decoder_input_ids = decoder_input_ids.unsqueeze(1)
-
-        word_states, input_states = self.embedding(decoder_input_ids, quant_states)
+        word_states = self.prepare_word_states(quant_states)
+        input_states = self.embedding(decoder_input_ids, word_states)
+        mixin_states = self.embedding(mixin_id_ids, word_states)
+        input_states = input_states + mixin_states
         inter_states, output_hidden_state = self.gru(input_states, hidden_state.unsqueeze(dim=0))
-        output_states = self.attn(inter_states, quant_states, quant_mask)
-                
-        fix_mask = torch.ones(quant_mask.shape[:2] + (self.vocab_size - self.quant_size,), dtype=torch.bool, device=self.cfg.device)
+        output_states = self.mem_attn(inter_states, memory_states)
+        output_states = self.quant_attn(output_states, quant_states, quant_mask)
+
+        fix_mask   = torch.ones(quant_mask.shape[:2] + (self.vocab_size - self.quant_size,), dtype=torch.bool, device=self.cfg.device)
         vocab_mask = torch.cat((fix_mask, quant_mask), dim=-1)
         
         logits = self.compute_logits(output_states, word_states, vocab_mask)
@@ -253,7 +266,8 @@ class MathRepresenter(nn.Module):
         self.position_embedding = nn.Embedding(self.cfg.expr_size , hidden_dim)
 
         self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
-        self.attn = Attention(hidden_dim)
+        self.mem_attn   = Attention(hidden_dim)
+        self.quant_attn = Attention(hidden_dim)
 
     def embedding(self,
         input_ids: Tensor, 
@@ -272,12 +286,13 @@ class MathRepresenter(nn.Module):
         quant_id_ids: Tensor,
         quant_states: Tensor,
         quant_mask: Tensor,
+        memory_states: Tensor,
     ) -> Tensor:
         input_states = self.embedding(decoder_input_ids, quant_states)
         input_states = input_states + self.position_embedding(position_ids) + self.quant_id_embedding(quant_id_ids)
         inter_states, _ = self.gru(input_states, hidden_state.unsqueeze(0))
-        output_states = self.attn(inter_states, quant_states, quant_mask)
-
+        output_states = self.mem_attn(inter_states, memory_states)
+        output_states = self.quant_attn(output_states, quant_states, quant_mask)
         return output_states
 
 
@@ -405,13 +420,15 @@ class MathSolverTest(nn.Module):
         shift_pt_labels[:, 0] = self.expr_tok.bos_token_id
         pt_labels[pt_labels == self.expr_tok.pad_token_id] = -1
         
-        for i in range(shift_pt_labels.shape[0]):
-            cnt = 0
-            for j in range(1, shift_pt_labels.shape[-1]):
+        pt_mixin_id = torch.zeros_like(shift_pt_labels)
+        pt_mixin_id.fill_(self.expr_tok.null_token_id)
+        for i in range(pt_mixin_id.shape[0]):
+            delta = 0
+            for j in range(1, pt_mixin_id.shape[1]):
                 if shift_pt_labels[i, j].item() == self.expr_tok.bos_token_id:
-                    shift_pt_labels[i, j] = self.expr_tok.convert_tokens_to_ids("[num{}]".format(quant_num[i] + cnt))
-                    cnt += 1
-
+                    pt_mixin_id[i, j] = self.expr_tok.qunat_id[quant_num[i] + delta]
+                    delta += 1
+        
         batch_sep = []
         for labels in batch_labels:
             sep = []
@@ -443,7 +460,7 @@ class MathSolverTest(nn.Module):
             .expand(*(pt_quant_id.shape + (-1,)))  # [B, L, |Q|]
         pt_quant_mask = (pt_range < pt_quant_id.unsqueeze(-1))
         
-        return pt_labels, shift_pt_labels, pt_quant_id, pt_position, pt_quant_mask, batch_quant_rng
+        return pt_labels, shift_pt_labels, pt_mixin_id, pt_quant_id, pt_position, pt_quant_mask, batch_quant_rng
     
     def encode(
         self, 
@@ -458,7 +475,7 @@ class MathSolverTest(nn.Module):
             n = len(batch_quant_ids[i])
             quant_states[i, :n, :].copy_(memory_states[i, batch_quant_ids[i], :])
         hidden_state = memory_states[:, 0, :].clone()
-        return hidden_state, quant_states
+        return hidden_state, memory_states, quant_states
 
     def represent(
         self,
@@ -468,6 +485,7 @@ class MathSolverTest(nn.Module):
         quant_id_ids: Tensor,
         quant_states: Tensor,
         quant_mask: Tensor,
+        memory_states: Tensor,
         batch_quant_rng: List[List[Tuple[int, int, int]]]
     ):
         memory_states = self.representer(
@@ -477,6 +495,7 @@ class MathSolverTest(nn.Module):
             quant_id_ids=quant_id_ids,
             quant_states=quant_states,
             quant_mask=quant_mask,
+            memory_states=memory_states,
         )
         batch_size = decoder_input_ids.shape[0]
         new_quant_states = torch.zeros(
@@ -499,12 +518,12 @@ class MathSolverTest(nn.Module):
         input_dict, quant_ids = self.prepare_input(
             [I.parse_input(sep_token="", use_expr=False) for I in batch]
         )
-        labels, decoder_input_ids, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
+        labels, decoder_input_ids, mixin_id_ids, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
             self.prepare_output(
                 [I.parse_output(self.expr_tok.bos_token, self.expr_tok.eos_token) for I in batch],
                 [len(x) for x in quant_ids]
             )
-        hidden_state, quant_states = self.encode(input_dict, quant_ids)
+        hidden_state, memory_states, quant_states = self.encode(input_dict, quant_ids)
 
         quant_states = self.represent(
             decoder_input_ids=decoder_input_ids,
@@ -513,14 +532,17 @@ class MathSolverTest(nn.Module):
             position_ids=position_ids,
             quant_states=quant_states,
             quant_mask=quant_mask,
+            memory_states=memory_states,
             batch_quant_rng=batch_quant_rng
         )
         
         logits, _ = self.decode(
             decoder_input_ids=decoder_input_ids,
+            mixin_id_ids=mixin_id_ids,
             hidden_state=hidden_state,
             quant_states=quant_states,
-            quant_mask=quant_mask
+            quant_mask=quant_mask,
+            memory_states=memory_states,
         )
         
         logits = logits.transpose(1, 2)
@@ -532,9 +554,6 @@ class MathSolverTest(nn.Module):
 
         return loss, Acc
 
-    def parse_expr(self, expr_str: str, arg0: int) -> Expr:
-        expr_toks = [t for t in re.split(r"([\*\/\^\+\-\(\)])", expr_str) if t != ""]
-        return Expr(arg0=arg0, expr_toks=expr_toks, expr_str=expr_str)
 
     @torch.no_grad()
     def expr_beam_search(
@@ -546,11 +565,11 @@ class MathSolverTest(nn.Module):
         beam_size: int = 4,
     ):
         input_dict, quant_ids = self.prepare_input([input_text])        
-        hidden_state, quant_states = self.encode(input_dict, quant_ids)
+        hidden_state, memory_states, quant_states = self.encode(input_dict, quant_ids)
 
         if len(expr_list) > 0:
             inter_text = " ".join(sum([expr.expr_toks + [self.expr_tok.bos_token] for expr in expr_list], []))
-            _, decoder_input_ids, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
+            _, decoder_input_ids, _, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
                 self.prepare_output([inter_text], [len(quant_ids[0])])
             quant_states = self.represent(
                 decoder_input_ids=decoder_input_ids,
@@ -559,6 +578,7 @@ class MathSolverTest(nn.Module):
                 position_ids=position_ids,
                 quant_states=quant_states,
                 quant_mask=quant_mask,
+                memory_states=memory_states,
                 batch_quant_rng=batch_quant_rng
             )
 
@@ -566,13 +586,20 @@ class MathSolverTest(nn.Module):
         search_quant_mask = torch.zeros((1, 1, self.cfg.quant_size), dtype=torch.bool, device=self.cfg.device)
         search_quant_mask[..., :quant_num] = True        
 
-        if len(expr_list) == 0:
-            start_token_id = self.expr_tok.bos_token_id
-        else:
-            start_token_id = self.expr_tok.convert_tokens_to_ids("[num{}]".format(quant_num))
-
         decoder_input_id = torch.tensor(
-            start_token_id,
+            self.expr_tok.bos_token_id,
+            dtype=torch.long,
+            device=hidden_state.device
+        ).view(1, 1)
+
+        mixin_id = torch.tensor(
+            self.expr_tok.qunat_id[quant_num],
+            dtype=torch.long,
+            device=hidden_state.device
+        ).view(1, 1)
+
+        mixin_null_id = torch.tensor(
+            self.expr_tok.null_token_id,
             dtype=torch.long,
             device=hidden_state.device
         ).view(1, 1)
@@ -580,7 +607,7 @@ class MathSolverTest(nn.Module):
         if gru_hidden_state is None:
             gru_hidden_state = hidden_state
         
-        beams = [ExprBeam([], decoder_input_id, gru_hidden_state, 0.0)]
+        beams = [ExprBeam([], decoder_input_id, mixin_id, gru_hidden_state, 0.0)]
         
         while len(beams) > 0:
             do_search = False
@@ -595,15 +622,17 @@ class MathSolverTest(nn.Module):
                 else:
                     next_token_logits, next_hidden_state = self.decode(
                         decoder_input_ids=beam.decoder_input_id,
+                        mixin_id_ids=beam.mixin_id,
                         hidden_state=beam.gru_hidden_state,
                         quant_states=quant_states,
-                        quant_mask=search_quant_mask
+                        quant_mask=search_quant_mask,
+                        memory_states=memory_states,
                     )
                     next_token_probs = torch.log_softmax(next_token_logits.view(-1), dim=0)
                     log_probs, indices = torch.topk(next_token_probs, beam_size)
                     for log_prob, index in zip(log_probs, indices):
                         next_beams.append(
-                            beam.extend(log_prob, next_hidden_state, index)
+                            beam.extend(log_prob, next_hidden_state, index, mixin_null_id)
                         )
             filtered_beams: List[ExprBeam] = []
             for beam in next_beams:
@@ -648,7 +677,7 @@ class MathSolverTest(nn.Module):
                         expr_list=beam.expr_list
                     )
                     expr_beams: List[ExprBeam] = self.expr_beam_search(
-                        I.parse_input_test(),
+                        I.parse_input("", use_expr=False),
                         beam.expr_list,
                         beam.gru_hidden_state,
                         beam_size=beam_size,
@@ -692,20 +721,23 @@ class ExprBeam:
     def __init__(self,
         predict_ids: List[int],
         decoder_input_id: Tensor,
+        mixin_id: Tensor,
         gru_hidden_state: Tensor,
         score: float
     ) -> None:
         self.predict_ids = predict_ids
         self.decoder_input_id = decoder_input_id
+        self.mixin_id = mixin_id
         self.gru_hidden_state = gru_hidden_state
         self.score = score
         self.end = False
     
-    def extend(self, log_prob: Tensor, gru_hidden_state: Tensor, index: Tensor) -> 'ExprBeam':
+    def extend(self, log_prob: Tensor, gru_hidden_state: Tensor, index: Tensor, mixin_id: Tensor) -> 'ExprBeam':
         length = len(self.predict_ids)
         next_beam = ExprBeam(
             predict_ids=self.predict_ids + [index.item()],
             decoder_input_id=index.clone().view(1, 1),
+            mixin_id=mixin_id.clone().view(1, 1),
             gru_hidden_state=gru_hidden_state.clone(),
             score=(self.score * length + log_prob) / (length + 1)
         )

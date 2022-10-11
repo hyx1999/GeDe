@@ -62,8 +62,13 @@ def train_solver(
     # trainer = MathTrainer(cfg, train_dataset, test_dataset)
     if args.model_type == "test2":
         trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
-    else:
+    elif args.model_type == "test":
         trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)        
+    else:
+        raise ValueError
+    
+    logger.info("model type: {}".format(args.model_type))
+
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-svamp")

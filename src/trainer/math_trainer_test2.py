@@ -246,7 +246,7 @@ class MathTrainerTest2:
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)
-            f = open("../cache/mwp/{}_{}_{}.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
+            f = open("../cache/mwp/{}_{}_{}_text2.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
         
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]

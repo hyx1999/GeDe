@@ -34,6 +34,7 @@ class MathTrainerTest:
         self.cfg = cfg
         self.use_dev = use_dev
         self.raw_dataset = {
+            "raw_train": deepcopy(train_dataset),
             "train": deepcopy(train_dataset),
             "test": deepcopy(test_dataset),
         }
@@ -42,7 +43,15 @@ class MathTrainerTest:
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
-    
+
+    def augment_data(self):
+        logger.info("data augumentation[shuffle,mix]")
+        shuffle_train_dataset = self.add_shuffle(self.raw_dataset["raw_train"])
+        mix_train_dataset = self.add_mix(self.raw_dataset["raw_train"])
+        self.raw_dataset["train"] = deepcopy(self.raw_dataset["raw_train"])
+        self.raw_dataset["train"].extend(shuffle_train_dataset)
+        self.raw_dataset["train"].extend(mix_train_dataset)
+
     def split_data(self):
         raw_train_dataset = self.raw_dataset["train"]
         val_ids = set(np.random.choice(len(raw_train_dataset), size=100, replace=False).tolist())
@@ -149,10 +158,10 @@ class MathTrainerTest:
         )
 
         for epoch in range(self.cfg.num_epochs):
-            if "svamp" in self.cfg.dataset_name:
-                self.augment_data()
-                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
-                dataset.data = self.train_dataset
+            # if "svamp" in self.cfg.dataset_name:
+            #     self.augment_data()
+            #     self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
+            #     dataset.data = self.train_dataset
 
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
@@ -230,7 +239,7 @@ class MathTrainerTest:
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)
-            f = open("../cache/mwp/{}_{}_{}.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
+            f = open("../cache/mwp/{}_{}_{}_test.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
         
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]

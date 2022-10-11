@@ -4,7 +4,7 @@ set -e
 
 mod=${1}
 log='log:'${2}
-device=3
+device=0
 echo "mod: ${mod}"
 
 cd src
@@ -12,13 +12,14 @@ cd src
 if [[ ${mod} == "train_svamp" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_svamp.py \
+        --model_type 'test' \
         --dataset_name 'svamp' \
         --log_text ${log} \
         --data_path '../data/SVAMP' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"max_step_size":5,"save_result":true,"num_epochs":1000,"batch_size":32}'
+        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"max_step_size":5,"save_result":true,"num_epochs":1000,"batch_size":8}'
 fi
 
 
@@ -26,6 +27,7 @@ if [[ ${mod} == "debug_svamp" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_svamp.py \
+        --model_type 'test' \
         --dataset_name 'svamp' \
         --log_text '(debug)' \
         --data_path '../data/SVAMP' \
