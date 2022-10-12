@@ -1,3 +1,3 @@
-from .math_dataset import loadMathToy, loadMath23K, loadSVAMP, loadMAWPS, \
+from .math_dataset import loadMathToy, loadMath23K, loadSVAMP, loadMAWPS, loadMathQA, \
     build_ext_words, join_const_nums, join_Expr_list
 from .kbqa_dataset import loadWebQSP

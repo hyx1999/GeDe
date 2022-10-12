@@ -30,6 +30,7 @@ class MathTrainerTest2:
         cfg: MathConfig,
         train_dataset: List[Dict[AnyStr, Any]],
         test_dataset: List[Dict[AnyStr, Any]],
+        dev_dataset: Optional[Dict[AnyStr, Any]] = None,
         use_dev: bool = True
     ) -> None:
         self.cfg = cfg
@@ -38,9 +39,10 @@ class MathTrainerTest2:
             "raw_train": deepcopy(train_dataset),
             "train": deepcopy(train_dataset),
             "test": deepcopy(test_dataset),
+            "dev": deepcopy(dev_dataset),
         }
         
-        if self.use_dev:
+        if self.use_dev and dev_dataset is None:
             self.split_data()
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None

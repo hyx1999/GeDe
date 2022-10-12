@@ -66,8 +66,6 @@ def train_solver(
         trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)        
     else:
         raise ValueError
-    
-    logger.info("model type: {}".format(args.model_type))
 
     trainer.train(solver)
     if args.save_model:
@@ -81,6 +79,7 @@ def main(args: argparse.Namespace):
         setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
+    logger.info("model type: {}".format(args.model_type))
     
     train_dataset, test_dataset, const_nums = loadSVAMP(args.data_path, head=args.head)
     

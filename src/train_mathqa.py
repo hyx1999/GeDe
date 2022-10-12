@@ -1,6 +1,6 @@
-from dataset import loadMath23K, build_ext_words, join_const_nums, join_Expr_list
-from solver import MathSolver
-from trainer import MathTrainer
+from dataset import loadMathQA
+from solver import MathSolverTest, MathSolverTest2
+from trainer import MathTrainerTest, MathTrainerTest2
 from cfg import MathConfig
 
 import datetime
@@ -39,6 +39,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model_type", type=str, default="test")
     parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
@@ -48,22 +49,30 @@ def get_args():
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--expr_mode", type=str, default="v3")
     return parser.parse_args()
 
 
 def train_solver(
     args: argparse.Namespace,
     train_dataset: List[Dict],
+    dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolver,
+    solver: Union[MathSolverTest, MathSolverTest2],
 ):
-    trainer = MathTrainer(cfg, train_dataset, test_dataset)
+    # trainer = MathTrainer(cfg, train_dataset, test_dataset)
+    if args.model_type == "test2":
+        trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    elif args.model_type == "test":
+        trainer = MathTrainerTest(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    else:
+        raise ValueError
+
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-math23k")
+        solver.save_model(args.save_model_dir, "final-mathqa")
     logger.info("[finish train solver]")
+    logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 def main(args: argparse.Namespace):
@@ -71,31 +80,27 @@ def main(args: argparse.Namespace):
         setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
+    logger.info("model type: {}".format(args.model_type))
     
-    train_dataset, test_dataset = loadMath23K(args.data_path, head=args.head)
-    ext_words = build_ext_words(train_dataset + test_dataset)
-
-    const_nums = [word for word in ext_words if word not in '+-*/^()=']
-    if '-1' not in const_nums:
-        const_nums.append('-1')
-    print(const_nums)
-
-    train_dataset = join_Expr_list(join_const_nums(train_dataset, const_nums), args.expr_mode)
-    test_dataset  = join_Expr_list(join_const_nums(test_dataset , const_nums), args.expr_mode)
+    train_dataset, dev_dataset, test_dataset, const_nums = loadMathQA(args.data_path, head=args.head)
     
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
     cfg.debug = args.debug
-    cfg.ext_tokens = ['^']
-    
-    solver = MathSolver(cfg, const_nums)
-    
-    print("expr-mode:", args.expr_mode)
+    cfg.const_quant_size = len(const_nums)
 
+    # solver = MathSolver(cfg, const_nums)
+    if args.model_type == "test2":
+        solver = MathSolverTest2(cfg)
+    elif args.model_type == "test":
+        solver = MathSolverTest(cfg)
+    else:
+        raise ValueError
+    
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     
-    train_solver(args, train_dataset, test_dataset, cfg, solver)
+    train_solver(args, train_dataset, dev_dataset, test_dataset, cfg, solver)
 
 
 if __name__ == '__main__':
