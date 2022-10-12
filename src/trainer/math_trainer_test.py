@@ -158,10 +158,10 @@ class MathTrainerTest:
         )
 
         for epoch in range(self.cfg.num_epochs):
-            # if "svamp" in self.cfg.dataset_name:
-            #     self.augment_data()
-            #     self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
-            #     dataset.data = self.train_dataset
+            if "svamp" in self.cfg.dataset_name and self.cfg.use_data_aug:
+                self.augment_data()
+                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
+                dataset.data = self.train_dataset
 
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             

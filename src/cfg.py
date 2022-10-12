@@ -23,9 +23,9 @@ class MathConfig:
         self.dataset_name = ""
         self.model_name = "hfl/chinese-roberta-wwm-ext"
 
+        self.num_epochs = 500
         self.batch_size = 8
         self.scheduler_step_size = 10
-        self.num_epochs = 500
         self.bert_lr = 2e-5
         self.gru_lr = 2e-5
         self.weight_decay = 1e-2
@@ -33,6 +33,7 @@ class MathConfig:
         self.max_nums_size = 35
         self.max_step_size = 35
 
+        self.use_data_aug = False
         self.debug = False
         self.device = "cuda:0"
         self.save_result = False

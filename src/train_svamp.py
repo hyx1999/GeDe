@@ -39,7 +39,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_type", type=str, default="test2")
+    parser.add_argument("--model_type", type=str, default="test")
     parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
@@ -92,8 +92,10 @@ def main(args: argparse.Namespace):
     # solver = MathSolver(cfg, const_nums)
     if args.model_type == "test2":
         solver = MathSolverTest2(cfg)
-    else:
+    elif args.model_type == "test":
         solver = MathSolverTest(cfg)
+    else:
+        raise ValueError
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")

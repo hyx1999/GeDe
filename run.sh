@@ -4,7 +4,7 @@ set -e
 
 mod=${1}
 log='log:'${2}
-device=3
+device=2
 echo "mod: ${mod}"
 
 cd src
@@ -39,6 +39,40 @@ then
 
 fi
 
+if [[ ${mod} == "train_mawps" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_mawps.py \
+        --model_type 'test' \
+        --dataset_name 'mawps' \
+        --log_text ${log} \
+        --data_path '../data/MAWPS' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --save_model \
+        --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"max_step_size":5,"save_result":true,"num_epochs":100}'
+
+        # "model_name": "bert-base-uncased", "bert_lr": 5e-5, "gru_lr": 5e-4, "weight_decay": 1e-4
+fi
+
+if [[ ${mod} == "debug_mawps" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_mawps.py \
+        --model_type 'test' \
+        --dataset_name 'mawps' \
+        --log_text '(debug)' \
+        --data_path '../data/MAWPS' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --cfg '{"model_name":"roberta-base","bert_lr":1e-5,"max_step_size":5,"save_result":true,"num_epochs":100}' \
+        --head 1000 \
+        --debug \
+        --save_model
+
+        # "model_name": "bert-base-uncased", "bert_lr": 5e-5, "gru_lr": 5e-4, "weight_decay": 1e-4
+fi
+
 cd ..
 
 # backup
@@ -71,38 +105,6 @@ cd ..
 #         --head 1000 \
 #         --expr_mode v3 \
 #         --debug
-# fi
-
-# if [[ ${mod} == "train_mawps" ]];
-# then
-
-#     CUDA_VISIBLE_DEVICES=${device} python train_mawps.py \
-#         --dataset_name 'mawps' \
-#         --log_text ${log} \
-#         --data_path '../data/MAWPS' \
-#         --load_model_dir '../models' \
-#         --save_model_dir '../models' \
-#         --save_model \
-#         --cfg '{"model_name":"roberta-base","bert_lr":2e-5,"gru_lr":2e-5,"max_step_size":5,"save_result":true}'
-
-#         # "model_name": "bert-base-uncased", "bert_lr": 5e-5, "gru_lr": 5e-4, "weight_decay": 1e-4
-# fi
-
-# if [[ ${mod} == "debug_mawps" ]];
-# then
-
-#     CUDA_VISIBLE_DEVICES=${device} python train_mawps.py \
-#         --dataset_name 'mawps' \
-#         --log_text '(debug)' \
-#         --data_path '../data/MAWPS' \
-#         --load_model_dir '../models' \
-#         --save_model_dir '../models' \
-#         --cfg '{"model_name":"roberta-base","bert_lr":1e-5,"gru_lr":5e-4,"save_result":true,"max_step_size":7}' \
-#         --head 1000 \
-#         --debug \
-#         --save_model
-
-#         # "model_name": "bert-base-uncased", "bert_lr": 5e-5, "gru_lr": 5e-4, "weight_decay": 1e-4
 # fi
 
 # if [[ ${mod} == "debug_mathtoy" ]];

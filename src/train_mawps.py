@@ -40,6 +40,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model_type", type=str, default="test")
     parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
@@ -59,7 +60,12 @@ def train_solver(
     cfg: MathConfig,
     solver: MathSolverTest2,
 ):
-    trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
+    if args.model_type == "test2":
+        trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
+    elif args.model_type == "test":
+        trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)
+    else:
+        raise ValueError
     trainer.train(solver)
     if args.save_model:
         solver.save_model(args.save_model_dir, "final-mawps")
@@ -82,7 +88,12 @@ def main(args: argparse.Namespace):
         cfg.debug = args.debug
         cfg.const_quant_size = len(const_nums)
         
-        solver = MathSolverTest2(cfg)
+        if args.model_type == "test2":
+            solver = MathSolverTest2(cfg)
+        elif args.model_type == "test":
+            solver = MathSolverTest(cfg)
+        else:
+            raise ValueError
         
         if args.save_model:
             solver.save_model(args.save_model_dir, "test")
