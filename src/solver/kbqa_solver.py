@@ -47,9 +47,11 @@ class LogicTokenizer:
         self.bos_token = "[bos]"
         self.eos_token = "[eos]"
         self.pad_token = "[pad]"
+        self.null_token = "[null]"
         self.bos_token_id = 0
         self.eos_token_id = 1
         self.pad_token_id = 2
+        self.null_token_id = 3
 
         self.tokens =  [self.bos_token, self.eos_token, self.pad_token] + cfg.ext_tokens + cfg.rels + cfg.types
         self.tokens_sorted = sorted(self.tokens, key=lambda x: len(x), reverse=True)

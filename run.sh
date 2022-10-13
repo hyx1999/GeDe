@@ -4,7 +4,7 @@ set -e
 
 mod=${1}
 log='log:'${2}
-device=2
+device=3
 echo "mod: ${mod}"
 
 cd src
@@ -95,7 +95,7 @@ then
         --data_path '../data/MathQA' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --cfg '{"model_name":"roberta-base","lr":1e-5,"save_result":true,"num_epochs":200}' \
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}' \
         --head 100 \
         --debug
 

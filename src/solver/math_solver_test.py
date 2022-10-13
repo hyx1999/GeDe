@@ -241,7 +241,7 @@ class MathDecoder(nn.Module):
             torch.cat((input_states,mixin_states), dim=-1)
         )
         inter_states, output_hidden_state = self.gru(input_states, hidden_state.unsqueeze(dim=0))
-        # inter_states = self.mem_attn(inter_states, memory_states)
+        inter_states = self.mem_attn(inter_states, memory_states)
         output_states = self.quant_attn(inter_states, quant_states, quant_mask)
 
         fix_mask   = torch.ones(quant_mask.shape[:2] + (self.vocab_size - self.quant_size,), dtype=torch.bool, device=self.cfg.device)
@@ -295,7 +295,7 @@ class MathRepresenter(nn.Module):
         input_states = self.embedding(decoder_input_ids, quant_states)
         input_states = input_states + self.position_embedding(position_ids) + self.quant_id_embedding(quant_id_ids)
         inter_states, _ = self.gru(input_states, hidden_state.unsqueeze(0))
-        # inter_states = self.mem_attn(inter_states, memory_states)
+        inter_states = self.mem_attn(inter_states, memory_states)
         output_states = self.quant_attn(inter_states, quant_states, quant_mask)
         return output_states
 
@@ -562,19 +562,20 @@ class MathSolverTest(nn.Module):
     @torch.no_grad()
     def expr_beam_search(
         self,
-        input_text: str,
+        hidden_state: Tensor, 
+        memory_states: Tensor, 
+        quant_states: Tensor,
+        quant_num_init: int,
         expr_list: List[Expr],
         gru_hidden_state: Tensor,
         max_length: int = 4,
         beam_size: int = 4,
     ):
-        input_dict, quant_ids = self.prepare_input([input_text])        
-        hidden_state, memory_states, quant_states = self.encode(input_dict, quant_ids)
 
         if len(expr_list) > 0:
             inter_text = " ".join(sum([expr.expr_toks + [self.expr_tok.bos_token] for expr in expr_list], []))
             _, decoder_input_ids, _, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
-                self.prepare_output([inter_text], [len(quant_ids[0])])
+                self.prepare_output([inter_text], [quant_num_init])
             quant_states = self.represent(
                 decoder_input_ids=decoder_input_ids,
                 hidden_state=hidden_state,
@@ -586,7 +587,7 @@ class MathSolverTest(nn.Module):
                 batch_quant_rng=batch_quant_rng
             )
 
-        quant_num = len(quant_ids[0]) + len(expr_list)
+        quant_num = quant_num_init + len(expr_list)
         search_quant_mask = torch.zeros((1, 1, self.cfg.quant_size), dtype=torch.bool, device=self.cfg.device)
         search_quant_mask[..., :quant_num] = True        
 
@@ -662,6 +663,16 @@ class MathSolverTest(nn.Module):
         const_nums: List[str],
         beam_size: int = 4
     ) -> List[Expr]:
+        I0 = ExprDataInstance(
+            question=question,
+            nums=nums,
+            const_nums=const_nums,
+            expr_list=[]
+        )
+        input_dict, quant_ids = self.prepare_input([I0.parse_input("", use_expr=False)])        
+        hidden_state, memory_states, quant_states = self.encode(input_dict, quant_ids)
+        quant_num_init = len(quant_ids[0])
+        
         beams: List[StatBeam] = [StatBeam(None, [], 0.0, self.expr_tok.bos_token)]
         while len(beams) > 0:
             do_search = False
@@ -674,14 +685,11 @@ class MathSolverTest(nn.Module):
                 if beam.end:
                     next_beams.append(beam)
                 else:
-                    I = ExprDataInstance(
-                        question=question,
-                        nums=nums,
-                        const_nums=const_nums,
-                        expr_list=beam.expr_list
-                    )
                     expr_beams: List[ExprBeam] = self.expr_beam_search(
-                        I.parse_input("", use_expr=False),
+                        hidden_state, 
+                        memory_states, 
+                        quant_states,
+                        quant_num_init,
                         beam.expr_list,
                         beam.gru_hidden_state,
                         beam_size=beam_size,
