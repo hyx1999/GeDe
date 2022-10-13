@@ -38,6 +38,9 @@ class KBQATrainer:
     ) -> List[Dict[AnyStr, Any]]:
         return batch
     
+    def train_ranker(self):
+        ...
+    
     def train(self):
         ...
     

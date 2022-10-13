@@ -79,7 +79,7 @@ def main(args: argparse.Namespace):
 
     # extra_tokens = build_extra_tokens(dataset_dict, rel_dict, type_dict)
     cfg.ext_tokens = ['AND', 'ARGMAX', 'ARGMIN', 'JOIN', 'NOW', 'R', 'TC'] + \
-        [f'[v{i}' for i in range(10)]  # 'Country' ?
+        [f'[v{i}' for i in range(cfg.variable_size)]  # 'Country' ?
     cfg.rels  = list(rel_dict["train"])
     cfg.types = list(type_dict["train"])
     

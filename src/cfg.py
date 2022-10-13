@@ -50,5 +50,14 @@ class KBQAConfig:
         self.ext_tokens: List[str] = None
         self.rels:  List[str] = None
         self.types: List[str] = None
+        
+        self.variable_size = 10
+        self.expr_size = 5
+        
+        self.relation_size = 100
+        self.type_size     = 100
+        
+        self.relation_bucket_size = 100
+        self.type_bucket_size     = 100
 
         self.__dict__.update(kwargs)
