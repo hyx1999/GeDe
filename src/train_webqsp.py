@@ -1,7 +1,9 @@
+from cfg import KBQAConfig
+from kbqa_utils import Expr, RawDataInstance
 from dataset import loadWebQSP
 from solver import KBQASolver
 from trainer import KBQATrainer
-from kbqa_utils import build_extra_tokens, build_domain_info
+from kbqa_utils import build_extra_tokens
 
 import datetime
 import argparse
@@ -53,16 +55,16 @@ def get_args():
 
 def train_solver(
     args: argparse.Namespace,
+    cfg: KBQAConfig,
     dataset_dict: List[Dict],
     solver: KBQASolver,
 ):
-    cfg = json.loads(args.cfg)
     trainer = KBQATrainer(cfg, dataset_dict, solver)
     trainer.cfg.dataset_name = args.dataset_name
     trainer.cfg.debug = args.debug
     trainer.train()
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-v3")
+        solver.save_model(args.save_model_dir, "final-webqsp")
     logger.info("[finish train solver]")
 
 
@@ -72,14 +74,16 @@ def main(args: argparse.Namespace):
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
-    dataset_dict, rel_dict = loadWebQSP(args.data_path, head=args.head)    
-    extra_tokens = build_extra_tokens(dataset_dict, rel_dict)
-    domain_info = build_domain_info(rel_dict)
-    solver = KBQASolver(
-        json.loads(args.cfg),
-        extra_tokens,
-        domain_info
-    )
+    cfg = KBQAConfig(**json.loads(args.cfg))
+    dataset_dict, rel_dict, type_dict = loadWebQSP(args.data_path, head=args.head)    
+
+    # extra_tokens = build_extra_tokens(dataset_dict, rel_dict, type_dict)
+    cfg.ext_tokens = ['AND', 'ARGMAX', 'ARGMIN', 'JOIN', 'NOW', 'R', 'TC'] + \
+        [f'[v{i}' for i in range(10)]  # 'Country' ?
+    cfg.rels  = list(rel_dict["train"])
+    cfg.types = list(type_dict["train"])
+    
+    solver = KBQASolver(cfg, rel_dict["train"], type_dict["train"])
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")

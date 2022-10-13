@@ -377,11 +377,12 @@ def loadMathQA(file_path: str, head: Optional[int] = None):
                     "Expr_list": expr_list
                 })
     const_nums = [str(x) for x in const_nums]
-    for obj in train_dataset + test_dataset:
+    for obj in train_dataset + dev_dataset + test_dataset:
         obj.update({"const_nums": const_nums})
     
     if head is not None and head != -1:
         train_dataset = train_dataset[:head]
+        dev_dataset   = dev_dataset[:head]
         test_dataset  = test_dataset[:head]
     
     return train_dataset, dev_dataset, test_dataset, const_nums

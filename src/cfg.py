@@ -1,19 +1,9 @@
+from typing import List
+
+
 class Config:
 
     def __init__(self, **kwargs) -> None:
-
-        self.model_name = "bert-base-chinese"
-        self.model_hidden_size = 768
-
-        self.batch_size = 8
-        self.scheduler_step_size = 10
-        self.num_epochs = 100  # 80
-
-        self.max_nums_size = 35
-
-        self.device = "cuda:0"
-
-        kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}
         self.__dict__.update(kwargs)
 
 
@@ -21,13 +11,11 @@ class MathConfig:
 
     def __init__(self, **kwargs) -> None:
         self.dataset_name = ""
-        self.model_name = "hfl/chinese-roberta-wwm-ext"
+        self.model_name = ""
 
         self.num_epochs = 500
         self.batch_size = 8
-        self.scheduler_step_size = 10
-        self.bert_lr = 2e-5
-        self.gru_lr = 2e-5
+        self.lr = 2e-5
         self.weight_decay = 1e-2
         
         self.max_nums_size = 35
@@ -51,14 +39,16 @@ class KBQAConfig:
 
     def __init__(self, **kwargs) -> None:
         self.dataset_name = ""
-        self.model_name = "facebook/bart-base"
+        self.model_name = ""
 
         self.batch_size = 8
-        self.scheduler_step_size = 10
-        self.num_epochs = 80
+        self.num_epochs = 50
         
         self.debug = False
         self.device = "cuda:0"
+        
+        self.ext_tokens: List[str] = None
+        self.rels:  List[str] = None
+        self.types: List[str] = None
 
-        kwargs = {k: v for k, v in kwargs.items() if k in self.__dict__}
         self.__dict__.update(kwargs)

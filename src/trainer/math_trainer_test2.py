@@ -152,7 +152,7 @@ class MathTrainerTest2:
 
         optim = AdamW(
             [
-                {'params': solver.parameters(), 'lr': self.cfg.bert_lr},
+                {'params': solver.parameters(), 'lr': self.cfg.lr},
             ],
             weight_decay=self.cfg.weight_decay
         )

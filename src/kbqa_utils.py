@@ -49,14 +49,6 @@ class RawDataInstance:
         exprs, ents = parse_S_expr(S_expr)
         self.exprs: List[Expr] = exprs
         self.ents: List[str] = ents
-    
-    def check_exprs(self) -> bool:
-        pat = re.compile('(?:g|m)\.|#\d+')
-        for expr in self.exprs:
-            if expr.tokens[0] == "JOIN":
-                if not pat.match(expr.tokens[-1]):
-                    return False
-        return True
 
 
 class TrainDataInstance:
@@ -110,6 +102,10 @@ class KBQADataset(Dataset):
         return self.data[index]
 
 
+def is_entity(token: str) -> bool:
+    return re.match("(?:m|g)\.", token) or token == 'Country'
+
+
 def parse_S_expr(S_expr: str) -> List[Expr]:
     exprs: List[Expr] = []
     tokens = [tok for tok in re.split(r"([\(\) ])", S_expr) if tok.strip() != ""]
@@ -117,7 +113,7 @@ def parse_S_expr(S_expr: str) -> List[Expr]:
     ents = []
     stk  = []
     for tok in tokens:
-        if re.match("(?:m|g)\.", tok):
+        if is_entity(tok):
             m_vars[tok] = len(m_vars)
             ents.append(tok)
     for tok in tokens:
@@ -137,7 +133,7 @@ def parse_S_expr(S_expr: str) -> List[Expr]:
                 if expr_str not in m_vars:
                     m_vars[expr_str] = len(m_vars)
                 arg0 = m_vars[expr_str]
-                stk.append("#{}".format(arg0))
+                stk.append("[v{}]".format(arg0))
                 exprs.append(Expr(arg0, expr_tokens))
             else:
                 stk.extend(expr_tokens)
@@ -145,14 +141,15 @@ def parse_S_expr(S_expr: str) -> List[Expr]:
             if tok not in m_vars:
                 stk.append(tok)
             else:
-                stk.append("#{}".format(m_vars[tok]))
+                stk.append("[v{}]".format(m_vars[tok]))
 
     return exprs, ents
 
 
 def build_extra_tokens(
     dataset_dict: Dict[str, KBQADataset], 
-    rel_dict: Dict[str, Set[str]],
+    rel_dict:  Dict[str, Set[str]],
+    type_dict: Dict[str, Set[str]],
     threshold: int = 5
 ) -> Set[str]:
     tok_dict = defaultdict(int)
@@ -161,309 +158,282 @@ def build_extra_tokens(
         for item in dataset.data:
             for expr in item.exprs:
                 for tok in expr.tokens:
-                    if tok in rel_dict["train"]:
+                    if tok in rel_dict["train"] or tok in type_dict["train"]:
                         continue
                     tok_dict[tok] += 1
-    for i in range(10):
-        tok_dict[f"[v{i}]"] += threshold
     extra_tokens = [k for k, v in tok_dict.items() if v >= threshold]
     return sorted(extra_tokens)
 
 
-def build_domain_info(
-    rel_dict: Dict[str, Set[str]]
-) -> Set[str]:
-    domain_info = set()
-    for rel in rel_dict["train"]:
-        prefix = rel.split(".")[0]
-        domain_info.add(prefix)
-    return domain_info
-
-
-class KBClient:
+class DBClient:
 
     def __init__(self, url: str = "http://10.77.110.128:3001/sparql") -> None:
         self.sparql = SPARQLWrapper(url)
         self.sparql.setReturnFormat(JSON)
-        self.max_ents_num = 100
     
-
-    def execute_join(self, sparql_tokens: List[str], heads: List[str]) -> List[str]:
-        rel = sparql_tokens[-1]
-        if sparql_tokens[2] == "[R]":
-            return self.query_ent(heads, rel, rev=True)
-        else:
-            return self.query_ent(heads, rel, rev=False)
-
-
-    def execute_and(self, 
-        lisp_tokens: List[str], 
-        ents_left:  Optional[List[str]] = None,
-        ents_right: Optional[List[str]] = None,
-    ):
-        pat = re.compile("#\d*]")
-        if not pat.match(lisp_tokens[2]):
-            t1, t2 = lisp_tokens[1], lisp_tokens[2]
-            lisp_tokens[1] = t2
-            lisp_tokens[2] = t1
-            ents_left, ents_right = ents_right, ents_left
-        if not pat.match(lisp_tokens[1]):
-            ents = " ".join([f"ns:{e}" for e in ents_right])
-            class_name = "ns:{}".format(lisp_tokens[1])
-            query = f"""
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX ns: <http://rdf.freebase.com/ns/>
-                SELECT distinct ?x WHERE {{
-                    ?x ns:type.object.type {class_name} .
-                    VALUES ?x{{ {ents} }}
-                }}
-            """
-            self.sparql.setQuery(query)
-            try:
-                results = self.sparql.query().convert()
-            except urllib.error.URLError as err:
-                raise err
-
-            return [i['x']['value'] for i in results['results']['bindings']]
-        else:
-            return list(set(ents_left) & set(ents_right))
-
-
-    def execute_cons(
-        self,
-        lisp_tokens: List[str],
-        ents: List[str]
-    ):
-        ents = " ".join([f"ns:{e}" for e in ents])
-        rel  = "ns:{}".format(lisp_tokens[2])
-        cons = "ns:{}".format(lisp_tokens[3])
-        query = f"""
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX ns: <http://rdf.freebase.com/ns/>
-            SELECT distinct ?x WHERE {{
-                ?x {rel} {cons} .
-                VALUES ?x{{ {ents} }}
-            }}
-        """
-        self.sparql.setQuery(query)
+    def execute(self, lisp_program: str) -> List[str]:
+        sparql_program = lisp_to_sparql(lisp_program)
+        self.sparql.setQuery(sparql_program)
         try:
             results = self.sparql.query().convert()
         except urllib.error.URLError as err:
             raise err
-        return [i['x']['value'] for i in results['results']['bindings']]
+        ...
+
+ 
+def lisp_to_sparql(lisp_program: str):
+    clauses = []
+    order_clauses = []
+    entities = set()  # collect entites for filtering
+    # identical_variables = {}   # key should be smaller than value, we will use small variable to replace large variable
+    identical_variables_r = {}  # key should be larger than value
+    expression = lisp_to_nested_expression(lisp_program)
+    superlative = False
+    if expression[0] in ['ARGMAX', 'ARGMIN']:
+        superlative = True
+        # remove all joins in relation chain of an arg function. In another word, we will not use arg function as
+        # binary function here, instead, the arity depends on the number of relations in the second argument in the
+        # original function
+        if isinstance(expression[2], list):
+            def retrieve_relations(exp: list):
+                rtn = []
+                for element in exp:
+                    if element == 'JOIN':
+                        continue
+                    elif isinstance(element, str):
+                        rtn.append(element)
+                    elif isinstance(element, list) and element[0] == 'R':
+                        rtn.append(element)
+                    elif isinstance(element, list) and element[0] == 'JOIN':
+                        rtn.extend(retrieve_relations(element))
+                return rtn
+
+            relations = retrieve_relations(expression[2])
+            expression = expression[:2]
+            expression.extend(relations)
+
+    sub_programs = _linearize_lisp_expression(expression, [0])
+    question_var = len(sub_programs) - 1
+    count = False
+
+    def get_root(var: int):
+        while var in identical_variables_r:
+            var = identical_variables_r[var]
+
+        return var
+
+    for i, subp in enumerate(sub_programs):
+        i = str(i)
+        if subp[0] == 'JOIN':
+            if isinstance(subp[1], list):  # R relation
+                if subp[2][:2] in ["m.", "g."]:  # entity
+                    clauses.append("ns:" + subp[2] + " ns:" + subp[1][1] + " ?x" + i + " .")
+                    entities.add(subp[2])
+                elif subp[2][0] == '#':  # variable
+                    clauses.append("?x" + subp[2][1:] + " ns:" + subp[1][1] + " ?x" + i + " .")
+                else:  # literal   (actually I think literal can only be object)
+                    if subp[2].__contains__('^^'):
+                        data_type = subp[2].split("^^")[1].split("#")[1]
+                        if data_type not in ['integer', 'float', 'dateTime']:
+                            subp[2] = f'"{subp[2].split("^^")[0] + "-08:00"}"^^<{subp[2].split("^^")[1]}>'
+                            # subp[2] = subp[2].split("^^")[0] + '-08:00^^' + subp[2].split("^^")[1]
+                        else:
+                            subp[2] = f'"{subp[2].split("^^")[0]}"^^<{subp[2].split("^^")[1]}>'
+                    clauses.append(subp[2] + " ns:" + subp[1][1] + " ?x" + i + " .")
+            else:
+                if subp[2][:2] in ["m.", "g."]:  # entity
+                    clauses.append("?x" + i + " ns:" + subp[1] + " ns:" + subp[2] + " .")
+                    entities.add(subp[2])
+                elif subp[2][0] == '#':  # variable
+                    clauses.append("?x" + i + " ns:" + subp[1] + " ?x" + subp[2][1:] + " .")
+                else:  # literal
+                    if subp[2].__contains__('^^'):
+                        data_type = subp[2].split("^^")[1].split("#")[1]
+                        if data_type not in ['integer', 'float', 'dateTime']:
+                            subp[2] = f'"{subp[2].split("^^")[0] + "-08:00"}"^^<{subp[2].split("^^")[1]}>'
+                        else:
+                            subp[2] = f'"{subp[2].split("^^")[0]}"^^<{subp[2].split("^^")[1]}>'
+                    clauses.append("?x" + i + " ns:" + subp[1] + " " + subp[2] + " .")
+        elif subp[0] == 'AND':
+            var1 = int(subp[2][1:])
+            rooti = get_root(int(i))
+            root1 = get_root(var1)
+            if rooti > root1:
+                identical_variables_r[rooti] = root1
+            else:
+                identical_variables_r[root1] = rooti
+                root1 = rooti
+            # identical_variables[var1] = int(i)
+            if subp[1][0] == "#":
+                var2 = int(subp[1][1:])
+                root2 = get_root(var2)
+                # identical_variables[var2] = int(i)
+                if root1 > root2:
+                    # identical_variables[var2] = var1
+                    identical_variables_r[root1] = root2
+                else:
+                    # identical_variables[var1] = var2
+                    identical_variables_r[root2] = root1
+            else:  # 2nd argument is a class
+                clauses.append("?x" + i + " ns:type.object.type ns:" + subp[1] + " .")
+        elif subp[0] in ['le', 'lt', 'ge', 'gt']:  # the 2nd can only be numerical value
+            clauses.append("?x" + i + " ns:" + subp[1] + " ?y" + i + " .")
+            if subp[0] == 'le':
+                op = "<="
+            elif subp[0] == 'lt':
+                op = "<"
+            elif subp[0] == 'ge':
+                op = ">="
+            else:
+                op = ">"
+            if subp[2].__contains__('^^'):
+                data_type = subp[2].split("^^")[1].split("#")[1]
+                if data_type not in ['integer', 'float', 'dateTime']:
+                    subp[2] = f'"{subp[2].split("^^")[0] + "-08:00"}"^^<{subp[2].split("^^")[1]}>'
+                else:
+                    subp[2] = f'"{subp[2].split("^^")[0]}"^^<{subp[2].split("^^")[1]}>'
+            clauses.append(f"FILTER (?y{i} {op} {subp[2]})")
+        elif subp[0] == 'TC':
+            var = int(subp[1][1:])
+            # identical_variables[var] = int(i)
+            rooti = get_root(int(i))
+            root_var = get_root(var)
+            if rooti > root_var:
+                identical_variables_r[rooti] = root_var
+            else:
+                identical_variables_r[root_var] = rooti
+
+            year = subp[3]
+            if year == 'NOW':
+                from_para = '"2015-08-10"^^xsd:dateTime'
+                to_para = '"2015-08-10"^^xsd:dateTime'
+            else:
+                from_para = f'"{year}-12-31"^^xsd:dateTime'
+                to_para = f'"{year}-01-01"^^xsd:dateTime'
+
+            clauses.append(f'FILTER(NOT EXISTS {{?x{i} ns:{subp[2]} ?sk0}} || ')
+            clauses.append(f'EXISTS {{?x{i} ns:{subp[2]} ?sk1 . ')
+            clauses.append(f'FILTER(xsd:datetime(?sk1) <= {from_para}) }})')
+            if subp[2][-4:] == "from":
+                clauses.append(f'FILTER(NOT EXISTS {{?x{i} ns:{subp[2][:-4] + "to"} ?sk2}} || ')
+                clauses.append(f'EXISTS {{?x{i} ns:{subp[2][:-4] + "to"} ?sk3 . ')
+            else:  # from_date -> to_date
+                clauses.append(f'FILTER(NOT EXISTS {{?x{i} ns:{subp[2][:-9] + "to_date"} ?sk2}} || ')
+                clauses.append(f'EXISTS {{?x{i} ns:{subp[2][:-9] + "to_date"} ?sk3 . ')
+            clauses.append(f'FILTER(xsd:datetime(?sk3) >= {to_para}) }})')
+
+        elif subp[0] in ["ARGMIN", "ARGMAX"]:
+            superlative = True
+            if subp[1][0] == '#':
+                var = int(subp[1][1:])
+                rooti = get_root(int(i))
+                root_var = get_root(var)
+                # identical_variables[var] = int(i)
+                if rooti > root_var:
+                    identical_variables_r[rooti] = root_var
+                else:
+                    identical_variables_r[root_var] = rooti
+            else:  # arg1 is class
+                clauses.append(f'?x{i} ns:type.object.type ns:{subp[1]} .')
+
+            if len(subp) == 3:
+                clauses.append(f'?x{i} ns:{subp[2]} ?sk0 .')
+            elif len(subp) > 3:
+                for j, relation in enumerate(subp[2:-1]):
+                    if j == 0:
+                        var0 = f'x{i}'
+                    else:
+                        var0 = f'c{j - 1}'
+                    var1 = f'c{j}'
+                    if isinstance(relation, list) and relation[0] == 'R':
+                        clauses.append(f'?{var1} ns:{relation[1]} ?{var0} .')
+                    else:
+                        clauses.append(f'?{var0} ns:{relation} ?{var1} .')
+
+                clauses.append(f'?c{j} ns:{subp[-1]} ?sk0 .')
+
+            if subp[0] == 'ARGMIN':
+                order_clauses.append("ORDER BY ?sk0")
+            elif subp[0] == 'ARGMAX':
+                order_clauses.append("ORDER BY DESC(?sk0)")
+            order_clauses.append("LIMIT 1")
 
 
-    def execute_tc(
-        self,
-        lisp_tokens: List[str],
-        ents: List[str]
-    ):
-        ents = " ".join([f"ns:{e}" for e in ents])
-        rel = "ns:{}".format(lisp_tokens[2])
-        year = lisp_tokens[3]
-        if year == "NOW":
-            from_para = '"2015-08-10"^^xsd:dateTime'
-            to_para = '"2015-08-10"^^xsd:dateTime'
-        else:
-            from_para = f'"{year}-12-31"^^xsd:dateTime'
-            to_para = f'"{year}-01-01"^^xsd:dateTime'
-        filter_clauses0 = f'FILTER(NOT EXISTS {{ ?x {rel} ?sk0 }} || EXISTS {{ ?x {rel} ?sk1 . FILTER(xsd::datetime(?sk1) <= {from_para}) }})'
-        if rel.endswith('from'):
-            rel = rel[:-4] + "to"  # from -> to
-            filter_clauses1 = f'FILTER(NOT EXISTS {{ ?x {rel} ?sk2 }} || EXISTS {{ ?x {rel} ?sk3 . FILTER(xsd::datetime(?sk3) >= {to_para}) }})'
-        else:
-            rel = rel[:-9] + "to_date"  # from_date -> to_date
-            filter_clauses1 = f'FILTER(NOT EXISTS {{ ?x {rel} ?sk2 }} || EXISTS {{ ?x {rel} ?sk3 . FILTER(xsd::datetime(?sk1) >= {to_para}) }})'
-        query = f"""
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX ns: <http://rdf.freebase.com/ns/>
-            SELECT distinct ?x WHERE {{
-                VALUES ?x{{ {ents} }}
-                {filter_clauses0}
-                {filter_clauses1}
-            }}
-        """
-        self.sparql.setQuery(query)
-        try:
-            results = self.sparql.query().convert()
-        except urllib.error.URLError as err:
-            raise err
-        return [i['x']['value'] for i in results['results']['bindings']]
+        elif subp[0] == 'COUNT':  # this is easy, since it can only be applied to the quesiton node
+            var = int(subp[1][1:])
+            root_var = get_root(var)
+            identical_variables_r[int(i)] = root_var  # COUNT can only be the outtermost
+            count = True
+    #  Merge identical variables
+    for i in range(len(clauses)):
+        for k in identical_variables_r:
+            clauses[i] = clauses[i].replace(f'?x{k} ', f'?x{get_root(k)} ')
+
+    question_var = get_root(question_var)
+
+    for i in range(len(clauses)):
+        clauses[i] = clauses[i].replace(f'?x{question_var} ', f'?x ')
+
+    if superlative:
+        arg_clauses = clauses[:]
+
+    for entity in entities:
+        clauses.append(f'FILTER (?x != ns:{entity})')
+    clauses.insert(0,
+                   f"FILTER (!isLiteral(?x) OR lang(?x) = '' OR langMatches(lang(?x), 'en'))")
+    clauses.insert(0, "WHERE {")
+    if count:
+        clauses.insert(0, f"SELECT COUNT DISTINCT ?x")
+    elif superlative:
+        clauses.insert(0, "{SELECT ?sk0")
+        clauses = arg_clauses + clauses
+        clauses.insert(0, "WHERE {")
+        clauses.insert(0, f"SELECT DISTINCT ?x")
+    else:
+        clauses.insert(0, f"SELECT DISTINCT ?x")
+    clauses.insert(0, "PREFIX ns: <http://rdf.freebase.com/ns/>")
+
+    clauses.append('}')
+    clauses.extend(order_clauses)
+    if superlative:
+        clauses.append('}')
+        clauses.append('}')
+
+    # for clause in clauses:
+    #     print(clause)
+
+    return '\n'.join(clauses)
 
 
-    def execute_argmax(
-        self,
-        lisp_tokens: List[str],
-        ents: List[str]
-    ):
-        rel = "ns:{}".format(lisp_tokens[-1])
-        query = f"""
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX ns: <http://rdf.freebase.com/ns/>
-            SELECT distinct ?x WHERE {{
-                ?x {rel} ?sk0 .
-                VALUES ?x{{ {ents} }}
-            }}
-            ORDER BY DESC(?sk0)
-            LIMIT 1
-        """
-        self.sparql.setQuery(query)
-        try:
-            results = self.sparql.query().convert()
-        except urllib.error.URLError as err:
-            raise err
-        return [i['x']['value'] for i in results['results']['bindings']]
+def _linearize_lisp_expression(expression: list, sub_formula_id):
+    sub_formulas = []
+    for i, e in enumerate(expression):
+        if isinstance(e, list) and e[0] != 'R':
+            sub_formulas.extend(_linearize_lisp_expression(e, sub_formula_id))
+            expression[i] = '#' + str(sub_formula_id[0] - 1)
+
+    sub_formulas.append(expression)
+    sub_formula_id[0] += 1
+    return sub_formulas
 
 
-    def execute_argmin(
-        self,
-        lisp_tokens: List[str],
-        ents: List[str]
-    ):
-        rel = "ns:{}".format(lisp_tokens[-1])
-        query = f"""
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-            PREFIX ns: <http://rdf.freebase.com/ns/>
-            SELECT distinct ?x WHERE {{
-                ?x {rel} ?sk0 .
-                VALUES ?x{{ {ents} }}
-            }}
-            ORDER BY ?sk0
-            LIMIT 1
-        """
-        self.sparql.setQuery(query)
-        try:
-            results = self.sparql.query().convert()
-        except urllib.error.URLError as err:
-            raise err
-        return [i['x']['value'] for i in results['results']['bindings']]
-
-
-    def query_rel(self, ents: List[str], rev: bool) -> List[str]:
-        ents = sorted(ents)
-        if len(ents) == 0:
-            return [], []
-        ents = " ".join([f"ns:{e}" for e in ents])
-        if not rev:
-            query = f"""
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX ns: <http://rdf.freebase.com/ns/>
-                SELECT distinct ?r0 WHERE {{
-                    ?src ?r0_ ?t0 .
-                    VALUES ?src {{ {ents} }}
-                    FILTER regex(?r0_, "http://rdf.freebase.com/ns/")
-                    bind(strafter(str(?r0_),str(ns:)) as ?r0)
-                }}
-            """
-            self.sparql.setQuery(query)
-            try:
-                results = self.sparql.query().convert()
-            except urllib.error.URLError as err:
-                raise err
-            rels = [i['r0']['value'] for i in results['results']['bindings'] if i['r0']['value'] != 'type.object.type']
-            return rels
-        else:
-            rev_query = f"""
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX ns: <http://rdf.freebase.com/ns/>
-                SELECT distinct ?r0 WHERE {{
-                    ?src ?r0_ ?t0 .
-                    VALUES ?src {{ {ents} }}
-                    FILTER regex(?r0_, "http://rdf.freebase.com/ns/")
-                    bind(strafter(str(?r0_),str(ns:)) as ?r0)
-                }}
-            """
-            self.sparql.setQuery(rev_query)
-            try:
-                results = self.sparql.query().convert()
-            except urllib.error.URLError as err:
-                raise err            
-            rev_rels = [i['r0']['value'] for i in results['results']['bindings'] if i['r0']['value'] != 'type.object.type']
-            return rev_rels           
-
-
-    def query_ent(self, heads: List[str], rel: str, rev: bool) -> List[str]:
-        heads = sorted(heads)
-        if len(heads) == 0:
-            return []
-        if rev:
-            heads = " ".join([f"ns:{h}" for h in heads])
-            rel = f"ns:{rel}"
-            query = f"""
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX ns: <http://rdf.freebase.com/ns/>
-                SELECT distinct ?t0 WHERE {{
-                    ?t0_ {rel} ?src .
-                    VALUES ?src {{ {heads} }}
-                    FILTER regex(?t0_, "http://rdf.freebase.com/ns/")
-                    bind(strafter(str(?t0_),str(ns:)) as ?t0)
-                }}
-            """
-        else:
-            heads = " ".join([f"ns:{h}" for h in heads])
-            rel = f"ns:{rel}"
-            query = f"""
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX ns: <http://rdf.freebase.com/ns/>
-                SELECT distinct ?t0 WHERE {{
-                    ?src {rel} ?t0_ .
-                    VALUES ?src {{ {heads} }}
-                    FILTER regex(?t0_, "http://rdf.freebase.com/ns/")
-                    bind(strafter(str(?t0_),str(ns:)) as ?t0)
-                }}
-            """
-        self.sparql.setQuery(query)
-        try:
-            results = self.sparql.query().convert()
-        except urllib.error.URLError as err:
-            raise err
-
-        return [i['t0']['value'] for i in results['results']['bindings']][:self.max_ents_num]
-
-
-    def query_value(self, heads: List[str], rel: str, rev: bool) -> List[str]:
-        heads = sorted(heads)
-        if len(heads) == 0:
-            return []
-        if rev:
-            heads = " ".join([f"ns:{h}" for h in heads])
-            rel = f"ns:{rel}"
-            query = f"""
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX ns: <http://rdf.freebase.com/ns/>
-                SELECT distinct ?t0 WHERE {{
-                    ?t0 {rel} ?src .
-                    VALUES ?src {{ {heads} }}
-                    FILTER (!regex(?t0, "http://rdf.freebase.com/ns/"))
-                }}
-            """
-        else:
-            heads = " ".join([f"ns:{h}" for h in heads])
-            rel = f"ns:{rel}"
-            query = f"""
-                PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-                PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-                PREFIX ns: <http://rdf.freebase.com/ns/>
-                SELECT distinct ?t0 WHERE {{
-                    ?src {rel} ?t0 .
-                    VALUES ?src {{ {heads} }}
-                    FILTER (!regex(?t0, "http://rdf.freebase.com/ns/"))
-                }}
-            """
-        self.sparql.setQuery(query)
-        try:
-            results = self.sparql.query().convert()
-        except urllib.error.URLError as err:
-            raise err
-
-        return [i['t0']['value'] for i in results['results']['bindings']]
+def lisp_to_nested_expression(lisp_string: str) -> List:
+    """
+    Takes a logical form as a lisp string and returns a nested list representation of the lisp.
+    For example, "(count (division first))" would get mapped to ['count', ['division', 'first']].
+    """
+    stack: List = []
+    current_expression: List = []
+    tokens = lisp_string.split()
+    for token in tokens:
+        while token[0] == '(':
+            nested_expression: List = []
+            current_expression.append(nested_expression)
+            stack.append(current_expression)
+            current_expression = nested_expression
+            token = token[1:]
+        current_expression.append(token.replace(')', ''))
+        while token[-1] == ')':
+            current_expression = stack.pop()
+            token = token[:-1]
+    return current_expression[0]

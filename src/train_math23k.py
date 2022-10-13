@@ -86,6 +86,7 @@ def main(args: argparse.Namespace):
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
     cfg.debug = args.debug
+    cfg.const_quant_size = len(const_nums)
     cfg.ext_tokens = ['^']
     
     solver = MathSolver(cfg, const_nums)

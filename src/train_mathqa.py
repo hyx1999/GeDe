@@ -88,6 +88,10 @@ def main(args: argparse.Namespace):
     cfg.dataset_name = args.dataset_name
     cfg.debug = args.debug
     cfg.const_quant_size = len(const_nums)
+    cfg.ext_tokens = ['^']
+    
+    logger.info("len(const_quant_size): {}".format(len(const_nums)))
+    logger.info("const_quants: {}".format(const_nums))
 
     # solver = MathSolver(cfg, const_nums)
     if args.model_type == "test2":
