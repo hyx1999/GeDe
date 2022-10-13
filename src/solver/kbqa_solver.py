@@ -368,28 +368,99 @@ class RelationRanker(nn.Module):
 
 class EncodeEntityFnMixin:
     
-    def encode_entity(self, question: str, entities: List[str]):
+    def encode_entity(self, 
+        batch_question: List[str], 
+        batch_entities: List[List[str]]
+    ):
         cfg: KBQAConfig = getattr(self, "cfg")
         tokenizer: Union[BertTokenizer, RobertaTokenizer] = getattr(self, "lang_tokenizer")
         encoder: Union[BertModel, RobertaModel] = getattr(self, "encoder")
-        text = " [entity] ".join([question] + entities)
-        ...
+        entity_token_id: int = getattr(self, "entity_token_id")
+
+        batch_size = len(batch_question)
+        hidden_dim = encoder.bert.config.hidden_size
+        variable_states = torch.zeros((batch_size, cfg.variable_size, hidden_dim), device=input_states.device)
+
+        batch_text = [
+            " [entity] ".join([question] + entities) 
+                for question, entities in zip(batch_question, batch_entities)
+        ]
+        input_dict = tokenizer(batch_text, return_tensors="pt", padding=True).to(cfg.device)
+        batch_entity_ids = []
+        for i in range(input_dict.input_ids.shape[0]):
+            entity_ids = []
+            for j in range(input_dict.input_ids.shape[1]):
+                if input_dict.input_ids[i, j].item() == entity_token_id:
+                    entity_ids.append(j)
+            batch_entity_ids.append(entity_ids)
+        
+        input_states: Tensor = encoder(**input_dict).last_hidden_state
+        
+        for i in range(batch_size):
+            n = len(batch_entity_ids[i])
+            variable_states[i, :n, ...].copy_(input_states[i, batch_entity_ids[i], ...])
+        return variable_states
 
 
 class EncodeSchemaFnMixin:
     
-    def encode_schema(self, question: str, relations: List[str], types: List[str]):
+    def encode_schema(self, 
+        batch_question: List[str], 
+        batch_relations: List[List[str]], 
+        batch_types: List[List[str]]
+    ):
         cfg: KBQAConfig = getattr(self, "cfg")
         tokenizer: Union[BertTokenizer, RobertaTokenizer] = getattr(self, "lang_tokenizer")
         encoder: Union[BertModel, RobertaModel] = getattr(self, "encoder")
-        relation_states = []
-        type_states     = []
-        for i in range(0, len(question), cfg.relation_bucket_size):
-            ...
-        ...
+        relation_token_id: int = getattr(self, "relation_token_id")
+        type_token_id: int = getattr(self, "type_token_id")
+
+        batch_size = len(batch_question)
+        hidden_dim = encoder.bert.config.hidden_size
+        
+        schema_states_list = []
+
+        for token, token_id, schema_size, batch_schemas in zip(
+            ["[relation]"     , "[type]"     ],
+            [relation_token_id, type_token_id],
+            [cfg.relation_size, cfg.type_size], 
+            [batch_relations  , batch_types  ]
+        ):
+            schema_states = torch.zeros((batch_size, schema_size, hidden_dim), device=input_states.device)
+
+            batch_schema_num = [0] * batch_size
+            for offset in range(0, cfg.relation_size, cfg.bucket_size):
+                batch_bucket = [schemas[offset:offset+cfg.bucket_size] for schemas in batch_schemas]
+
+                batch_text = [
+                    f" {token} ".join([question] + schemas) 
+                        for question, schemas in zip(batch_question, batch_bucket)
+                ]
+                input_dict = tokenizer(batch_text, return_tensors="pt", padding=True).to(cfg.device)
+                batch_schema_ids = []
+                for i in range(input_dict.input_ids.shape[0]):
+                    schema_ids = []
+                    for j in range(input_dict.input_ids.shape[1]):
+                        if input_dict.input_ids[i, j].item() == token_id:
+                            schema_ids.append(j)
+                    batch_schema_ids.append(schema_ids)
+                
+                input_states: Tensor = encoder(**input_dict).last_hidden_state
+                
+                batch_size, _, hidden_dim = input_states.shape
+                schema_states = torch.zeros((batch_size, cfg.variable_size, hidden_dim), device=input_states.device)
+                for i in range(batch_size):
+                    n0 = batch_schema_num[i]
+                    n1 = n0 + len(batch_schema_ids[i])
+                    schema_states[i, n0:n1, ...].copy_(input_states[i, batch_schema_ids[i], ...])
+                    batch_schema_num[i] = n1
+            schema_states_list.append(schema_states)
+        
+        relation_states, type_states = tuple(schema_states_list)
+        return relation_states, type_states
 
 
-class KBQASolver(nn.Module):
+class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin):
     
     def __init__(self, 
         cfg: KBQAConfig,
@@ -429,6 +500,10 @@ class KBQASolver(nn.Module):
             [f'[v{i}]' for i in range(self.cfg.variable_size)] + \
             ['[entity]', '[relation]', '[type]']
         self.lang_tokenizer.add_tokens(tokens)
+        
+        self.entity_token_id   = self.lang_tokenizer.convert_tokens_to_ids('[entity]')
+        self.relation_token_id = self.lang_tokenizer.convert_tokens_to_ids('[relation]')
+        self.type_token_id     = self.lang_tokenizer.convert_tokens_to_ids('[type]')
     
     def prepare_input(
         self,
@@ -481,20 +556,20 @@ class KBQASolver(nn.Module):
         batch_position  = []
         batch_variable_rng = []
         for i, sep in enumerate(batch_sep):
-            quant_id = []
+            variable_id = []
             position = []
-            quant_rng = []
+            variable_rng = []
             last_x = 0
             for j, x in enumerate(sep):
-                quant_id.extend([variable_num[i] + j] * (x - last_x))
+                variable_id.extend([variable_num[i] + j] * (x - last_x))
                 position.extend(list(range(x - last_x)))
-                quant_rng.append((variable_num[i] + j, last_x, x))
+                variable_rng.append((variable_num[i] + j, last_x, x))
                 last_x = x
-            quant_id.extend([0] * (len(batch_labels[i]) - len(quant_id)))
+            variable_id.extend([0] * (len(batch_labels[i]) - len(variable_id)))
             position.extend([0] * (len(batch_labels[i]) - len(position)))
-            batch_variable_id.append(quant_id)
+            batch_variable_id.append(variable_id)
             batch_position.append(position)
-            batch_variable_rng.append(quant_rng)
+            batch_variable_rng.append(variable_rng)
         pt_variable_id = torch.tensor(batch_variable_id, dtype=torch.long, device=self.cfg.device)
         pt_position = torch.tensor(batch_position, dtype=torch.long, device=self.cfg.device)
         pt_range = torch.arange(self.cfg.quant_size, dtype=torch.long, device=self.cfg.device)\
@@ -502,3 +577,48 @@ class KBQASolver(nn.Module):
         pt_variable_mask = (pt_range < pt_variable_id.unsqueeze(-1))
         
         return pt_labels, shift_pt_labels, pt_mixin_id, pt_variable_id, pt_position, pt_variable_mask, batch_variable_rng
+
+    def encode(
+        self, 
+        input_dict: Dict[str, Tensor], 
+    ) -> Tuple[Tensor, Tensor]:
+        memory_states: Tensor = self.encoder(input_dict)
+        hidden_state = memory_states.select(1, 0).clone()
+        return hidden_state, memory_states
+
+    def represent(
+        self,
+        hidden_state: Tensor,
+        decoder_input_ids: Tensor,
+        position_ids: Tensor,
+        variable_id_ids: Tensor,
+        relation_states: Tensor,  # [N, |Q|, H],
+        type_states: Tensor,
+        variable_states: Tensor,
+        variable_mask: Tensor,
+        memory_states: Tensor,
+        batch_variable_rng: List[List[Tuple[int, int, int]]]
+    ):
+        memory_states = self.representer(
+            decoder_input_ids=decoder_input_ids,
+            hidden_state=hidden_state,
+            position_ids=position_ids,
+            variable_id_ids=variable_id_ids,
+            relation_states=relation_states,
+            type_states=type_states,
+            variable_states=variable_states,
+            variable_mask=variable_mask,
+            memory_states=memory_states,
+        )
+        batch_size = decoder_input_ids.shape[0]
+        new_variable_states = torch.zeros(
+            batch_size, self.cfg.variable_size, self.encoder.bert.config.hidden_size, dtype=torch.float, device=memory_states.device)
+        for i, variable_rng in enumerate(batch_variable_rng):
+            for j in range(len(variable_rng)):
+                variable_id, left, right = variable_rng[j]
+                indices = list(range(left, right))
+                new_variable_states[i, variable_id, :].copy_(torch.mean(memory_states[i, indices, :], dim=0))
+        return variable_states + new_variable_states
+
+    def decode(self):
+        ...
