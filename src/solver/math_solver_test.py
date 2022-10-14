@@ -20,7 +20,7 @@ from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from math_utils import Op, Expr, Tok, ExprDataInstance
+from math_utils import Op, Expr, Tok, MathDataInstance
 from cfg import MathConfig
 
 
@@ -518,7 +518,7 @@ class MathSolverTest(nn.Module):
     ) -> Tuple[Tensor, Tensor]:
         return self.decoder(*args, **kwargs)
     
-    def forward(self, batch: List[ExprDataInstance]) -> Tensor:
+    def forward(self, batch: List[MathDataInstance]) -> Tensor:
         input_dict, quant_ids = self.prepare_input(
             [I.parse_input(sep_token="", use_expr=False) for I in batch]
         )
@@ -663,7 +663,7 @@ class MathSolverTest(nn.Module):
         const_nums: List[str],
         beam_size: int = 4
     ) -> List[Expr]:
-        I0 = ExprDataInstance(
+        I0 = MathDataInstance(
             question=question,
             nums=nums,
             const_nums=const_nums,

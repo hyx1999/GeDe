@@ -5,7 +5,7 @@ from solver import MathSolverTest
 from scheduler import GradualWarmupScheduler
 from math_utils import DefaultDataset, compute_Expr_list
 from cfg import MathConfig
-from math_utils import ExprDataInstance
+from math_utils import MathDataInstance
 from transformers import get_linear_schedule_with_warmup
 
 import numpy as np
@@ -116,14 +116,14 @@ class MathTrainerTest:
             new_data.append(obj)
         return new_data
 
-    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[ExprDataInstance]:
+    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[MathDataInstance]:
         new_dataset = []
         for obj in dataset:
             question = "".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
-            new_dataset.append(ExprDataInstance(
+            new_dataset.append(MathDataInstance(
                 question=question,
                 nums=nums,
                 const_nums=const_nums,

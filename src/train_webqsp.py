@@ -1,5 +1,5 @@
 from cfg import KBQAConfig
-from kbqa_utils import Expr, RawDataInstance
+from kbqa_utils import Expr, KBQADataInstance
 from dataset import loadWebQSP
 from solver import KBQASolver
 from trainer import KBQATrainer

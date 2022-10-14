@@ -31,7 +31,7 @@ class DefaultDataset(Dataset):
         return self.data[index]   
 
 
-class ExprDataInstance:
+class MathDataInstance:
     
     def __init__(
         self,

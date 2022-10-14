@@ -17,7 +17,7 @@ from typing import Dict, List, Any, AnyStr, Set, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from kbqa_utils import Expr, RawDataInstance, DataBatch, KBQADataset, DBClient
+from kbqa_utils import Expr, KBQADataInstance, DataBatch, KBQADataset, DBClient
 from cfg import KBQAConfig
 
 
@@ -620,5 +620,15 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin):
                 new_variable_states[i, variable_id, :].copy_(torch.mean(memory_states[i, indices, :], dim=0))
         return variable_states + new_variable_states
 
-    def decode(self):
-        ...
+    def decode(
+        self,
+        *args,
+        **kwargs
+    ) -> Tuple[Tensor, Tensor]:
+        return self.decoder(*args, **kwargs)
+    
+    def forward(self, batch: List) -> Tensor:
+        input_dict = self.prepare_input([I.parse_input() for I in batch])
+        labels, decoder_input_ids, mixin_id_ids, variable_id_ids, position_ids, variaboe_mask, batch_variable_rng = \
+            self.prepare_output([I.parse_output() for I in batch])
+        hidden_state, memory_states = self.encode(input_dict)

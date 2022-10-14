@@ -28,7 +28,7 @@ class Expr:
         return "([v{}] = {})".format(self.arg0, " ".join(self.tokens))
 
 
-class RawDataInstance:
+class KBQADataInstance:
     
     def __init__(
         self,
@@ -89,7 +89,7 @@ class KBQADataset(Dataset):
     
     def __init__(
         self, 
-        data: List[Union[RawDataInstance, TrainDataInstance]], 
+        data: List[Union[KBQADataInstance, TrainDataInstance]], 
         **kwargs
     ) -> None:
         # instances
@@ -98,7 +98,7 @@ class KBQADataset(Dataset):
     def __len__(self):
         return len(self.data)
     
-    def __getitem__(self, index) -> RawDataInstance:
+    def __getitem__(self, index) -> KBQADataInstance:
         return self.data[index]
 
 

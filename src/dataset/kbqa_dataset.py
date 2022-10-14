@@ -5,7 +5,7 @@ from torch.utils.data import Dataset
 from typing import Dict, AnyStr, List, Union, Tuple, Any, Optional
 from enum import Enum
 from collections import defaultdict
-from kbqa_utils import Expr, KBQADataset, RawDataInstance
+from kbqa_utils import Expr, KBQADataset, KBQADataInstance
 
 
 def loadWebQSP(path: AnyStr, head: Optional[int] = None) -> Dict[AnyStr, KBQADataset]:
@@ -34,7 +34,7 @@ def loadWebQSP(path: AnyStr, head: Optional[int] = None) -> Dict[AnyStr, KBQADat
                 for node in raw_item["graph_query"]["nodes"]:
                     types.append(node["class"])
                 relations = list(set(relations))
-                item = RawDataInstance(qid, query, S_expr, relations, answer)
+                item = KBQADataInstance(qid, query, S_expr, relations, answer)
                 data.append(item)
                 for rel in relations:
                     rel_dict[key].add(rel)
