@@ -507,8 +507,11 @@ class MathSolverTest(nn.Module):
         for i, quant_rng in enumerate(batch_quant_rng):
             for j in range(len(quant_rng)):
                 quant_id, left, right = quant_rng[j]
-                indices = list(range(left, right))
-                new_quant_states[i, quant_id, :].copy_(torch.mean(memory_states[i, indices, :], dim=0))
+                # indices = list(range(left, right))
+                # new_quant_states[i, quant_id, :].copy_(torch.mean(memory_states[i, indices, :], dim=0))
+                index = right - 1
+                new_quant_states[i, quant_id, :].copy_(memory_states[i, index, :])
+
         return quant_states + new_quant_states
 
     def decode(

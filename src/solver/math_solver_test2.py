@@ -125,7 +125,7 @@ class AttentionOutput(nn.Module):
         return output
 
 
-class CrossAttention(nn.Module):
+class Attention(nn.Module):
 
     def __init__(self,
         hidden_dim: int
@@ -175,7 +175,7 @@ class MathDecoder(nn.Module):
         self.quant_size = quant_size
         self.vocab_size = vocab_size
         
-        self.attn = CrossAttention(hidden_dim)
+        self.attn = Attention(hidden_dim)
         self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
         self.fix_states = nn.Embedding(vocab_size - quant_size, hidden_dim)
         
@@ -223,36 +223,12 @@ class MathDecoder(nn.Module):
         word_states, input_states = self.embedding(decoder_input_ids, quant_states)
         inter_states, output_hidden_state = self.gru(input_states, hidden_state.unsqueeze(dim=0))
 
-        # output_states = self.attn(inter_states, memory_states, attn_mask)
-        output_states = self.attn(inter_states, quant_states, vocab_mask[..., -self.cfg.quant_size:])
+        output_states = self.attn(inter_states, memory_states, attn_mask)
+        # output_states = self.attn(inter_states, quant_states, vocab_mask[..., -self.cfg.quant_size:])
         
         logits = self.compute_logits(output_states, word_states, vocab_mask)
         
         return logits, output_hidden_state.squeeze(dim=0)
-
-
-class MathRepresent(nn.Module):
-    
-    def __init__(self,
-        cfg: MathConfig,
-        quant_size: int,
-        vocab_size: int,
-        hidden_dim: int, 
-    ) -> None:
-        super().__init__()
-        self.cfg = cfg
-        self.quant_size = quant_size
-        self.vocab_size = vocab_size
-        
-        self.attn = CrossAttention(hidden_dim)
-        self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
-        self.fix_states = nn.Embedding(vocab_size - quant_size, hidden_dim)
-        
-        self.transform = nn.Sequential(
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.GELU(),
-            nn.LayerNorm(hidden_dim)
-        )
 
 
 class MathEncoder(nn.Module):

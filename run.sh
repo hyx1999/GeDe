@@ -4,7 +4,7 @@ set -e
 
 mod=${1}
 log='log:'${2}
-device=3
+device=2
 echo "mod: ${mod}"
 
 cd src
@@ -81,7 +81,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}'
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":250}'  # 250
 
 fi
 

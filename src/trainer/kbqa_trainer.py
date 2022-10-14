@@ -1,6 +1,6 @@
 import os
 import re
-from kbqa_utils import KBQADataset, DBClient, TrainDataInstance
+from kbqa_utils import KBQADataset, DBClient, KBQADataInstance
 from scheduler import GradualWarmupScheduler
 from solver import KBQASolver
 from cfg import KBQAConfig

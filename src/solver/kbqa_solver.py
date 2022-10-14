@@ -317,7 +317,7 @@ class KBQAEncoder(nn.Module):
         return encoder_outputs
 
 
-class RelationRanker(nn.Module):
+class SchemaRanker(nn.Module):
     
     def __init__(self,
         cfg: KBQAConfig
@@ -331,11 +331,11 @@ class RelationRanker(nn.Module):
     
     def forward(self,
         text_input: Dict[str, Tensor],
-        relation_input: Dict[str, Tensor],
+        schema_input: Dict[str, Tensor],
         label: Tensor
     ):
         text_states: Tensor = self.bert(**text_input).last_hidden_state          # [B, ..., H]
-        relation_states: Tensor = self.bert(**relation_input).last_hidden_state  # [B * L, ..., H]
+        relation_states: Tensor = self.bert(**schema_input).last_hidden_state  # [B * L, ..., H]
         
         text_states = text_states.select(1, 0)
         relation_states = relation_states.select(1, 0).view(*(label.shape + (-1,)))  # [B, L, H]
@@ -351,11 +351,11 @@ class RelationRanker(nn.Module):
     @torch.no_grad()
     def topk(self,
         text_input: Dict[str, Tensor],
-        relation_input: Dict[str, Tensor],
+        schema_input: Dict[str, Tensor],
         k: int
     ):
         text_states: Tensor = self.bert(**text_input).last_hidden_state          # [1, ..., H]
-        relation_states: Tensor = self.bert(**relation_input).last_hidden_state  # [L, ..., H]
+        relation_states: Tensor = self.bert(**schema_input).last_hidden_state  # [L, ..., H]
         
         text_states = text_states.select(1, 0).squeeze(0)  # [H]
         relation_states = relation_states.select(1, 0)     # [L, H]
@@ -460,15 +460,26 @@ class EncodeSchemaFnMixin:
         return relation_states, type_states
 
 
-class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin):
+class RankSchemaFnMixin:
+    
+    def rank(self, k: int):
+        ...
+
+
+class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchemaFnMixin):
     
     def __init__(self, 
         cfg: KBQAConfig,
+        candidate_relations: List[str],
+        candidate_types: List[str],
     ) -> None:
         super().__init__()
         self.cfg = cfg
+        self.candidate_relations = candidate_relations
+        self.candidate_types = candidate_types
+
         self.db = DBClient()
-        self.ranker = RelationRanker(cfg)
+        self.ranker = SchemaRanker(cfg) 
         
         self.lang_tokenizer = model_dict["tokenizer"][cfg.model_name].from_pretrained(
             cfg.model_name,
@@ -627,8 +638,11 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin):
     ) -> Tuple[Tensor, Tensor]:
         return self.decoder(*args, **kwargs)
     
-    def forward(self, batch: List) -> Tensor:
-        input_dict = self.prepare_input([I.parse_input() for I in batch])
+    def forward(self, batch: List[KBQADataInstance]) -> Tensor:
+        batch_question  = [I.parse_input()  for I in batch]
+        batch_el_result = [I.parse_el()     for I in batch]
+        batch_target    = [I.parse_output() for I in batch]
+        input_dict = self.prepare_input()
         labels, decoder_input_ids, mixin_id_ids, variable_id_ids, position_ids, variaboe_mask, batch_variable_rng = \
             self.prepare_output([I.parse_output() for I in batch])
         hidden_state, memory_states = self.encode(input_dict)

@@ -34,44 +34,45 @@ class KBQADataInstance:
         self,
         qid: str,
         query: str,
-        S_expr: str,  # target query graph
-        relations: List[str],
+        el_result: Dict[str, List[str]],
+        S_expr: str,
+        friendly_name: Dict[str, str],  # entity mid -> entity friendly name
         answer: List[str]
     ) -> None:
         self.qid = qid
         self.query = query
-        self.relations = relations
-        self.answer = answer
-        
-        self.parse(S_expr)
+        self.el_result = el_result
+                
+        self.parse_label(S_expr, friendly_name, answer)
 
-    def parse(self, S_expr: str):
-        exprs, ents = parse_S_expr(S_expr)
+    def parse_label(self, S_expr: str,friendly_name: Dict[str, str], answer: List[str]):
+        exprs, entities = parse_S_expr(S_expr)
         self.exprs: List[Expr] = exprs
-        self.ents: List[str] = ents
+        self.entities: List[str] = entities
+        self.friendly_name: Dict[str, str] = friendly_name
+        self.answer: List[str] = answer
 
-
-class TrainDataInstance:
+    def add_candidate_relations(self):
+        ...
     
-    def __init__(self,
-        query: str,
-        prefix: List[Expr],
-        target: Expr,
-        rels: List[str],
-        rev_rels: List[str]
-    ) -> None:
-        self.query = query
-        self.prefix = prefix
-        self.target = target
-        self.rels = rels
-        self.rev_rels = rev_rels
+    def add_candidate_types(self):
+        ...
+    
+    def parse_input(self):
+        ...
+    
+    def parse_output(self):
+        ...
+    
+    def parse_el(self):
+        ...
 
 
 class DataBatch:
     
     def __init__(
         self,
-        batch: List[TrainDataInstance]
+        batch: List[KBQADataInstance]
     ) -> None:
         self.batch = batch
         
@@ -89,7 +90,7 @@ class KBQADataset(Dataset):
     
     def __init__(
         self, 
-        data: List[Union[KBQADataInstance, TrainDataInstance]], 
+        data: List[KBQADataInstance], 
         **kwargs
     ) -> None:
         # instances
@@ -110,12 +111,12 @@ def parse_S_expr(S_expr: str) -> List[Expr]:
     exprs: List[Expr] = []
     tokens = [tok for tok in re.split(r"([\(\) ])", S_expr) if tok.strip() != ""]
     m_vars = {}
-    ents = []
+    entities = []
     stk  = []
     for tok in tokens:
         if is_entity(tok):
             m_vars[tok] = len(m_vars)
-            ents.append(tok)
+            entities.append(tok)
     for tok in tokens:
         tok = "{}".format(tok.strip())
         # if re.fullmatch("(?:JOIN)|(?:AND)|(?:CONS)|(?:TC)|(?:R)|(?:ARGMAX)|(?:ARGMIN)", tok):
@@ -143,7 +144,7 @@ def parse_S_expr(S_expr: str) -> List[Expr]:
             else:
                 stk.append("[v{}]".format(m_vars[tok]))
 
-    return exprs, ents
+    return exprs, entities
 
 
 def build_extra_tokens(

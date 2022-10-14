@@ -7,12 +7,21 @@ from enum import Enum
 from collections import defaultdict
 from kbqa_utils import Expr, KBQADataset, KBQADataInstance
 
+def loadWebQSP_el_result(path: str):
+    data_path = os.path.join(path, "el_result.json")
+    with open(data_path, "r") as f:
+        el_result = json.load(f)
+    return el_result
 
-def loadWebQSP(path: AnyStr, head: Optional[int] = None) -> Dict[AnyStr, KBQADataset]:
+
+def loadWebQSP(path: str, head: Optional[int] = None) -> Dict[str, KBQADataset]:
     dataset_dict: Dict[str, KBQADataset] = dict()
     rel_dict  = defaultdict(set)
     type_dict = defaultdict(set)
     max_edge_num = 0
+    
+    el_result = loadWebQSP_el_result(path)
+    
     for key in ["train", "test"]:
         data_path = os.path.join(path, "data", "webqsp_0107.{}.json".format(key))
         data = []
@@ -27,19 +36,24 @@ def loadWebQSP(path: AnyStr, head: Optional[int] = None) -> Dict[AnyStr, KBQADat
                 if S_expr is None:
                     filter_count += 1
                     continue
+                firendly_name = {
+                    node["id"]: node["friendly_name"] 
+                        for node in raw_item["graph_query"]["nodes"] if node["node_type"] == "entity"
+                }
+                item = KBQADataInstance(qid, query, el_result[qid], S_expr, firendly_name, answer)
+                data.append(item)
+
                 relations = []
                 types = []
                 for edge in raw_item["graph_query"]["edges"]:
                     relations.append(edge["relation"])
                 for node in raw_item["graph_query"]["nodes"]:
                     types.append(node["class"])
-                relations = list(set(relations))
-                item = KBQADataInstance(qid, query, S_expr, relations, answer)
-                data.append(item)
                 for rel in relations:
                     rel_dict[key].add(rel)
                 for cls in types:
                     type_dict[key].add(cls)
+
                 max_edge_num = max(max_edge_num, len(raw_item["graph_query"]["edges"]))
 
         if key == "train":
