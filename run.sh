@@ -26,7 +26,7 @@ fi
 if [[ ${mod} == "debug_svamp" ]];
 then
 
-    CUDA_VISIBLE_DEVICES=${device} python train_svamp.py \
+    CUDA_LAUNCH_BLOCKING=1 CUDA_VISIBLE_DEVICES=${device} python train_svamp.py \
         --model_type 'test' \
         --dataset_name 'svamp' \
         --log_text '(debug)' \
@@ -81,7 +81,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":250}'  # 250
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}'
 
 fi
 
