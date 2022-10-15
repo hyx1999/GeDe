@@ -35,55 +35,46 @@ class KBQADataInstance:
         qid: str,
         query: str,
         el_result: Dict[str, List[str]],
-        S_expr: str,
-        friendly_name: Dict[str, str],  # entity mid -> entity friendly name
-        answer: List[str]
+        lisp: str,
+        mid2name: Dict[str, str],  # entity mid -> entity friendly name
+        answer: List[str],
+        end: bool = True
     ) -> None:
         self.qid = qid
         self.query = query
         self.el_result = el_result
-                
-        self.parse_label(S_expr, friendly_name, answer)
-
-    def parse_label(self, S_expr: str,friendly_name: Dict[str, str], answer: List[str]):
-        exprs, entities = parse_S_expr(S_expr)
-        self.exprs: List[Expr] = exprs
-        self.entities: List[str] = entities
-        self.friendly_name: Dict[str, str] = friendly_name
+        self.lisp = lisp
+        self.mid2name: Dict[str, str] = mid2name
         self.answer: List[str] = answer
+        self.end = end
 
-    def add_candidate_relations(self):
-        ...
+        self.candidate_relations: List[str] = None
+        self.candidate_types: List[str] = None
+        self.target: List[Expr] = None
+        
+        self.parse_target(lisp, mid2name, answer)
+
+    def parse_target(self):
+        self.target = parse_target(self.lisp, self.mid2name, self.candidate_relations, self.candidate_types)
+
+    def add_candidate_relations(self, relations: List[str]):
+        self.candidate_relations = relations
     
-    def add_candidate_types(self):
-        ...
+    def add_candidate_types(self, types: List[str]):
+        self.candidate_types = types
     
     def parse_input(self):
-        ...
+        return self.query
     
-    def parse_output(self):
-        ...
-    
-    def parse_el(self):
-        ...
-
-
-class DataBatch:
-    
-    def __init__(
-        self,
-        batch: List[KBQADataInstance]
-    ) -> None:
-        self.batch = batch
-        
-        self.parse()
-    
-    def __len__(self):
-        return len(self.batch)
-
-    def parse(self):
-        self.batch_query = [I.query for I in self.batch]
-        self.batch_rels = [I.rels for I in self.batch]
+    def parse_output(self, bos_token: str, eos_token: str):
+        output_text = []
+        for expr in self.target:
+            output_text.extend(expr.tokens)
+            output_text.append(bos_token)
+        if self.end:
+            output_text[-1] = eos_token
+        output_text = " ".join(output_text)
+        return output_text
 
 
 class KBQADataset(Dataset):
@@ -103,24 +94,24 @@ class KBQADataset(Dataset):
         return self.data[index]
 
 
-def is_entity(token: str) -> bool:
-    return re.match("(?:m|g)\.", token) or token == 'Country'
-
-
-def parse_S_expr(S_expr: str) -> List[Expr]:
+def parse_target(lisp: str, mid2name: Dict[str, str], relations: List[str], types: List[str]) -> List[Expr]:
     exprs: List[Expr] = []
-    tokens = [tok for tok in re.split(r"([\(\) ])", S_expr) if tok.strip() != ""]
-    m_vars = {}
-    entities = []
-    stk  = []
+    entities = sorted(mid2name.values())
+    m_vars = {entity: index for index, entity in enumerate(entities)}
+    
+    rel2id = {rel: index for index, rel in enumerate(relations)}
+    tp2id = {tp: index for index, tp in enumerate(types)}
+
+    tokens = [tok for tok in re.split(r"([\(\) ])", lisp) if tok.strip() != ""]  # ['(', ')', ' ']
+    stk = []
     for tok in tokens:
-        if is_entity(tok):
-            m_vars[tok] = len(m_vars)
-            entities.append(tok)
-    for tok in tokens:
-        tok = "{}".format(tok.strip())
-        # if re.fullmatch("(?:JOIN)|(?:AND)|(?:CONS)|(?:TC)|(?:R)|(?:ARGMAX)|(?:ARGMIN)", tok):
-        #     tok = "[{}]".format(tok)
+        tok = tok.strip()
+        if tok in mid2name:
+            tok = mid2name[tok]
+        if tok in rel2id:
+            tok = "[r{}]".format(rel2id[tok])
+        if tok in tp2id:
+            tok = "[t{}]".format(tp2id[tok])
         if tok == '(':
             stk.append(tok)
         elif tok == ')':
@@ -144,7 +135,7 @@ def parse_S_expr(S_expr: str) -> List[Expr]:
             else:
                 stk.append("[v{}]".format(m_vars[tok]))
 
-    return exprs, entities
+    return exprs
 
 
 def build_extra_tokens(
@@ -157,7 +148,7 @@ def build_extra_tokens(
     for key in ["train", "dev"]:
         dataset = dataset_dict[key]
         for item in dataset.data:
-            for expr in item.exprs:
+            for expr in item.target:
                 for tok in expr.tokens:
                     if tok in rel_dict["train"] or tok in type_dict["train"]:
                         continue

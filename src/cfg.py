@@ -48,15 +48,11 @@ class KBQAConfig:
         self.device = "cuda:0"
         
         self.ext_tokens: List[str] = None
-        self.rels:  List[str] = None
-        self.types: List[str] = None
         
-        self.variable_size = 10
-        self.expr_size = 5
-        
+        self.variable_size = 20
+        self.expr_size     = 5
         self.relation_size = 100
         self.type_size     = 100
-        
-        self.bucket_size = 100
+        self.bucket_size   = 100
 
         self.__dict__.update(kwargs)

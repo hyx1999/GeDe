@@ -50,22 +50,9 @@ def get_args():
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--train_ranker", action="store_true")
+    parser.add_argument("--train_solver", action="store_true")
     return parser.parse_args()
-
-
-def train_solver(
-    args: argparse.Namespace,
-    cfg: KBQAConfig,
-    dataset_dict: List[Dict],
-    solver: KBQASolver,
-):
-    trainer = KBQATrainer(cfg, dataset_dict, solver)
-    trainer.cfg.dataset_name = args.dataset_name
-    trainer.cfg.debug = args.debug
-    trainer.train()
-    if args.save_model:
-        solver.save_model(args.save_model_dir, "final-webqsp")
-    logger.info("[finish train solver]")
 
 
 def main(args: argparse.Namespace):
@@ -75,20 +62,38 @@ def main(args: argparse.Namespace):
     logger.info("log_text: {}".format(args.log_text))
     
     cfg = KBQAConfig(**json.loads(args.cfg))
-    dataset_dict, rel_dict, type_dict = loadWebQSP(args.data_path, head=args.head)    
+    dataset_dict, rel_dict, type_dict = loadWebQSP(args.data_path, head=args.head)
 
     # extra_tokens = build_extra_tokens(dataset_dict, rel_dict, type_dict)
-    cfg.ext_tokens = ['AND', 'ARGMAX', 'ARGMIN', 'JOIN', 'NOW', 'R', 'TC'] + \
-        [f'[v{i}' for i in range(cfg.variable_size)]  # 'Country' ?
-    cfg.rels  = list(rel_dict["train"])
-    cfg.types = list(type_dict["train"])
+    cfg.ext_tokens = ['AND', 'ARGMAX', 'ARGMIN', 'JOIN', 'NOW', 'R', 'TC']   
+    cfg.relation_size = min(cfg.relation_size, len(rel_dict["train"]))
+    cfg.type_size = min(cfg.type_size, len(type_dict["train"]))
     
-    solver = KBQASolver(cfg, rel_dict["train"], type_dict["train"])
+    solver = KBQASolver(cfg, list(rel_dict["train"]), list(type_dict["train"]))
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     
-    train_solver(args, dataset_dict, solver)
+    trainer = KBQATrainer(cfg, dataset_dict, solver)
+    trainer.cfg.dataset_name = args.dataset_name
+    trainer.cfg.debug = args.debug
+    
+    if args.train_ranker:
+        trainer.train_ranker()
+        logger.info("[finish train ranker]")
+    else:
+        solver.ranker.load_model(args.save_model_dir, "final")
+    
+    # frozen ranker parameters
+    for p in solver.ranker.parameters():
+        p.requires_grad = False
+    
+    if args.train_solver:
+        trainer.train()
+        if args.save_model:
+            solver.save_model(args.save_model_dir, "final-webqsp")
+        logger.info("[finish train solver]")
+        logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 if __name__ == '__main__':

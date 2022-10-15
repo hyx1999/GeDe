@@ -37,7 +37,7 @@ def loadWebQSP(path: str, head: Optional[int] = None) -> Dict[str, KBQADataset]:
                     filter_count += 1
                     continue
                 firendly_name = {
-                    node["id"]: node["friendly_name"] 
+                    node["id"]: node["friendly_name"]
                         for node in raw_item["graph_query"]["nodes"] if node["node_type"] == "entity"
                 }
                 item = KBQADataInstance(qid, query, el_result[qid], S_expr, firendly_name, answer)
