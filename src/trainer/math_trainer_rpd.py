@@ -1,7 +1,7 @@
 import os
 import math
 import random
-from solver import MathSolverTest
+from solver import MathSolverRPD
 from scheduler import GradualWarmupScheduler
 from math_utils import DefaultDataset, compute_Expr_list
 from cfg import MathConfig
@@ -22,7 +22,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class MathTrainerTest:
+class MathTrainerRPD:
 
     def __init__(
         self, 
@@ -140,7 +140,7 @@ class MathTrainerTest:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolverTest):
+    def train(self, solver: MathSolverRPD):
         solver.to(self.cfg.device)
         
         dataset = DefaultDataset(self.train_dataset)
@@ -167,7 +167,7 @@ class MathTrainerTest:
 
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if epoch > self.cfg.num_epochs // 2 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")
@@ -178,7 +178,7 @@ class MathTrainerTest:
                     if not self.use_dev:
                         dev_acc = test_acc
                     
-                    if epoch >= 40 and (self.best_dev_acc is None or dev_acc >= self.best_dev_acc):
+                    if self.best_dev_acc is None or dev_acc >= self.best_dev_acc:
                         self.best_dev_acc = dev_acc
                         self.best_test_acc = test_acc
                 else:
@@ -188,7 +188,7 @@ class MathTrainerTest:
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolverTest,
+        solver: MathSolverRPD,
         optim: Union[Adam, AdamW],
         scheduler: LambdaLR,
         loader: DataLoader
@@ -230,7 +230,7 @@ class MathTrainerTest:
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolverTest,
+        solver: MathSolverRPD,
         test_data: List[Dict]
     ) -> float:
         solver.eval()

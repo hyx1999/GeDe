@@ -1,6 +1,6 @@
 from dataset import loadMAWPS
-from solver import MathSolverTest2, MathSolverTest
-from trainer import MathTrainerTest2, MathTrainerTest
+from solver import MathSolverRPE, MathSolverRPD
+from trainer import MathTrainerRPE, MathTrainerRPD
 from cfg import MathConfig
 
 import datetime
@@ -58,12 +58,12 @@ def train_solver(
     train_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolverTest2,
+    solver: MathSolverRPE,
 ):
-    if args.model_type == "test2":
-        trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
-    elif args.model_type == "test":
-        trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)
+    if args.model_type == "rpe":
+        trainer = MathTrainerRPE(cfg, train_dataset, test_dataset, use_dev=False)
+    elif args.model_type == "rpd":
+        trainer = MathTrainerRPD(cfg, train_dataset, test_dataset, use_dev=False)
     else:
         raise ValueError
     trainer.train(solver)
@@ -89,10 +89,10 @@ def main(args: argparse.Namespace):
         cfg.debug = args.debug
         cfg.const_quant_size = len(const_nums)
         
-        if args.model_type == "test2":
-            solver = MathSolverTest2(cfg)
-        elif args.model_type == "test":
-            solver = MathSolverTest(cfg)
+        if args.model_type == "rpe":
+            solver = MathSolverRPE(cfg)
+        elif args.model_type == "rpd":
+            solver = MathSolverRPD(cfg)
         else:
             raise ValueError
         

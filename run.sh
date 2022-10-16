@@ -12,7 +12,7 @@ cd src
 if [[ ${mod} == "train_svamp" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_svamp.py \
-        --model_type 'test' \
+        --model_type 'rpd' \
         --dataset_name 'svamp' \
         --log_text ${log} \
         --data_path '../data/SVAMP' \
@@ -27,7 +27,7 @@ if [[ ${mod} == "debug_svamp" ]];
 then
 
     CUDA_LAUNCH_BLOCKING=1 CUDA_VISIBLE_DEVICES=${device} python train_svamp.py \
-        --model_type 'test' \
+        --model_type 'rpd' \
         --dataset_name 'svamp' \
         --log_text '(debug)' \
         --data_path '../data/SVAMP' \
@@ -43,14 +43,14 @@ if [[ ${mod} == "train_mawps" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_mawps.py \
-        --model_type 'test' \
+        --model_type 'rpe' \
         --dataset_name 'mawps' \
         --log_text ${log} \
         --data_path '../data/MAWPS' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"max_step_size":5,"save_result":true,"num_epochs":100}'
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"max_step_size":5,"save_result":false,"num_epochs":100}'
 
 fi
 
@@ -58,13 +58,13 @@ if [[ ${mod} == "debug_mawps" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_mawps.py \
-        --model_type 'test' \
+        --model_type 'rpe' \
         --dataset_name 'mawps' \
         --log_text '(debug)' \
         --data_path '../data/MAWPS' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --cfg '{"model_name":"roberta-base","lr":1e-5,"max_step_size":5,"save_result":true,"num_epochs":100}' \
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"max_step_size":5,"save_result":false,"num_epochs":100}' \
         --head 1000 \
         --debug
 
@@ -74,14 +74,14 @@ if [[ ${mod} == "train_mathqa" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_mathqa.py \
-        --model_type 'test' \
+        --model_type 'rpe' \
         --dataset_name 'mathqa' \
         --log_text ${log} \
         --data_path '../data/MathQA' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}'
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}'
 
 fi
 
@@ -89,7 +89,7 @@ if [[ ${mod} == "debug_mathqa" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_mathqa.py \
-        --model_type 'test' \
+        --model_type 'rpe' \
         --dataset_name 'mathqa' \
         --log_text '(debug)' \
         --data_path '../data/MathQA' \

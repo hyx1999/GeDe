@@ -1,6 +1,6 @@
 from dataset import loadSVAMP
-from solver import MathSolverTest, MathSolverTest2
-from trainer import MathTrainerTest, MathTrainerTest2
+from solver import MathSolverRPD, MathSolverRPE
+from trainer import MathTrainerRPD, MathTrainerRPE
 from cfg import MathConfig
 
 import datetime
@@ -57,13 +57,13 @@ def train_solver(
     train_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: Union[MathSolverTest, MathSolverTest2],
+    solver: Union[MathSolverRPD, MathSolverRPE],
 ):
     # trainer = MathTrainer(cfg, train_dataset, test_dataset)
-    if args.model_type == "test2":
-        trainer = MathTrainerTest2(cfg, train_dataset, test_dataset, use_dev=False)
-    elif args.model_type == "test":
-        trainer = MathTrainerTest(cfg, train_dataset, test_dataset, use_dev=False)        
+    if args.model_type == "rpe":
+        trainer = MathTrainerRPE(cfg, train_dataset, test_dataset, use_dev=False)
+    elif args.model_type == "rpd":
+        trainer = MathTrainerRPD(cfg, train_dataset, test_dataset, use_dev=False)        
     else:
         raise ValueError
 
@@ -89,10 +89,10 @@ def main(args: argparse.Namespace):
     cfg.const_quant_size = len(const_nums)
 
     # solver = MathSolver(cfg, const_nums)
-    if args.model_type == "test2":
-        solver = MathSolverTest2(cfg)
-    elif args.model_type == "test":
-        solver = MathSolverTest(cfg)
+    if args.model_type == "rpe":
+        solver = MathSolverRPE(cfg)
+    elif args.model_type == "rpd":
+        solver = MathSolverRPD(cfg)
     else:
         raise ValueError
     

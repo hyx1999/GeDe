@@ -17,7 +17,7 @@ from typing import Dict, List, Any, AnyStr, Set, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from kbqa_utils import Expr, KBQADataInstance, DataBatch, KBQADataset, DBClient
+from kbqa_utils import Expr, KBQADataInstance, KBQADataset, DBClient
 from cfg import KBQAConfig
 
 
