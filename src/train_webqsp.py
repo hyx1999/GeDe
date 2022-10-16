@@ -2,7 +2,7 @@ from cfg import KBQAConfig
 from kbqa_utils import Expr, KBQADataInstance
 from dataset import loadWebQSP
 from solver import KBQASolver
-from trainer import KBQATrainer
+from trainer import KBQATrainerRPD
 from kbqa_utils import build_extra_tokens
 
 import datetime
@@ -74,7 +74,7 @@ def main(args: argparse.Namespace):
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     
-    trainer = KBQATrainer(cfg, dataset_dict, solver)
+    trainer = KBQATrainerRPD(cfg, dataset_dict, solver)
     trainer.cfg.dataset_name = args.dataset_name
     trainer.cfg.debug = args.debug
     

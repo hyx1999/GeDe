@@ -37,7 +37,9 @@ class KBQADataInstance:
         el_result: Dict[str, List[str]],
         lisp: str,
         mid2name: Dict[str, str],  # entity mid -> entity friendly name
-        answer: List[str],
+        answer: List[str] = None,
+        answer_relations: List[str] = None,
+        answer_types: List[str] = None,
         end: bool = True
     ) -> None:
         self.qid = qid
@@ -45,24 +47,31 @@ class KBQADataInstance:
         self.el_result = el_result
         self.lisp = lisp
         self.mid2name: Dict[str, str] = mid2name
-        self.answer: List[str] = answer
+        self.answer = answer
+        self.answer_relations = answer_relations
+        self.answer_types = answer_types
         self.end = end
 
         self.candidate_relations: List[str] = None
         self.candidate_types: List[str] = None
         self.target: List[Expr] = None
-        
-        self.parse_target(lisp, mid2name, answer)
+        self.tag = True
 
     def parse_target(self):
         self.target = parse_target(self.lisp, self.mid2name, self.candidate_relations, self.candidate_types)
+
+    def parse_target_relation_mask(self, rel2id: Dict[str, int]):
+        self.target_relation_mask = parse_target_relations(self.answer_relations, rel2id)
+    
+    def parse_target_type_mask(self, tp2id: Dict[str, int]):
+        self.target_type_mask = parse_target_types(self.answer_types, tp2id)
 
     def add_candidate_relations(self, relations: List[str]):
         self.candidate_relations = relations
     
     def add_candidate_types(self, types: List[str]):
         self.candidate_types = types
-    
+
     def parse_input(self):
         return self.query
     
@@ -136,6 +145,21 @@ def parse_target(lisp: str, mid2name: Dict[str, str], relations: List[str], type
                 stk.append("[v{}]".format(m_vars[tok]))
 
     return exprs
+
+def parse_target_relations(answer_relations: List[str], rel2id: Dict[str, str]) -> List[int]:
+    target_relations = [rel2id[r] for r in answer_relations]
+    target_relation_mask = [0] * len(rel2id)
+    for i in target_relations:
+        target_relation_mask[i] = 1
+    return target_relation_mask
+
+
+def parse_target_types(answer_types: List[str], tp2id: Dict[str, str]) -> List[int]:
+    target_types = [tp2id[r] for r in answer_types]
+    target_type_mask = [0] * len(tp2id)
+    for i in target_types:
+        target_type_mask[i] = 1
+    return target_type_mask
 
 
 def build_extra_tokens(

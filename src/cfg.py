@@ -43,7 +43,9 @@ class KBQAConfig:
 
         self.batch_size = 8
         self.num_epochs = 50
-        
+        self.lr = 2e-5
+        self.weight_decay = 1e-2
+
         self.debug = False
         self.device = "cuda:0"
         

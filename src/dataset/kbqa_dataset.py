@@ -40,9 +40,6 @@ def loadWebQSP(path: str, head: Optional[int] = None) -> Dict[str, KBQADataset]:
                     node["id"]: node["friendly_name"]
                         for node in raw_item["graph_query"]["nodes"] if node["node_type"] == "entity"
                 }
-                item = KBQADataInstance(qid, query, el_result[qid], S_expr, firendly_name, answer)
-                data.append(item)
-
                 relations = []
                 types = []
                 for edge in raw_item["graph_query"]["edges"]:
@@ -54,20 +51,22 @@ def loadWebQSP(path: str, head: Optional[int] = None) -> Dict[str, KBQADataset]:
                 for cls in types:
                     type_dict[key].add(cls)
 
-                max_edge_num = max(max_edge_num, len(raw_item["graph_query"]["edges"]))
+                max_edge_num = max(max_edge_num, len(raw_item["graph_query"]["edges"]))                
+                answer_relations = list(set(relations))
+                answer_types = list(set(types))
+                item = KBQADataInstance(
+                    qid, query, el_result[qid], S_expr, firendly_name, 
+                    answer=answer, 
+                    answer_relations=answer_relations, 
+                    answer_types=answer_types
+                )
+                data.append(item)
 
         if key == "train":
-            dev_indexs = np.random.choice(len(data), 100, replace=False).tolist()
-            train_indexs = [i for i in range(len(data)) if i not in dev_indexs]
-
-            train_data = [data[i] for i in train_indexs]
-            dev_data   = [data[i] for i in dev_indexs]
             print("filter_count: ", filter_count)
-            print("train: ", len(train_data))
-            print("dev: ", len(dev_data))
+            print("train: ", len(data))
             dataset_dict.update({
-                "train": train_data,
-                "dev": dev_data,
+                "train": data,
             })
         else:
             print("filter_count: ", filter_count)

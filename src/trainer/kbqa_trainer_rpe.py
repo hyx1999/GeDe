@@ -19,15 +19,15 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class KBQATrainer:
+class KBQATrainerRPE:
 
     def __init__(
         self, 
-        cfg_dict: Dict[AnyStr, Any],
+        cfg: KBQAConfig,
         dataset_dict: Dict[str, List[Dict[str, Any]]],
         solver: KBQASolver
     ) -> None:
-        self.cfg = KBQAConfig(**cfg_dict)
+        self.cfg = cfg
         self.dataset_dict = dataset_dict
         self.train_dataset: KBQADataset = None
         self.solver = solver
