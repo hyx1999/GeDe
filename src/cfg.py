@@ -56,5 +56,6 @@ class KBQAConfig:
         self.relation_size = 100
         self.type_size     = 100
         self.bucket_size   = 100
+        self.ranker_bucket_size = 100
 
         self.__dict__.update(kwargs)

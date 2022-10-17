@@ -4,7 +4,7 @@ set -e
 
 mod=${1}
 log='log:'${2}
-device=2
+device=3
 echo "mod: ${mod}"
 
 cd src
@@ -74,7 +74,7 @@ if [[ ${mod} == "train_mathqa" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_mathqa.py \
-        --model_type 'rpe' \
+        --model_type 'rpd' \
         --dataset_name 'mathqa' \
         --log_text ${log} \
         --data_path '../data/MathQA' \
@@ -89,13 +89,13 @@ if [[ ${mod} == "debug_mathqa" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_mathqa.py \
-        --model_type 'rpe' \
+        --model_type 'rpd' \
         --dataset_name 'mathqa' \
         --log_text '(debug)' \
         --data_path '../data/MathQA' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}' \
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}' \
         --head 100 \
         --debug
 

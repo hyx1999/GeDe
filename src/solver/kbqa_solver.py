@@ -239,8 +239,9 @@ class KBQADecoder(nn.Module):
             torch.cat((input_states,mixin_states), dim=-1)
         )
         inter_states, output_hidden_state = self.gru(input_states, hidden_state.unsqueeze(dim=0))
+        inter_states = self.var_attn(inter_states, variable_states, variable_mask)
         inter_states = self.mem_attn(inter_states, memory_states)
-        output_states = self.var_attn(inter_states, variable_states, variable_mask)
+        output_states = inter_states
 
         fix_mask = torch.ones(
             variable_mask.shape[:2] + (self.fix_vocab_size + relation_states.shape[1] + type_states.shape[1],), 
@@ -267,9 +268,7 @@ class KBQARepresenter(nn.Module):
         self.position_embedding = nn.Embedding(cfg.expr_size, hidden_dim)
 
         self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
-        self.self_attn = Attention(hidden_dim)
         self.mem_attn  = Attention(hidden_dim)
-        self.var_attn  = Attention(hidden_dim)
 
     def embedding(self,
         input_ids: Tensor, 
@@ -293,14 +292,12 @@ class KBQARepresenter(nn.Module):
         variable_states: Tensor,
         variable_mask: Tensor,
         memory_states: Tensor,
-        casual_mask: Tensor,
     ) -> Tensor:
         input_states = self.embedding(decoder_input_ids, relation_states, type_states, variable_states)
         input_states = input_states + self.position_embedding(position_ids) + self.variable_id_embedding(variable_id_ids)
-        # inter_states, _ = self.gru(input_states, hidden_state.unsqueeze(0))
-        inter_states = self.self_attn(input_states, input_states, casual_mask)
+        inter_states, _ = self.gru(input_states, hidden_state.unsqueeze(0))
         inter_states = self.mem_attn(inter_states, memory_states)
-        output_states = self.var_attn(inter_states, variable_states, variable_mask)
+        output_states = inter_states
         return output_states
 
 
@@ -363,7 +360,7 @@ class SchemaRanker(nn.Module):
         return loss
     
     @torch.no_grad()
-    def topk(self,
+    def compute_logits(self,
         text_input: Dict[str, Tensor],
         schema_input: Dict[str, Tensor],
         k: int
@@ -375,9 +372,8 @@ class SchemaRanker(nn.Module):
         relation_states = relation_states.select(1, 0)     # [L, H]
         
         logits = torch.einsum('h,jh->j', text_states, relation_states)
-        _, indices = torch.topk(logits, k)
         
-        return indices
+        return logits
 
 
 class EncodeEntityFnMixin:
@@ -485,14 +481,28 @@ class RankSchemaFnMixin:
         ranker: SchemaRanker = getattr(self, 'ranker')
         
         text_input = tokenizer(question, return_tensors="pt").to(cfg.device)
-        rel_input  = tokenizer(all_relations, return_tensors="pt", padding=True).to(cfg.device)
-        tp_input   = tokenizer(all_types    , return_tensors="pt", padding=True).to(cfg.device)
+        rel_logits = []
+        tp_logits  = []
+        for offset in range(0, len(all_relations), cfg.ranker_bucket_size):
+            bucket = all_relations[offset:offset+cfg.ranker_bucket_size]
+            rel_input = tokenizer(bucket, return_tensors="pt", padding=True).to(cfg.device)
+            logits = ranker.compute_logits(text_input, rel_input).view(-1)
+            rel_logits.append(logits)
+
+        for offset in range(0, len(all_types), cfg.ranker_bucket_size):
+            bucket = all_types[offset:offset+cfg.ranker_bucket_size]
+            tp_input = tokenizer(all_types    , return_tensors="pt", padding=True).to(cfg.device)
+            logits = ranker.compute_logits(text_input, tp_input).view(-1)
+            tp_logits.append(logits)
         
-        rel_indices = ranker.topk(text_input, rel_input, relation_k).view(-1).tolist()
-        tp_indices  = ranker.topk(text_input, tp_input , type_k    ).view(-1).tolist()
+        rel_logits = torch.stack(rel_logits, dim=0)
+        tp_logits  = torch.stack(tp_logits , dim=0)
+
+        _, rel_indices = torch.topk(rel_logits, k=relation_k)
+        _, tp_indices  = torch.topk(tp_logits , k=type_k    )
         
-        candidate_relations = [all_relations[i] for i in rel_indices]
-        candidate_types = [all_types[i] for i in tp_indices]
+        candidate_relations = [all_relations[i] for i in rel_indices.tolist()]
+        candidate_types = [all_types[i] for i in tp_indices.tolist()]
         return candidate_relations, candidate_types
 
 
@@ -511,7 +521,8 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
         self.db = DBClient()
         self.ranker = SchemaRanker(cfg) 
         
-        self.lang_tokenizer = model_dict["tokenizer"][cfg.model_name].from_pretrained(
+        TokenizerType = BertTokenizer
+        self.lang_tokenizer: TokenizerType = model_dict["tokenizer"][cfg.model_name].from_pretrained(
             cfg.model_name,
             cache_dir="../cache/model"            
         )
@@ -563,7 +574,6 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
         output_text: List[str],
         variable_num: List[int],
     ) -> Tuple[Tensor, Tensor, Tensor, Tensor, Tensor, Tensor, List[Tuple[int, int, int]]]:
-        MAX_VARIABLE_ID = 512
         batch_labels: List[List[int]] = self.logic_tokenizer(
             output_text, 
             padding=True,
@@ -577,7 +587,7 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
         shift_pt_labels[:, 1:].copy_(pt_labels[:, :-1])
         shift_pt_labels[:, 0] = self.logic_tokenizer.bos_token_id
         pt_labels[pt_labels == self.logic_tokenizer.pad_token_id] = -1
-        
+
         pt_mixin_id = torch.zeros_like(shift_pt_labels)
         pt_mixin_id.fill_(self.logic_tokenizer.null_token_id)
         for i in range(pt_mixin_id.shape[0]):
@@ -586,7 +596,7 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
                 if shift_pt_labels[i, j].item() == self.logic_tokenizer.bos_token_id:
                     pt_mixin_id[i, j] = self.logic_tokenizer.variable_id[variable_num[i] + delta]
                     delta += 1
-        
+
         batch_sep = []
         for labels in batch_labels:
             sep = []
@@ -607,7 +617,7 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
                 position.extend(list(range(x - last_x)))
                 variable_rng.append((variable_num[i] + j, last_x, x))
                 last_x = x
-            variable_id.extend([MAX_VARIABLE_ID] * (len(batch_labels[i]) - len(variable_id)))
+            variable_id.extend([0] * (len(batch_labels[i]) - len(variable_id)))
             position.extend([0] * (len(batch_labels[i]) - len(position)))
             batch_variable_id.append(variable_id)
             batch_position.append(position)
@@ -617,11 +627,8 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
         pt_range = torch.arange(self.cfg.quant_size, dtype=torch.long, device=self.cfg.device)\
             .expand(*(pt_variable_id.shape + (-1,)))  # [B, L, |Q|]
         pt_variable_mask = (pt_range < pt_variable_id.unsqueeze(-1))
-        pt_casual_mask = (pt_variable_id.unsqueeze(-1) >= pt_variable_id.unsqueeze(-2))
-
-        pt_variable_id[pt_variable_id == MAX_VARIABLE_ID] = 0
         
-        return pt_labels, shift_pt_labels, pt_mixin_id, pt_variable_id, pt_position, pt_variable_mask, pt_casual_mask, batch_variable_rng
+        return pt_labels, shift_pt_labels, pt_mixin_id, pt_variable_id, pt_position, pt_variable_mask, batch_variable_rng
 
     def encode(
         self, 
@@ -642,7 +649,6 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
         variable_states: Tensor,
         variable_mask: Tensor,
         memory_states: Tensor,
-        casual_mask: Tensor,
         batch_variable_rng: List[List[Tuple[int, int, int]]]
     ):
         memory_states = self.representer(
@@ -655,7 +661,6 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
             variable_states=variable_states,
             variable_mask=variable_mask,
             memory_states=memory_states,
-            casual_mask=casual_mask,
         )
         batch_size = decoder_input_ids.shape[0]
         new_variable_states = torch.zeros(
@@ -681,4 +686,3 @@ class KBQASolver(nn.Module, EncodeEntityFnMixin, EncodeSchemaFnMixin, RankSchema
         labels, decoder_input_ids, mixin_id_ids, variable_id_ids, position_ids, variaboe_mask, batch_variable_rng = \
             self.prepare_output([I.parse_output() for I in batch])
         hidden_state, memory_states = self.encode(input_dict)
-        

@@ -4,7 +4,7 @@ import math
 import random
 from solver import MathSolverRPE
 from scheduler import GradualWarmupScheduler
-from math_utils import DefaultDataset, compute_Expr_list
+from math_utils import MathDataset, compute_Expr_list
 from cfg import MathConfig
 from math_utils import MathDataInstance
 from transformers import get_linear_schedule_with_warmup
@@ -146,7 +146,7 @@ class MathTrainerRPE:
     def train(self, solver: MathSolverRPE):
         solver.to(self.cfg.device)
         
-        dataset = DefaultDataset(self.train_dataset)
+        dataset = MathDataset(self.train_dataset)
         shuffle_flag = not self.cfg.debug
         loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
 
@@ -244,7 +244,7 @@ class MathTrainerRPE:
         
         Acc  = []
 
-        test_dataset = DefaultDataset(test_data)
+        test_dataset = MathDataset(test_data)
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)

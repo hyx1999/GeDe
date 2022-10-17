@@ -224,7 +224,6 @@ class MathDecoder(nn.Module):
         inter_states, output_hidden_state = self.gru(input_states, hidden_state.unsqueeze(dim=0))
 
         output_states = self.attn(inter_states, memory_states, attn_mask)
-        # output_states = self.attn(inter_states, quant_states, vocab_mask[..., -self.cfg.quant_size:])
         
         logits = self.compute_logits(output_states, word_states, vocab_mask)
         

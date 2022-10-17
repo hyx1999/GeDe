@@ -270,8 +270,6 @@ class MathRepresenter(nn.Module):
         self.position_embedding = nn.Embedding(self.cfg.expr_size , hidden_dim)
 
         self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
-        # self.self_attn  = Attention(hidden_dim)
-
         self.mem_attn   = Attention(hidden_dim)
         self.quant_attn = Attention(hidden_dim)
 
@@ -293,15 +291,11 @@ class MathRepresenter(nn.Module):
         quant_states: Tensor,
         quant_mask: Tensor,
         memory_states: Tensor,
-        casual_mask: Tensor,
     ) -> Tensor:
         input_states = self.embedding(decoder_input_ids, quant_states)
         input_states = input_states + self.position_embedding(position_ids) + self.quant_id_embedding(quant_id_ids)
-
         inter_states, _ = self.gru(input_states, hidden_state.unsqueeze(0))
-        # inter_states  = self.self_attn(input_states, input_states, casual_mask)
-
-        inter_states  = self.mem_attn(inter_states, memory_states)
+        inter_states = self.mem_attn(inter_states, memory_states)
         output_states = self.quant_attn(inter_states, quant_states, quant_mask)
         return output_states
 
@@ -415,8 +409,7 @@ class MathSolverRPD(nn.Module):
         self, 
         output_text: List[str],
         quant_num: List[int],
-    ) -> Tuple[Tensor, Tensor, Tensor, Tensor, Tensor, Tensor, Tensor, List[Tuple[int, int, int]]]:
-        MAX_QUANT_ID = 512
+    ) -> Tuple[Tensor, Tensor, Tensor, Tensor, Tensor, Tensor, List[Tuple[int, int, int]]]:
         batch_labels: List[List[int]] = self.expr_tok(
             output_text, 
             padding=True,
@@ -460,7 +453,7 @@ class MathSolverRPD(nn.Module):
                 position.extend(list(range(x - last_x)))
                 quant_rng.append((quant_num[i] + j, last_x, x))
                 last_x = x
-            quant_id.extend([MAX_QUANT_ID] * (len(batch_labels[i]) - len(quant_id)))
+            quant_id.extend([0] * (len(batch_labels[i]) - len(quant_id)))
             position.extend([0] * (len(batch_labels[i]) - len(position)))
             batch_quant_id.append(quant_id)
             batch_position.append(position)
@@ -470,11 +463,8 @@ class MathSolverRPD(nn.Module):
         pt_range = torch.arange(self.cfg.quant_size, dtype=torch.long, device=self.cfg.device)\
             .expand(*(pt_quant_id.shape + (-1,)))  # [B, L, |Q|]
         pt_quant_mask = (pt_range < pt_quant_id.unsqueeze(-1))
-        pt_casual_mask = (pt_quant_id.unsqueeze(-1) >= pt_quant_id.unsqueeze(-2))
-
-        pt_quant_id[pt_quant_id == MAX_QUANT_ID] = 0
-
-        return pt_labels, shift_pt_labels, pt_mixin_id, pt_quant_id, pt_position, pt_quant_mask, pt_casual_mask, batch_quant_rng
+        
+        return pt_labels, shift_pt_labels, pt_mixin_id, pt_quant_id, pt_position, pt_quant_mask, batch_quant_rng
     
     def encode(
         self, 
@@ -500,7 +490,6 @@ class MathSolverRPD(nn.Module):
         quant_states: Tensor,
         quant_mask: Tensor,
         memory_states: Tensor,
-        casual_mask: Tensor,
         batch_quant_rng: List[List[Tuple[int, int, int]]]
     ):
         memory_states = self.representer(
@@ -510,7 +499,6 @@ class MathSolverRPD(nn.Module):
             quant_id_ids=quant_id_ids,
             quant_states=quant_states,
             quant_mask=quant_mask,
-            casual_mask=casual_mask,
             memory_states=memory_states,
         )
         batch_size = decoder_input_ids.shape[0]
@@ -519,9 +507,8 @@ class MathSolverRPD(nn.Module):
         for i, quant_rng in enumerate(batch_quant_rng):
             for j in range(len(quant_rng)):
                 quant_id, left, right = quant_rng[j]
-                indices = list(range(left, right - 1))
+                indices = list(range(left, right))
                 new_quant_states[i, quant_id, :].copy_(torch.mean(memory_states[i, indices, :], dim=0))
-
         return quant_states + new_quant_states
 
     def decode(
@@ -535,7 +522,7 @@ class MathSolverRPD(nn.Module):
         input_dict, quant_ids = self.prepare_input(
             [I.parse_input(sep_token="", use_expr=False) for I in batch]
         )
-        labels, decoder_input_ids, mixin_id_ids, quant_id_ids, position_ids, quant_mask, casual_mask, batch_quant_rng = \
+        labels, decoder_input_ids, mixin_id_ids, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
             self.prepare_output(
                 [I.parse_output(self.expr_tok.bos_token, self.expr_tok.eos_token) for I in batch],
                 [len(x) for x in quant_ids]
@@ -550,7 +537,6 @@ class MathSolverRPD(nn.Module):
             quant_states=quant_states,
             quant_mask=quant_mask,
             memory_states=memory_states,
-            casual_mask=casual_mask,
             batch_quant_rng=batch_quant_rng
         )
         
@@ -588,7 +574,7 @@ class MathSolverRPD(nn.Module):
 
         if len(expr_list) > 0:
             inter_text = " ".join(sum([expr.expr_toks + [self.expr_tok.bos_token] for expr in expr_list], []))
-            _, decoder_input_ids, _, quant_id_ids, position_ids, quant_mask, casual_mask, batch_quant_rng = \
+            _, decoder_input_ids, _, quant_id_ids, position_ids, quant_mask, batch_quant_rng = \
                 self.prepare_output([inter_text], [quant_num_init])
             quant_states = self.represent(
                 decoder_input_ids=decoder_input_ids,
@@ -598,7 +584,6 @@ class MathSolverRPD(nn.Module):
                 quant_states=quant_states,
                 quant_mask=quant_mask,
                 memory_states=memory_states,
-                casual_mask=casual_mask,
                 batch_quant_rng=batch_quant_rng
             )
 

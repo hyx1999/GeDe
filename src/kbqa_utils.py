@@ -55,6 +55,8 @@ class KBQADataInstance:
         self.candidate_relations: List[str] = None
         self.candidate_types: List[str] = None
         self.target: List[Expr] = None
+        self.generated_exprs: List[Expr] = None
+        self.next_expr: Expr = None
         self.tag = True
 
     def parse_target(self):
@@ -62,9 +64,11 @@ class KBQADataInstance:
 
     def parse_target_relation_mask(self, rel2id: Dict[str, int]):
         self.target_relation_mask = parse_target_relations(self.answer_relations, rel2id)
+        return self.target_relation_mask
     
     def parse_target_type_mask(self, tp2id: Dict[str, int]):
         self.target_type_mask = parse_target_types(self.answer_types, tp2id)
+        return self.target_type_mask
 
     def add_candidate_relations(self, relations: List[str]):
         self.candidate_relations = relations

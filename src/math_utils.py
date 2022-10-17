@@ -19,7 +19,7 @@ Op = namedtuple('Op', ['arg0', 'arg1', 'arg2', 'op'])  # $(arg0) = $(arg1) $(op)
 Expr = namedtuple('Expr', ['arg0', 'expr_toks', 'expr_str'])
 
 
-class DefaultDataset(Dataset):
+class MathDataset(Dataset):
     
     def __init__(self, data: List[Dict]) -> None:
         self.data = data

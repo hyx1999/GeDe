@@ -2,7 +2,7 @@ import os
 import math
 from solver import MathSolver
 from scheduler import GradualWarmupScheduler
-from math_utils import DefaultDataset, compute_Expr_list
+from math_utils import MathDataset, compute_Expr_list
 from cfg import MathConfig
 from math_utils import MathDataInstance
 
@@ -92,7 +92,7 @@ class MathTrainer:
         scheduler_steplr = StepLR(optim, step_size=self.cfg.scheduler_step_size, gamma=0.5)
         scheduler_warmup = GradualWarmupScheduler(optim, multiplier=1.0, total_epoch=5, after_scheduler=scheduler_steplr)
 
-        dataset = DefaultDataset(self.train_dataset)
+        dataset = MathDataset(self.train_dataset)
         shuffle_flag = not self.cfg.debug
         loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
 
@@ -169,7 +169,7 @@ class MathTrainer:
         
         Acc  = []
 
-        test_dataset = DefaultDataset(test_data)
+        test_dataset = MathDataset(test_data)
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)
