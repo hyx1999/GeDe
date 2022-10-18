@@ -167,8 +167,7 @@ class MathTrainerRPD:
 
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            # if epoch > self.cfg.num_epochs // 2 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
-            if epoch > 50 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if epoch > self.cfg.num_epochs // 2 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")

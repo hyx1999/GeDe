@@ -20,7 +20,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class KBQATrainerRPD:
+class KBQATrainer:
 
     def __init__(
         self, 

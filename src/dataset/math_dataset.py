@@ -1,5 +1,6 @@
 from copy import deepcopy
 import json
+import math
 import os
 import re
 import jieba
@@ -123,7 +124,7 @@ def preprocess(data: List[Dict]) -> List[Dict]:
     return obj_data
 
 
-def loadMath23K(data_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
+def loadMath23KRaw(data_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
     train_data = []
     test_data  = []
 
@@ -326,6 +327,83 @@ def loadMathQA(file_path: str, head: Optional[int] = None):
     pat_m = re.compile("m_(\d+)")
     
     def parse_num(x: str, nums_size: int) -> str:
+        m0 = pat_a.fullmatch(x)
+        if m0:
+            index = ord(m0.group(1)) - ord('a')
+            return '[num{}]'.format(index)
+        m1 = pat_m.fullmatch(x)
+        if m1:
+            index = nums_size + int(m1.group(1)) - 1
+            return '[num{}]'.format(index)
+        x = float(x)
+        if x not in const_nums:
+            const_nums.append(x)
+        return '[c{}]'.format(const_nums.index(x))
+    
+    for dataset, path in zip([train_dataset, dev_dataset, test_dataset], [train_path, dev_path, test_path]):
+        with open(path, "r") as f:
+            objs = json.loads(f.read())
+            for i, obj in enumerate(objs):
+                raw_text: str     = obj["text"]
+                nums: List[float] = obj["num_list"]
+                rank = [i for i in range(len(nums))]
+                rank.sort(key=lambda x: nums[x])
+                question = []
+                for token in raw_text.split():
+                    m = pat.match(token)
+                    if m:
+                        index = ord(m.group(1)) - ord('a')
+                        question.append("[num{}]".format(index))
+                        # question.append("[rk{}]".format(rank[index]))
+                    else:
+                        question.append(token)
+                question = " ".join(question)
+                expr_list = []
+                for raw_expr in obj["equation_layer"]:
+                    x: str  = raw_expr[0]
+                    y: str  = raw_expr[1]
+                    op: str = raw_expr[2]
+                    if op.endswith('_rev'):
+                        op = op.replace("_rev", "")
+                        x, y = y, x
+                    x = parse_num(x, len(nums))
+                    y = parse_num(y, len(nums))
+                    arg0 = len(nums) + len(expr_list)
+                    expr_list.append(Expr(arg0=arg0, expr_toks=[x, op, y], expr_str=" ".join([x, op, y])))
+                dataset.append({
+                    "sample_id": i,
+                    "raw_text": obj["text"],
+                    "seg_text": question,
+                    "nums": [str(x) for x in nums],
+                    "Expr_list": expr_list
+                })
+    const_nums = [str(x) for x in const_nums]
+    for obj in train_dataset + dev_dataset + test_dataset:
+        obj.update({"const_nums": const_nums})
+    
+    if head is not None and head != -1:
+        train_dataset = train_dataset[:head]
+        dev_dataset   = dev_dataset[:head]
+        test_dataset  = test_dataset[:head]
+    
+    return train_dataset, dev_dataset, test_dataset, const_nums
+
+
+def loadMath23K(file_path: str, head: Optional[int] = None):
+    train_path = os.path.join(file_path, "train.json")
+    dev_path   = os.path.join(file_path, "dev.json")
+    test_path  = os.path.join(file_path, "test.json")
+    train_dataset = []
+    dev_dataset   = []
+    test_dataset  = []
+    const_nums    = []
+    pat = re.compile("temp_([a-z])")
+    pat_a = re.compile("([a-z])")
+    pat_m = re.compile("m_(\d+)")
+    
+    def parse_num(x: str, nums_size: int) -> str:
+        if x == "PI":
+            x = str(math.pi)
         m0 = pat_a.fullmatch(x)
         if m0:
             index = ord(m0.group(1)) - ord('a')

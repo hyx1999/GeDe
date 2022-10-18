@@ -184,7 +184,7 @@ class MathTrainerRPE:
                     if not self.use_dev:
                         dev_acc = test_acc
                     
-                    if epoch >= 40 and (self.best_dev_acc is None or dev_acc >= self.best_dev_acc):
+                    if self.best_dev_acc is None or dev_acc >= self.best_dev_acc:
                         self.best_dev_acc = dev_acc
                         self.best_test_acc = test_acc
                 else:

@@ -1,4 +1,4 @@
-from dataset import loadMath23K
+from dataset import loadMath23KRaw, build_ext_words, join_const_nums, join_Expr_list
 from solver import MathSolverRPD, MathSolverRPE
 from trainer import MathTrainerRPD, MathTrainerRPE
 from cfg import MathConfig
@@ -49,30 +49,27 @@ def get_args():
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--expr_mode", type=str, default="v3")
     return parser.parse_args()
 
 
 def train_solver(
     args: argparse.Namespace,
     train_dataset: List[Dict],
-    dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: Union[MathSolverRPD, MathSolverRPE],
+    solver: Union[MathSolverRPE, MathSolverRPD],
 ):
-    # trainer = MathTrainer(cfg, train_dataset, test_dataset)
     if args.model_type == "rpe":
-        trainer = MathTrainerRPE(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+        trainer = MathTrainerRPE(cfg, train_dataset, test_dataset)
     elif args.model_type == "rpd":
-        trainer = MathTrainerRPD(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+        trainer = MathTrainerRPD(cfg, train_dataset, test_dataset)
     else:
         raise ValueError
-
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-mathqa")
+        solver.save_model(args.save_model_dir, "final-math23k")
     logger.info("[finish train solver]")
-    logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 def main(args: argparse.Namespace):
@@ -80,13 +77,17 @@ def main(args: argparse.Namespace):
         setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
-    logger.info("model type: {}".format(args.model_type))
     
-    train_dataset, dev_dataset, test_dataset, const_nums = loadMath23K(args.data_path, head=args.head)
-    
-    logger.info("train dataset size: {}".format(len(train_dataset)))
-    logger.info("test dataset size: {}".format(len(test_dataset)))
-    logger.info("dev dataset size: {}".format(len(dev_dataset)))
+    train_dataset, test_dataset = loadMath23KRaw(args.data_path, head=args.head)
+    ext_words = build_ext_words(train_dataset + test_dataset)
+
+    const_nums = [word for word in ext_words if word not in '+-*/^()=']
+    if '-1' not in const_nums:
+        const_nums.append('-1')
+    print(const_nums)
+
+    train_dataset = join_Expr_list(join_const_nums(train_dataset, const_nums), args.expr_mode)
+    test_dataset  = join_Expr_list(join_const_nums(test_dataset , const_nums), args.expr_mode)
     
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
@@ -94,10 +95,6 @@ def main(args: argparse.Namespace):
     cfg.const_quant_size = len(const_nums)
     cfg.ext_tokens = ['^']
     
-    logger.info("len(const_quant_size): {}".format(len(const_nums)))
-    logger.info("const_quants: {}".format(const_nums))
-
-    # solver = MathSolver(cfg, const_nums)
     if args.model_type == "rpe":
         solver = MathSolverRPE(cfg)
     elif args.model_type == "rpd":
@@ -105,10 +102,13 @@ def main(args: argparse.Namespace):
     else:
         raise ValueError
     
+    assert args.expr_mode == "v3"
+    print("expr-mode:", args.expr_mode)
+
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     
-    train_solver(args, train_dataset, dev_dataset, test_dataset, cfg, solver)
+    train_solver(args, train_dataset, test_dataset, cfg, solver)
 
 
 if __name__ == '__main__':
