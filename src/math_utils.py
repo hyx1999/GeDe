@@ -12,12 +12,13 @@ import random
 from collections import namedtuple
 from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 
-Tok = str
+Op = None
 
-Op = namedtuple('Op', ['arg0', 'arg1', 'arg2', 'op'])  # $(arg0) = $(arg1) $(op) $(arg2)
+Tok = str
 
 Expr = namedtuple('Expr', ['arg0', 'expr_toks', 'expr_str'])
 
+MultiExpr = namedtuple('MultiExpr', ['args', 'expr_toks', 'expr_str'])
 
 class MathDataset(Dataset):
     

@@ -16,6 +16,7 @@ class MathConfig:
         self.num_epochs = 500
         self.batch_size = 8
         self.lr = 2e-5
+        self.lr_alpha = 1.0
         self.weight_decay = 1e-2
         
         self.max_nums_size = 35
@@ -34,7 +35,7 @@ class MathConfig:
         
         self.__dict__.update(kwargs)
 
-
+"""
 class KBQAConfig:
 
     def __init__(self, **kwargs) -> None:
@@ -59,3 +60,4 @@ class KBQAConfig:
         self.ranker_bucket_size = 100
 
         self.__dict__.update(kwargs)
+"""

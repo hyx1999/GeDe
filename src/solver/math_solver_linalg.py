@@ -58,7 +58,7 @@ class ExprTokenizer:
         self.pad_token_id = 2
         self.tokens = \
             [self.bos_token, self.eos_token, self.pad_token] + \
-            ["+", "-", "*", "/"] + ext_tokens + \
+            ["Sum", "Mul", "MatMul", "MatSolve", "[", "]"] + ext_tokens + \
             [f"[c{i}]" for i in range(const_quant_size)] + \
             [f"[num{i}]" for i in range(quant_size)]
         self.token_id = {
@@ -248,7 +248,7 @@ class MathEncoder(nn.Module):
         return encoder_outputs
 
 
-class MathSolverRPE(nn.Module):
+class MathSolverLinalg(nn.Module):
     
     def __init__(
         self,
@@ -528,8 +528,6 @@ class MathSolverRPE(nn.Module):
                 tokens = self.expr_tok.convert_ids_to_tokens(beam.predict_ids)
                 if not grammar_test(tokens, max_length, self.expr_tok.bos_token, self.expr_tok.eos_token):
                     continue
-                if not constraint_test(tokens):  # common constraint
-                    continue
                 if not beam.end and tokens[-1] in [self.expr_tok.bos_token, self.expr_tok.eos_token]:
                     beam.end = True
                 filtered_beams.append(beam)
@@ -537,7 +535,6 @@ class MathSolverRPE(nn.Module):
             beams = sorted(beams, key=lambda b: b.score, reverse=True)[:beam_size]
 
         return beams
-
 
     @torch.no_grad()
     def beam_search(
@@ -638,40 +635,5 @@ class StatBeam:
 
 
 def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: str) -> bool:
-    if len(tokens) >= max_length and tokens[-1] not in [bos_token, eos_token]:
-        return False
-    end = tokens[-1] in [bos_token, eos_token]
-    if end:
-        tokens = tokens[:-1]
-    pat = re.compile("\[num\d+\]|\[c\d+\]")
-    n_stk = []
-    o_stk = []
-    try:
-        for i, tok in enumerate(tokens):
-            if pat.match(tok):
-                if i > 0 and tokens[i - 1] not in '+-*/^(':
-                    return False
-                n_stk.append('n')
-            elif tok in '+-*/^':
-                if i > 0 and tokens[i - 1] in '+-*/^(':
-                    return False
-                o_stk.append(tok)
-        if end:
-            while len(o_stk) > 0:
-                o_stk.pop()
-                n_stk.pop()
-                n_stk.pop()
-                n_stk.append('n')
-            if len(n_stk) != 1:
-                return False
-    except:
-        return False 
-    return True
-
-
-def constraint_test(tokens: List[Tok]):
-    if len(tokens) < 3:
-        return True
-    if tokens[0] == tokens[2] and tokens[1] in "-/^":
-        return False
+    ...
     return True

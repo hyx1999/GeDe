@@ -1,7 +1,6 @@
-from dataset import loadMathToy
-from solver import MathSolver
-from trainer import MathTrainer
-from math_utils import Expr
+from dataset import loadToyLinalg
+from solver import MathSolverLinalg
+from trainer import MathTrainerLinalg
 from cfg import MathConfig
 
 import datetime
@@ -55,15 +54,18 @@ def get_args():
 def train_solver(
     args: argparse.Namespace,
     train_dataset: List[Dict],
+    dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolver,
+    solver: MathSolverLinalg,
 ):
-    trainer = MathTrainer(cfg, train_dataset, test_dataset)
+    trainer = MathTrainerLinalg(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-mathtoy")
+        solver.save_model(args.save_model_dir, "final-mathqa")
     logger.info("[finish train solver]")
+    logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 def main(args: argparse.Namespace):
@@ -71,41 +73,25 @@ def main(args: argparse.Namespace):
         setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
+    logger.info("model type: {}".format(args.model_type))
     
-    train_dataset, test_dataset = loadMathToy(args.data_path, head=args.head)
-    const_nums = []
-
+    train_dataset, dev_dataset, test_dataset = loadToyLinalg(args.data_path, head=args.head)
+    
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
     cfg.debug = args.debug
-    solver = MathSolver(cfg, const_nums)
+    cfg.const_quant_size = 0
+    cfg.ext_tokens = []
     
-    if args.expr_mode == "v1":
-        for obj in train_dataset:
-            obj["Expr_list"] = obj["Expr_list0"]
-        for obj in test_dataset:
-            obj["Expr_list"] = obj["Expr_list0"]
-    else:
-        for obj in train_dataset:
-            obj["Expr_list"] = [obj["Expr_list1"]]
-        for obj in test_dataset:
-            obj["Expr_list"] = [obj["Expr_list1"]]
-    
-    for dataset in [train_dataset, test_dataset]:
-        for obj in dataset:
-            Expr_list = [
-                Expr(
-                    arg0=opseq_obj["arg0"],
-                    expr_toks=opseq_obj["expr_toks"],
-                    expr_str="".join(opseq_obj["expr_toks"])
-                ) for opseq_obj in obj["Expr_list"]
-            ]
-            obj["Expr_list"] = Expr_list
+    logger.info("len(const_quant_size): {}".format(0))
+    logger.info("const_quants: {}".format([]))
 
+    solver = MathSolverLinalg(cfg)
+    
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
     
-    train_solver(args, train_dataset, test_dataset, cfg, solver)
+    train_solver(args, train_dataset, dev_dataset, test_dataset, cfg, solver)
 
 
 if __name__ == '__main__':

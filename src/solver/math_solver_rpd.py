@@ -20,7 +20,7 @@ from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from math_utils import Op, Expr, Tok, MathDataInstance
+from math_utils import Expr, Tok, MathDataInstance
 from cfg import MathConfig
 
 

@@ -6,7 +6,7 @@ import re
 import jieba
 from typing import Any, AnyStr, Dict, List, Tuple, Optional
 from tqdm import tqdm
-from math_utils import Expr, \
+from math_utils import Expr, MultiExpr, \
     build_Expr_list_v1, build_Expr_list_v2, build_Expr_list_v3, \
     convert_const_nums
 
@@ -153,21 +153,32 @@ def loadMath23KRaw(data_path: str, head: Optional[int] = None) -> Tuple[List[Dic
     return train_data, test_data
 
 
-def loadMathToy(data_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
+def loadToyLinalg(file_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
     train_data = []
+    dev_data   = []
     test_data  = []
 
-    traindata_path = os.path.join(data_path, "train.json")
-    testdata_path = os.path.join(data_path, "test.json")
-    for data, path in zip([train_data, test_data], [traindata_path, testdata_path]):
+    train_path = os.path.join(file_path, "train.json")
+    dev_path   = os.path.join(file_path, "dev.json")
+    test_path  = os.path.join(file_path, "test.json")
+    for data, path in zip([train_data, dev_data, test_data], [train_path, dev_path, test_path]):
         with open(path, "r") as f:
             data.extend(json.load(f))
+        for obj in data:
+            obj["Expr_list"] = [
+                MultiExpr(
+                    args=expr_obj["args"],
+                    expr_toks=expr_obj["expr_toks"],
+                    expr_str="".join(expr_obj["expr_toks"])
+                ) for expr_obj in obj["Expr_list"]
+            ]
     
     if head is not None and head != -1:
         train_data = train_data[:head]
+        dev_data = dev_data[:head // 10]
         test_data = test_data[:head // 10]
 
-    return train_data, test_data
+    return train_data, dev_data, test_data
 
 
 def loadSVAMP(file_path: str, head: Optional[int] = None):
