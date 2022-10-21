@@ -37,10 +37,15 @@ def mat_to_toks(m: np.ndarray, quant_map: Dict[str, str]) -> List[str]:
         )
     return ["["] + res + ["]"]
 
+def shuffle(x: List) -> List:
+    x_copy = [i for i in x]
+    random.shuffle(x_copy)
+    return x_copy
+
 def genDAGInstance(id: str):
-    N = random.randint(2, 3)
-    M = random.randint(2, 3)
-    level = random.randint(2, 4)
+    N = random.randint(1, 2)
+    M = random.randint(1, 2)
+    level = random.randint(2, 3)
     init_num = rand_vec(N + M)
     transform_per_level = []
     for i in range(1, level):
@@ -66,39 +71,40 @@ def genDAGInstance(id: str):
     texts.append(" ".join(
         ["Given"] + \
         ["a_{} = {:.3f} ,".format(i, init_num[i]) for i in range(N + M)] + \
-        [f"S_0 is the sum of [a_0, a_1, ..., a_{N+M-1}] ."])
+        [f"S_0 is the sum of [a_0, ..., a_{N+M-1}] ."])
     )
     for i in range(1, level):
         T: Transform = transform_per_level[i - 1]
         prev_index = (i - 1) * (N + M)
         index = i * (N + M)
         
-        texts_i = ["Let"]
+        texts_i = []
         for x in range(N):
             if T.inv0:
                 texts_i.append(
                     f"a_{prev_index + T.indices0[x]} = " + \
-                    " + ".join([f"{T.mat0[x, y]:.3f} * b_{index + y}" for y in range(N)]) + " , "
+                    " + ".join(shuffle([f"{T.mat0[x, y]:.3f} * b_{index + y}" for y in range(N)])) + " , "
                 )
             else:
                 texts_i.append(
                     f"b_{index + x} = " + \
-                    " + ".join([f"{T.mat0[x, y]:.3f} * a_{prev_index + T.indices0[y]}" for y in range(N)]) + " , "
+                    " + ".join(shuffle([f"{T.mat0[x, y]:.3f} * a_{prev_index + T.indices0[y]}" for y in range(N)])) + " , "
                 )
 
         for x in range(M):
             if T.inv1:
                 texts_i.append(
                     f"a_{prev_index + T.indices1[x]} = " + \
-                    " + ".join([f"{T.mat1[x, y]:.3f} * b_{index + N + y}" for y in range(M)]) + " , "
+                    " + ".join(shuffle([f"{T.mat1[x, y]:.3f} * b_{index + N + y}" for y in range(M)])) + " , "
                 )
             else:
                 texts_i.append(
                     f"b_{index + N + x} = " + \
-                    " + ".join([f"{T.mat1[x, y]:.3f} * a_{prev_index + T.indices1[y]}" for y in range(M)]) + " , "
+                    " + ".join(shuffle([f"{T.mat1[x, y]:.3f} * a_{prev_index + T.indices1[y]}" for y in range(M)])) + " , "
                 )
-        texts_i.append(f"[a_{index}, a_{index+1}, ..., a_{index+N+M-1}] equal to [b_{index}, b_{index+1}, ..., b_{index+N+M-1}] multiply S_{i-1} ,")
-        texts_i.append(f"S_{i} is the sum of [a_{index}, a_{index+1}, ..., a_{index+N+M-1}] .")
+        texts_i = shuffle(texts_i)
+        texts_i.append(f"[a_{index}, ..., a_{index+N+M-1}] equal to [b_{index}, ..., b_{index+N+M-1}] multiply S_{i-1} ,")
+        texts_i.append(f"S_{i} is the sum of [a_{index}, ..., a_{index+N+M-1}] .")
         texts.append(" ".join(texts_i))
     texts.append(f"find the value of S_{level - 1} .")
     
@@ -206,7 +212,7 @@ test_path = os.path.join(folder_path, "test.json")
 # print(json.dumps(obj, indent=4))
 # exit(0)
 
-for path, num in zip([train_path, dev_path, test_path], [1000, 100, 100]):
+for path, num in zip([train_path, dev_path, test_path], [500, 100, 100]):
     data = [genDAGInstance(str(_)) for _ in tqdm(range(num), total=num)]
     with open(path, "w") as f:
         f.write(json.dumps(data, ensure_ascii=False))

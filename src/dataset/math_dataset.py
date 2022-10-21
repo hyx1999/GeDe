@@ -164,6 +164,8 @@ def loadToyLinalg(file_path: str, head: Optional[int] = None) -> Tuple[List[Dict
     for data, path in zip([train_data, dev_data, test_data], [train_path, dev_path, test_path]):
         with open(path, "r") as f:
             data.extend(json.load(f))
+        # print(json.dumps(data[0], indent=4))
+        # exit(0)
         for obj in data:
             obj["Expr_list"] = [
                 MultiExpr(

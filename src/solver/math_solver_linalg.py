@@ -62,6 +62,7 @@ class ExprTokenizer:
             ["Sum", "Mul", "MatMul", "MatSolve", "[", "]", ","] + ext_tokens + \
             [f"[c{i}]" for i in range(const_quant_size)] + \
             [f"[num{i}]" for i in range(quant_size)]
+        self.sorted_tokens = sorted(self.tokens, key=lambda x: len(x), reverse=True)
         self.token_id = {
             token: index for index, token in enumerate(self.tokens)
         }
@@ -71,6 +72,7 @@ class ExprTokenizer:
         batch_text: List[str], 
         padding: bool = True
     ) -> List[List[int]]:
+        # print(batch_text)
         batch_result: List[List[int]] = []
         for text in batch_text:
             result = []
@@ -81,7 +83,7 @@ class ExprTokenizer:
                     index += 1
                     continue
                 match_token = None
-                for token in self.tokens:   # 按理说需要按照长度排序, 这里没有单词是前缀的情况
+                for token in self.sorted_tokens:
                     if text[index:index + len(token)] == token:
                         match_token = token
                         index += len(token)
@@ -296,11 +298,9 @@ class MathSolverLinalg(nn.Module):
         if ext_tokens is None:
             ext_tokens = []
         tokens = \
-            ["+", "-", "*", "/"] + ext_tokens + \
-            ['[int]', '[float]', '[frac]', '[perc]'] + \
+            ["Sum", "Mul", "MatMul", "MatSolve", "[", "]", ","] + ext_tokens + \
             [f"[c{i}]"   for i in range(self.cfg.const_quant_size)] + \
-            [f"[num{i}]" for i in range(self.cfg.quant_size)] + \
-            [f'[rk{i}]'  for i in range(self.cfg.quant_size)]
+            [f"[num{i}]" for i in range(self.cfg.quant_size)]
         self.lang_tok.add_tokens(tokens)
 
         self.quant_tokens_id = list(self.lang_tok.convert_tokens_to_ids(

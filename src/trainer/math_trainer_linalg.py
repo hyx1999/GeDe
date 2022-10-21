@@ -4,7 +4,7 @@ import math
 import random
 from solver import MathSolverLinalg
 from scheduler import GradualWarmupScheduler
-from math_utils import LinalgDataInstance, compute_MultiExpr_list
+from math_utils import LinalgDataInstance, MathDataset, compute_MultiExpr_list
 from cfg import MathConfig
 from math_utils import LinalgDataInstance
 from transformers import get_linear_schedule_with_warmup
@@ -89,7 +89,7 @@ class MathTrainerLinalg:
     def train(self, solver: MathSolverLinalg):
         solver.to(self.cfg.device)
         
-        dataset = LinalgDataInstance(self.train_dataset)
+        dataset = MathDataset(self.train_dataset)
         shuffle_flag = not self.cfg.debug
         loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
 
@@ -116,7 +116,7 @@ class MathTrainerLinalg:
                 
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            if epoch > self.cfg.num_epochs // 2 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")
@@ -187,7 +187,7 @@ class MathTrainerLinalg:
         
         Acc  = []
 
-        test_dataset = LinalgDataInstance(test_data)
+        test_dataset = MathDataset(test_data)
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)

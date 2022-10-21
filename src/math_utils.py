@@ -99,7 +99,7 @@ class LinalgDataInstance:
             for expr in self.expr_list:
                 input_text.append(sep_token)
                 input_text.append("{} = {}"\
-                    .format(" ".join(expr.args), " ".join(expr.expr_toks)))
+                    .format(" ".join([f"[num{i}]" for i in expr.args]), " ".join(expr.expr_toks)))
         input_text = " ".join(input_text)
         return input_text
 

@@ -73,7 +73,6 @@ def main(args: argparse.Namespace):
         setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
-    logger.info("model type: {}".format(args.model_type))
     
     train_dataset, dev_dataset, test_dataset = loadToyLinalg(args.data_path, head=args.head)
     

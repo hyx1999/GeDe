@@ -175,7 +175,7 @@ then
     CUDA_VISIBLE_DEVICES=${device} python train_toylinalg.py \
         --dataset_name 'toylinalg' \
         --log_text ${log} \
-        --data_path '../data/Math23K' \
+        --data_path '../data/ToyLinalg' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
@@ -189,10 +189,10 @@ then
     CUDA_VISIBLE_DEVICES=${device} python train_toylinalg.py \
         --dataset_name 'toylinalg' \
         --log_text '(debug)' \
-        --data_path '../data/Math23K' \
+        --data_path '../data/ToyLinalg' \
         --load_model_dir 'models_test' \
         --save_model_dir 'models_test' \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100}' \
+        --cfg '{"model_name":"roberta-base","num_epochs":20,"lr":2e-5,"quant_size":100}' \
         --head 1000 \
         --debug
 fi
