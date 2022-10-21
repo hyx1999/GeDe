@@ -73,6 +73,47 @@ class MathDataInstance:
         return output_text
 
 
+class LinalgDataInstance:
+    
+    def __init__(
+        self,
+        question: str,
+        nums: List[str],
+        const_nums: List[str],
+        expr_list: List[MultiExpr],
+        target: Optional[List[MultiExpr]] = None,
+        id: Optional[int] = None,
+        end: bool = True
+    ) -> None:
+        self.question = question
+        self.nums = nums
+        self.const_nums = const_nums
+        self.expr_list = expr_list
+        self.target = target
+        self.id = id
+        self.end = end
+    
+    def parse_input(self, sep_token: str, use_expr: bool = True) -> str:
+        input_text = [self.question]
+        if use_expr:
+            for expr in self.expr_list:
+                input_text.append(sep_token)
+                input_text.append("{} = {}"\
+                    .format(" ".join(expr.args), " ".join(expr.expr_toks)))
+        input_text = " ".join(input_text)
+        return input_text
+
+    def parse_output(self, bos_token: str, eos_token: str) -> str:
+        output_text = []
+        for expr in self.target:
+            output_text.extend(expr.expr_toks)
+            output_text.append(bos_token)
+        if self.end:
+            output_text[-1] = eos_token
+        output_text = " ".join(output_text)
+        return output_text
+
+
 def convert_const_nums(seg_expr: List[Tok], const_nums: List[str]) -> int:
     new_seg_expr: List[str] = []
     for tok in seg_expr:
@@ -401,6 +442,28 @@ def compute_Expr_list(Expr_list: List[Expr], nums: List[str], const_nums: List[s
         logger.warning("decimal.Error: {}".format(Expr_list))
         return None
     return nums_table[Expr_list[-1].arg0] if len(Expr_list) > 0 else None
+
+
+def compute_MultiExpr_list(Expr_list: List[MultiExpr], nums: List[str], const_nums: List[str], max_nums_size: int):
+    if Expr_list is None:
+        return None
+    
+    nums = [parse_value(x) for x in nums]
+    nums_table = nums + [0.0] * (max_nums_size - len(nums))
+
+    const_nums = [parse_value(x) for x in const_nums]
+
+    def do_OpSeq(expr_toks: List[Tok]):
+        # print("expr_tokens:", expr_toks)
+        ...
+
+    try:
+        for expr in Expr_list:
+            nums_table[expr.arg0] = do_OpSeq(expr.expr_toks)
+    except:
+        logger.warning("decimal.Error: {}".format(Expr_list))
+        return None
+    return nums_table[Expr_list[-1].args[0]] if len(Expr_list) > 0 else None
 
 
 """

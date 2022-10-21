@@ -2,11 +2,11 @@ import json
 import os
 import math
 import random
-from solver import MathSolverRPE
+from solver import MathSolverLinalg
 from scheduler import GradualWarmupScheduler
-from math_utils import MathDataset, compute_Expr_list
+from math_utils import LinalgDataInstance, compute_MultiExpr_list
 from cfg import MathConfig
-from math_utils import MathDataInstance
+from math_utils import LinalgDataInstance
 from transformers import get_linear_schedule_with_warmup
 
 import numpy as np
@@ -47,14 +47,6 @@ class MathTrainerLinalg:
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
-    
-    def augment_data(self):
-        logger.info("data augumentation[shuffle,mix]")
-        shuffle_train_dataset = self.add_shuffle(self.raw_dataset["raw_train"])
-        mix_train_dataset = self.add_mix(self.raw_dataset["raw_train"])
-        self.raw_dataset["train"] = deepcopy(self.raw_dataset["raw_train"])
-        self.raw_dataset["train"].extend(shuffle_train_dataset)
-        self.raw_dataset["train"].extend(mix_train_dataset)
 
     def split_data(self):
         raw_train_dataset = self.raw_dataset["train"]
@@ -69,58 +61,7 @@ class MathTrainerLinalg:
         self.raw_dataset["train"] = train_dataset
         self.raw_dataset["dev"] = dev_dataset
 
-    def add_shuffle(self, data: List[Dict], num: int = 5000):
-        num = min(num, len(data))
-        indices = np.random.choice(range(len(data)), num, replace=False)
-        data = [data[i] for i in indices]
-        new_data = []
-        for obj in data:
-            obj = deepcopy(obj)
-            text: str = obj["seg_text"]
-            seg_text = text.split(".")
-            seg_text, q_text = seg_text[:-1], seg_text[-1:]
-            random.shuffle(seg_text)
-            seg_text = ".".join(seg_text + q_text)
-            obj["id"] = -1
-            obj["seg_text"] = seg_text
-            new_data.append(obj)
-        return new_data
-
-    def add_mix(self, data: List[Dict], num: int = 5000):
-        num = min(num, len(data))
-        indices1 = np.random.choice(range(len(data)), num, replace=False)
-        indices2 = np.random.choice(range(len(data)), num, replace=False)
-        new_data = []
-        for i, j in zip(indices1, indices2):
-            if i == j:
-                continue
-            obj1 = data[i]
-            obj2 = data[j]
-            nums_size1 = len(obj1["nums"])
-            nums_size2 = len(obj2["nums"])
-            text1: str = obj1["seg_text"]
-            text2: str = obj2["seg_text"]
-            for i in range(nums_size2 - 1, -1, -1):
-                text2 = text2.replace(f"[num{i}]", f"[num{i+nums_size1}]")
-            seg_text1 = text1.split(".")
-            seg_text2 = text2.split(".")
-            ctx = seg_text1[:-1] + seg_text2[:-1]
-            q_text = seg_text1[-1:]
-            random.shuffle(ctx)
-            text = ".".join(ctx + q_text)
-            nums = obj1["nums"] + obj2["nums"]
-            obj = {
-                "id": -2,
-                "sample_id": obj1["sample_id"],
-                "seg_text": text,
-                "nums": nums,
-                "const_nums": obj1["const_nums"],
-                "Expr_list": obj1["Expr_list"]
-            }
-            new_data.append(obj)
-        return new_data
-
-    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[MathDataInstance]:
+    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[LinalgDataInstance]:
         new_dataset = []
         for obj in dataset:
             question = "".join(obj["seg_text"])
@@ -128,7 +69,7 @@ class MathTrainerLinalg:
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
             for i in range(len(expr_list)):
-                new_dataset.append(MathDataInstance(
+                new_dataset.append(LinalgDataInstance(
                     question=question,
                     nums=nums,
                     const_nums=const_nums,
@@ -145,10 +86,10 @@ class MathTrainerLinalg:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolverRPE):
+    def train(self, solver: MathSolverLinalg):
         solver.to(self.cfg.device)
         
-        dataset = MathDataset(self.train_dataset)
+        dataset = LinalgDataInstance(self.train_dataset)
         shuffle_flag = not self.cfg.debug
         loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
 
@@ -197,7 +138,7 @@ class MathTrainerLinalg:
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolverRPE,
+        solver: MathSolverLinalg,
         optim: Union[Adam, AdamW],
         scheduler: LambdaLR,
         loader: DataLoader
@@ -239,14 +180,14 @@ class MathTrainerLinalg:
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolverRPE,
+        solver: MathSolverLinalg,
         test_data: List[Dict]
     ) -> float:
         solver.eval()
         
         Acc  = []
 
-        test_dataset = MathDataset(test_data)
+        test_dataset = LinalgDataInstance(test_data)
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)
@@ -258,37 +199,30 @@ class MathTrainerLinalg:
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
-            # if self.cfg.debug:
-            #     print(">")
-            #     print("target:", [" ".join(x.expr_toks) for x in obj["Expr_list"]])
-            # output_Expr_list = solver.generate(input_text, nums, const_nums)
             output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
             target_Expr_list = obj["Expr_list"]
 
-            try:
-                output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.max_nums_size)
-                target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.max_nums_size)
-            except SyntaxError:
-                output_value = None
-                target_value = None
-            eps = 1e-5
+            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
+            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
 
-            # TEST USE
-            # if i < 20:
-            #     logger.info("i: {}".format(i))
-            #     logger.info("input_text: {}".format(input_text))
-            #     logger.info("output_Op_list: {}".format(output_Expr_list))
-            #     logger.info("target_Op_list: {}".format(target_Expr_list))
-            #     logger.info("output_value: {}".format(output_value))
-            #     logger.info("target_value: {}".format(target_value))
+            # try:
+            #     output_value = compute_MultiExpr_list(output_Expr_list, nums, const_nums, self.cfg.max_nums_size)
+            #     target_value = compute_MultiExpr_list(target_Expr_list, nums, const_nums, self.cfg.max_nums_size)
+            # except SyntaxError:
+            #     output_value = None
+            #     target_value = None
+            # eps = 1e-5
 
-            if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
+            # if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
+            #     Acc.append(1)
+            # else:
+            #     Acc.append(0)
+            
+            if " ".join(expr_list0) == " ".join(expr_list1):
                 Acc.append(1)
             else:
                 Acc.append(0)
             
-            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
-            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
             if self.cfg.save_result:
                 f.write("id: {}\n".format(i))
                 f.write("input={}\n".format(input_text))

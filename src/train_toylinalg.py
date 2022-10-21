@@ -63,7 +63,7 @@ def train_solver(
 
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-mathqa")
+        solver.save_model(args.save_model_dir, "final-linalg")
     logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
 

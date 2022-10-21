@@ -38,9 +38,9 @@ def mat_to_toks(m: np.ndarray, quant_map: Dict[str, str]) -> List[str]:
     return ["["] + res + ["]"]
 
 def genDAGInstance(id: str):
-    N = random.randint(3, 3)
-    M = random.randint(3, 3)
-    level = random.randint(4, 4)
+    N = random.randint(2, 3)
+    M = random.randint(2, 3)
+    level = random.randint(2, 4)
     init_num = rand_vec(N + M)
     transform_per_level = []
     for i in range(1, level):
@@ -95,7 +95,7 @@ def genDAGInstance(id: str):
             else:
                 texts_i.append(
                     f"b_{index + N + x} = " + \
-                    " + ".join([f"{T.mat1[x, y]:.3f} * a_{prev_index + T.indices0[y]}" for y in range(M)]) + " , "
+                    " + ".join([f"{T.mat1[x, y]:.3f} * a_{prev_index + T.indices1[y]}" for y in range(M)]) + " , "
                 )
         texts_i.append(f"[a_{index}, a_{index+1}, ..., a_{index+N+M-1}] equal to [b_{index}, b_{index+1}, ..., b_{index+N+M-1}] multiply S_{i-1} ,")
         texts_i.append(f"S_{i} is the sum of [a_{index}, a_{index+1}, ..., a_{index+N+M-1}] .")
@@ -128,7 +128,7 @@ def genDAGInstance(id: str):
 
     expr_list.append({
         "args": [quant_offset],
-        "expr_toks": ["Sum", "["] + [f"[num{x}]" for x in range(N + M)] + ["]"]
+        "expr_toks": ["Sum", "[", "["] + [f"[num{x}]" for x in range(N + M)] + ["]", "]"]
     })
     var_map[f"S_0"] = f"[num{quant_offset}]"
     quant_offset += len(expr_list[-1]["args"])
@@ -180,7 +180,7 @@ def genDAGInstance(id: str):
 
         expr_list.append({
             "args": [quant_offset],
-            "expr_toks": ["Sum", "["] + [var_map["a_{}".format(index + x)] for x in range(N + M)] + ["]"]
+            "expr_toks": ["Sum", "[", "["] + [var_map["a_{}".format(index + x)] for x in range(N + M)] + ["]", "]"]
         })
         var_map[f"S_{i}"] = f"[num{quant_offset}]"
         quant_offset += len(expr_list[-1]["args"])
@@ -202,9 +202,9 @@ train_path = os.path.join(folder_path, "train.json")
 dev_path = os.path.join(folder_path, "dev.json")
 test_path = os.path.join(folder_path, "test.json")
 
-obj = genDAGInstance('test')
-print(json.dumps(obj, indent=4))
-exit(0)
+# obj = genDAGInstance('test')
+# print(json.dumps(obj, indent=4))
+# exit(0)
 
 for path, num in zip([train_path, dev_path, test_path], [1000, 100, 100]):
     data = [genDAGInstance(str(_)) for _ in tqdm(range(num), total=num)]

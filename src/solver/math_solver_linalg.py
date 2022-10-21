@@ -1,5 +1,6 @@
 # math solver with multidecoder
 
+from lib2to3.pgen2 import token
 import re
 import random
 import numpy as np
@@ -20,7 +21,7 @@ from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from math_utils import Expr, Tok, MathDataInstance
+from math_utils import Expr, Tok, LinalgDataInstance, parse_num_index
 from cfg import MathConfig
 
 
@@ -58,7 +59,7 @@ class ExprTokenizer:
         self.pad_token_id = 2
         self.tokens = \
             [self.bos_token, self.eos_token, self.pad_token] + \
-            ["Sum", "Mul", "MatMul", "MatSolve", "[", "]"] + ext_tokens + \
+            ["Sum", "Mul", "MatMul", "MatSolve", "[", "]", ","] + ext_tokens + \
             [f"[c{i}]" for i in range(const_quant_size)] + \
             [f"[num{i}]" for i in range(quant_size)]
         self.token_id = {
@@ -378,7 +379,7 @@ class MathSolverLinalg(nn.Module):
     ) -> Tuple[Tensor, Tensor]:
         return self.decoder(*args, **kwargs)
     
-    def forward(self, batch: List[MathDataInstance]) -> Tensor:
+    def forward(self, batch: List[LinalgDataInstance]) -> Tensor:
         input_dict, quant_ids = self.prepare_input(
             [I.parse_input("#") for I in batch]
         )
@@ -403,83 +404,6 @@ class MathSolverLinalg(nn.Module):
             Acc = torch.sum(preds == labels) / (torch.sum(labels != -1) + 1e-5)
 
         return loss, Acc
-
-    def parse_expr(self, expr_str: str, arg0: int) -> Expr:
-        expr_toks = [t for t in re.split(r"([\*\/\^\+\-\(\)])", expr_str) if t != ""]
-        return Expr(arg0=arg0, expr_toks=expr_toks, expr_str=expr_str)
-
-    @torch.no_grad()
-    def expr_generate(
-        self,
-        input_text: str, 
-        max_length: int = 4,
-    ) -> str:
-
-        input_dict, num_ids = self.prepare_input([input_text])
-        hidden_state, memory_states, quant_states, vocab_mask = self.encode(input_dict, num_ids)
-
-        decoder_input_ids = torch.tensor(
-            self.expr_tok.bos_token_id, 
-            dtype=torch.long,
-            device=hidden_state.device
-        ).view(1, 1)
-
-        predict_ids = []
-
-        while len(predict_ids) < max_length:
-            next_token_logits, hidden_state = self.decode(
-                decoder_input_ids=decoder_input_ids[..., -1:],
-                hidden_state=hidden_state,
-                quant_states=quant_states,
-                memory_states=memory_states,
-                vocab_mask=vocab_mask,
-            )
-
-            next_token_id = torch.argmax(next_token_logits.view(-1), dim=0)
-            predict_ids.append(next_token_id.item())
-
-            if predict_ids[-1] in [self.expr_tok.bos_token_id, self.expr_tok.eos_token_id]:
-                break
-            else:
-                decoder_input_ids = torch.cat((decoder_input_ids, next_token_id), dim=1)  # [1, L] -> [1, L + 1]
-        
-        predict_tokens = self.expr_tok.convert_ids_to_tokens(predict_ids)
-        predict_text = "".join(predict_tokens)\
-            .replace(self.expr_tok.bos_token, "")\
-            .replace(self.expr_tok.eos_token, "")
-        exit_flag = (len(predict_ids) == 0 or predict_ids[-1] == self.expr_tok.eos_token_id)
-        return predict_text, exit_flag
-
-    @torch.no_grad()
-    def generate(
-        self, 
-        question: str, 
-        quants: List[str], 
-        const_quants: List[str]
-    ) -> List[Expr]:
-        expr_list: List[Expr] = []
-        quant_size = len(quants)
-        step = 0
-        while len(quants) + len(expr_list) < self.cfg.max_nums_size and step < self.cfg.max_step_size:
-            I = MathDataInstance(
-                question=question,
-                nums=quants,
-                const_nums=const_quants,
-                expr_list=expr_list
-            )
-            op_text, exit_flag = self.expr_generate(
-                I.parse_input("#")
-            )
-            try:
-                expr = self.parse_expr(op_text, quant_size)
-                expr_list.append(expr)
-            except:
-                break
-            quant_size += 1
-            step += 1
-            if exit_flag:
-                break
-        return expr_list
 
     @torch.no_grad()
     def expr_beam_search(
@@ -556,7 +480,7 @@ class MathSolverLinalg(nn.Module):
                 if beam.end:
                     next_beams.append(beam)
                 else:
-                    I = MathDataInstance(
+                    I = LinalgDataInstance(
                         question=question,
                         nums=nums,
                         const_nums=const_nums,
@@ -635,5 +559,66 @@ class StatBeam:
 
 
 def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: str) -> bool:
-    ...
+    pat = re.compile("\[num\d+\]")
+    def parse_quant_test(tokens: List[Tok]):
+        if len(tokens) != 1 or not pat.match(tokens[0]):
+            return False
+        return True
+
+    def parse_vector_test(tokens: List[Tok]):
+        if len(tokens) > 2 and tokens[0] == "[" and tokens[-1] == "]":
+            tokens = tokens[1:-1]
+            if any(not pat.match(tokens[i]) for i in range(len(tokens))):
+                    return None
+            return len(tokens)
+        return None
+
+    def parse_matrix_test(tokens: List[Tok]):
+        if len(tokens) > 2 and tokens[0] == "[" and tokens[-1] == "]":
+            tokens = tokens[1:-1]
+            end_indexs = [i + 1 for i, t in enumerate(tokens) if t == "]"]
+            if len(end_indexs) == 0 or end_indexs[-1] != len(tokens) - 1:
+                return None
+            start_indexs = [0] + [x for x in end_indexs[:-1]]
+            dims = []
+            for x, y in zip(start_indexs, end_indexs):
+                dims.append(parse_vector_test(tokens[x:y]))
+            if any(x is None for x in dims) or any(x != dims[0] for x in dims):
+                return None
+            return len(dims), dims[0]
+        return None
+
+    def parse_fn_test(tokens: List[Tok]):
+        if tokens[0] == "Sum":
+            if tokens[1] == "[" and tokens[-1] == "]" and parse_vector_test(tokens[2:-1]) is not None:
+                return True
+        elif tokens[0] == "Mul":
+            if tokens[1] == "[" and tokens[-1] == "]" and "," in tokens:
+                index = tokens.index(",")
+                if parse_vector_test(tokens[2:index]) is not None and parse_quant_test(tokens[index+1:-1]):
+                    return True
+        elif tokens[0] == "MatMul" or tokens[0] == "MatSolve":
+            if tokens[1] == "[" and tokens[-1] == "]" and "," in tokens:
+                index = tokens.index(",")
+                mat_dim = parse_matrix_test(tokens[2:index])
+                vec_dim = parse_vector_test(tokens[index+1:-1])
+                if mat_dim is not None and vec_dim is not None and mat_dim[-1] == vec_dim:
+                    return True
+        raise SyntaxError("parse fn: {}".format("".join(tokens)))
+
+    if len(tokens) >= max_length and tokens[-1] not in [bos_token, eos_token]:
+        return False
+    if len(tokens) > 0 and tokens[0] not in ["Sum", "Mul", "MatMul", "MatSolve"]:
+        return False
+    if len(tokens) > 1 and tokens[1] != "[":
+        return False
+    if len(tokens) >= max_length:
+        tokens = tokens[:-1]  # remove [bos], [eos]
+        try:
+            parse_fn_test(tokens)
+        except SyntaxError as e:
+            return False
+        except:
+            print("tokens: {}".format("".join(tokens)))
+            exit(0)
     return True

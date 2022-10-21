@@ -7,7 +7,7 @@ log=$2
 device=$3
 
 if [ -z $3 ]; then
-    device=3
+    device=0
 fi
 
 echo "mod: ${mod}"
@@ -166,6 +166,34 @@ then
         --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","num_epochs":200,"lr":2e-5}' \
         --head 1000 \
         --expr_mode v3 \
+        --debug
+fi
+
+if [[ ${mod} == "train_toylinalg" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_toylinalg.py \
+        --dataset_name 'toylinalg' \
+        --log_text ${log} \
+        --data_path '../data/Math23K' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --save_model \
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100}'
+
+fi
+
+# debug
+if [[ ${mod} == "debug_toylinalg" ]];
+then
+    CUDA_VISIBLE_DEVICES=${device} python train_toylinalg.py \
+        --dataset_name 'toylinalg' \
+        --log_text '(debug)' \
+        --data_path '../data/Math23K' \
+        --load_model_dir 'models_test' \
+        --save_model_dir 'models_test' \
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100}' \
+        --head 1000 \
         --debug
 fi
 
