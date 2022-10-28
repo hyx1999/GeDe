@@ -292,8 +292,8 @@ class MathTrainerRPE:
             target_Expr_list = obj["Expr_list"]
 
             try:
-                output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.max_nums_size)
-                target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.max_nums_size)
+                output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
+                target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
             except SyntaxError:
                 output_value = None
                 target_value = None

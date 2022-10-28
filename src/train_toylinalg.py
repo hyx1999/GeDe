@@ -69,8 +69,8 @@ def train_solver(
 
 
 def main(args: argparse.Namespace):
-    if not args.debug:
-        setup_logger()
+    # if not args.debug:
+    setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     

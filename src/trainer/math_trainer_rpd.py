@@ -147,12 +147,39 @@ class MathTrainerRPD:
         shuffle_flag = not self.cfg.debug
         loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
 
+        param_dict = {
+            "encoder": [],
+            "decoder": [],
+            "encoder_no_decay": [],
+            "decoder_no_decay": [],
+        }
+        # no_decay = ["bias", "LayerNorm.weight", "LayerNorm.bias"]
+        no_decay = ["LayerNorm"]
+        for name, p in solver.named_parameters():
+            if "encoder" in name:
+                if any(nd in name for nd in no_decay):
+                    param_dict["encoder_no_decay"].append(p)
+                else:
+                    param_dict["encoder"].append(p)
+            elif "decoder" in name:
+                if any(nd in name for nd in no_decay):
+                    param_dict["decoder_no_decay"].append(p)
+                else:
+                    param_dict["decoder"].append(p)
+            else:
+                print("name: {}".format(name))
+                raise ValueError
+
+        alpha = self.cfg.lr_alpha
         optim = AdamW(
             [
-                {'params': solver.parameters(), 'lr': self.cfg.lr},
+                {'params': param_dict["encoder"] , 'lr': self.cfg.lr        , 'weight_decay': self.cfg.weight_decay},
+                {'params': param_dict["decoder"] , 'lr': self.cfg.lr * alpha, 'weight_decay': self.cfg.weight_decay},
+                {'params': param_dict["encoder_no_decay"], 'lr': self.cfg.lr        , 'weight_decay': 0.0},
+                {'params': param_dict["decoder_no_decay"], 'lr': self.cfg.lr * alpha, 'weight_decay': 0.0},
             ],
-            weight_decay=self.cfg.weight_decay
         )
+        
         scheduler = get_linear_schedule_with_warmup(
             optim, 
             num_warmup_steps=0,
@@ -253,8 +280,8 @@ class MathTrainerRPD:
             target_Expr_list = obj["Expr_list"]
 
             try:
-                output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.max_nums_size)
-                target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.max_nums_size)
+                output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
+                target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
             except SyntaxError:
                 output_value = None
                 target_value = None

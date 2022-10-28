@@ -179,7 +179,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100}'
+        --cfg '{"model_name":"roberta-base","num_epochs":100,"lr":2e-5,"quant_size":100,"save_result":true}'
 
 fi
 
@@ -192,7 +192,7 @@ then
         --data_path '../data/ToyLinalg' \
         --load_model_dir 'models_test' \
         --save_model_dir 'models_test' \
-        --cfg '{"model_name":"roberta-base","num_epochs":20,"lr":2e-5,"quant_size":100}' \
+        --cfg '{"model_name":"roberta-base","num_epochs":20,"lr":2e-5,"quant_size":100,"save_result":true}' \
         --head 1000 \
         --debug
 fi

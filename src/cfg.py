@@ -19,7 +19,6 @@ class MathConfig:
         self.lr_alpha = 1.0
         self.weight_decay = 1e-2
         
-        self.max_nums_size = 35
         self.max_step_size = 35
 
         self.use_data_aug = False

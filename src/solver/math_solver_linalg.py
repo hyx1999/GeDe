@@ -21,7 +21,7 @@ from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from math_utils import Expr, Tok, LinalgDataInstance, parse_num_index
+from math_utils import MultiExpr, Tok, LinalgDataInstance
 from cfg import MathConfig
 
 
@@ -285,7 +285,7 @@ class MathSolverLinalg(nn.Module):
 
         self.update_vocab(cfg.ext_tokens)
         self.encoder.bert.resize_token_embeddings(len(self.lang_tok))
-        
+                
     def save_model(self, dir_path: str, suffix: str = "") -> None:
         path = os.path.join(dir_path, f"model_{suffix}.pth")
         torch.save(self.state_dict(), path)
@@ -409,7 +409,7 @@ class MathSolverLinalg(nn.Module):
     def expr_beam_search(
         self,
         input_text: str,
-        max_length: int = 4,
+        max_length: int = 20,
         beam_size: int = 4,
     ):
         input_dict, quant_ids = self.prepare_input([input_text])
@@ -422,7 +422,8 @@ class MathSolverLinalg(nn.Module):
         ).view(1, 1)
         
         beams = [ExprBeam([], decoder_input_id, hidden_state, 0.0)]
-        
+        end_beams = []
+        step = 0
         while len(beams) > 0:
             do_search = False
             for beam in beams:
@@ -454,6 +455,8 @@ class MathSolverLinalg(nn.Module):
                     continue
                 if not beam.end and tokens[-1] in [self.expr_tok.bos_token, self.expr_tok.eos_token]:
                     beam.end = True
+                    end_beams.append(beam)
+
                 filtered_beams.append(beam)
             beams = filtered_beams
             beams = sorted(beams, key=lambda b: b.score, reverse=True)[:beam_size]
@@ -467,7 +470,7 @@ class MathSolverLinalg(nn.Module):
         nums: List[str], 
         const_nums: List[str],
         beam_size: int = 4
-    ) -> List[Expr]:
+    ) -> List[MultiExpr]:
         beams: List[StatBeam] = [StatBeam([], 0.0, self.expr_tok.bos_token)]
         while len(beams) > 0:
             do_search = False
@@ -492,13 +495,16 @@ class MathSolverLinalg(nn.Module):
                     )
                     for expr_beam in expr_beams:
                         tokens = self.expr_tok.convert_ids_to_tokens(expr_beam.predict_ids)
-                        arg0 = len(nums) + len(beam.expr_list)
-                        expr = Expr(arg0=arg0, expr_toks=tokens[:-1], expr_str=" ".join(tokens[:-1]))
+                        start_num = beam.expr_list[-1].args[-1] + 1 if len(beam.expr_list) > 0 else len(nums)
+                        args = [start_num + i for i in range(parse_fn_dim(tokens[:-1]))]  # erae bos and eos
+                        expr = MultiExpr(args=args, expr_toks=tokens[:-1], expr_str=" ".join(tokens[:-1]))
                         end_token = tokens[-1]
                         next_beams.append(beam.extend(expr=expr, score=expr_beam.score, end_token=end_token))
             filtered_beams: List[StatBeam] = []
             for beam in next_beams:
-                if (len(nums) + len(beam.expr_list) >= self.cfg.max_nums_size or len(beam.expr_list) >= self.cfg.max_step_size) and beam.end_token != self.expr_tok.eos_token:
+                if len(beam.expr_list) > 0 and beam.expr_list[-1].args[-1] > self.cfg.quant_size:
+                    continue
+                if len(beam.expr_list) >= self.cfg.max_step_size and beam.end_token != self.expr_tok.eos_token:
                     continue
                 if not beam.end and beam.end_token == self.expr_tok.eos_token:
                     beam.end = True
@@ -539,7 +545,7 @@ class ExprBeam:
 class StatBeam:
     
     def __init__(self, 
-        expr_list: List[Expr],
+        expr_list: List[MultiExpr],
         score: float,
         end_token: str
     ) -> None:
@@ -548,7 +554,7 @@ class StatBeam:
         self.end_token = end_token
         self.end = False
     
-    def extend(self, expr: Expr, score: float, end_token: str) -> 'StatBeam':
+    def extend(self, expr: MultiExpr, score: float, end_token: str) -> 'StatBeam':
         length = len(self.expr_list)
         next_beam = StatBeam(
             expr_list=self.expr_list + [expr],
@@ -558,61 +564,66 @@ class StatBeam:
         return next_beam
 
 
-def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: str) -> bool:
+def parse_quant_test(tokens: List[Tok]):
     pat = re.compile("\[num\d+\]")
-    def parse_quant_test(tokens: List[Tok]):
-        if len(tokens) != 1 or not pat.match(tokens[0]):
-            return False
-        return True
+    if len(tokens) != 1 or not pat.match(tokens[0]):
+        return False
+    return True
 
-    def parse_vector_test(tokens: List[Tok]):
-        if len(tokens) > 2 and tokens[0] == "[" and tokens[-1] == "]":
-            tokens = tokens[1:-1]
-            if any(not pat.match(tokens[i]) for i in range(len(tokens))):
-                    return None
-            return len(tokens)
-        return None
 
-    def parse_matrix_test(tokens: List[Tok]):
-        if len(tokens) > 2 and tokens[0] == "[" and tokens[-1] == "]":
-            tokens = tokens[1:-1]
-            end_indexs = [i + 1 for i, t in enumerate(tokens) if t == "]"]
-            if len(end_indexs) == 0 or end_indexs[-1] != len(tokens) - 1:
+def parse_vector_test(tokens: List[Tok]):
+    pat = re.compile("\[num\d+\]")
+    if len(tokens) > 2 and tokens[0] == "[" and tokens[-1] == "]":
+        tokens = tokens[1:-1]
+        if any(not pat.match(tokens[i]) for i in range(len(tokens))):
                 return None
-            start_indexs = [0] + [x for x in end_indexs[:-1]]
-            dims = []
-            for x, y in zip(start_indexs, end_indexs):
-                dims.append(parse_vector_test(tokens[x:y]))
-            if any(x is None for x in dims) or any(x != dims[0] for x in dims):
-                return None
-            return len(dims), dims[0]
-        return None
+        return len(tokens)
+    return None
 
-    def parse_fn_test(tokens: List[Tok]):
-        if tokens[0] == "Sum":
-            if tokens[1] == "[" and tokens[-1] == "]" and parse_vector_test(tokens[2:-1]) is not None:
+
+def parse_matrix_test(tokens: List[Tok]):
+    if len(tokens) > 2 and tokens[0] == "[" and tokens[-1] == "]":
+        tokens = tokens[1:-1]
+        end_indexs = [i + 1 for i, t in enumerate(tokens) if t == "]"]
+        if len(end_indexs) == 0 or end_indexs[-1] != len(tokens):
+            return None
+        start_indexs = [0] + [x for x in end_indexs[:-1]]
+        dims = []
+        for x, y in zip(start_indexs, end_indexs):
+            dims.append(parse_vector_test(tokens[x:y]))
+        if any(x is None for x in dims) or any(x != dims[0] for x in dims):
+            return None
+        return len(dims), dims[0]
+    return None
+
+
+def parse_fn_test(tokens: List[Tok]):
+    if tokens[0] == "Sum":
+        if tokens[1] == "[" and tokens[-1] == "]" and parse_vector_test(tokens[2:-1]) is not None:
+            return True
+    elif tokens[0] == "Mul":
+        if tokens[1] == "[" and tokens[-1] == "]" and "," in tokens:
+            index = tokens.index(",")
+            if parse_vector_test(tokens[2:index]) is not None and parse_quant_test(tokens[index+1:-1]):
                 return True
-        elif tokens[0] == "Mul":
-            if tokens[1] == "[" and tokens[-1] == "]" and "," in tokens:
-                index = tokens.index(",")
-                if parse_vector_test(tokens[2:index]) is not None and parse_quant_test(tokens[index+1:-1]):
-                    return True
-        elif tokens[0] == "MatMul" or tokens[0] == "MatSolve":
-            if tokens[1] == "[" and tokens[-1] == "]" and "," in tokens:
-                index = tokens.index(",")
-                mat_dim = parse_matrix_test(tokens[2:index])
-                vec_dim = parse_vector_test(tokens[index+1:-1])
-                if mat_dim is not None and vec_dim is not None and mat_dim[-1] == vec_dim:
-                    return True
-        raise SyntaxError("parse fn: {}".format("".join(tokens)))
+    elif tokens[0] == "MatMul" or tokens[0] == "MatSolve":
+        if tokens[1] == "[" and tokens[-1] == "]" and "," in tokens:
+            index = tokens.index(",")
+            mat_dim = parse_matrix_test(tokens[2:index])
+            vec_dim = parse_vector_test(tokens[index+1:-1])
+            if mat_dim is not None and vec_dim is not None and mat_dim[-1] == vec_dim and mat_dim[0] == mat_dim[1]:
+                return True
+    raise SyntaxError("[test] parse fn: {}".format("".join(tokens)))
 
+
+def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: str) -> bool:
     if len(tokens) >= max_length and tokens[-1] not in [bos_token, eos_token]:
         return False
     if len(tokens) > 0 and tokens[0] not in ["Sum", "Mul", "MatMul", "MatSolve"]:
         return False
     if len(tokens) > 1 and tokens[1] != "[":
         return False
-    if len(tokens) >= max_length:
+    if len(tokens) > 0 and tokens[-1] in [bos_token, eos_token]:
         tokens = tokens[:-1]  # remove [bos], [eos]
         try:
             parse_fn_test(tokens)
@@ -622,3 +633,29 @@ def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: 
             print("tokens: {}".format("".join(tokens)))
             exit(0)
     return True
+
+
+def parse_vector_dim(tokens: List[Tok]):
+    return len(tokens) - 2
+
+
+def parse_matrix_dim(tokens: List[Tok]):
+    tokens = tokens[1:-1]
+    end_indexs = [i + 1 for i, t in enumerate(tokens) if t == "]"]
+    start_indexs = [0] + [x for x in end_indexs[:-1]]
+    dims = []
+    for x, y in zip(start_indexs, end_indexs):
+        dims.append(parse_vector_dim(tokens[x:y]))
+    return len(dims), dims[0]
+
+
+def parse_fn_dim(tokens: List[Tok]):
+    if tokens[0] == "Sum":
+        return 1
+    elif tokens[0] == "Mul":
+        index = tokens.index(",")
+        return parse_vector_dim(tokens[2:index])
+    elif tokens[0] == "MatMul" or tokens[0] == "MatSolve":
+        index = tokens.index(",")
+        return parse_vector_dim(tokens[index+1:-1])
+    raise SyntaxError("[parse dim] parse fn: {}".format("".join(tokens)))

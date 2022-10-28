@@ -194,9 +194,9 @@ class MathSolver(nn.Module):
         if hasattr(self.cfg, "expr_mode") and getattr(self.cfg, "expr_mode") == "v2":
             ops.extend(["(", ")"])
         const_nums_id   = [f'[c{n}]' for n in range(const_nums_size)]
-        nums_id   = [f'[num{n}]' for n in range(self.cfg.max_nums_size)]
+        nums_id   = [f'[num{n}]' for n in range(self.cfg.quant_size)]
         nums_type = ['[int]', '[float]', '[frac]', '[perc]']
-        nums_rk   = [f'[rk{n}]' for n in range(self.cfg.max_nums_size)]
+        nums_rk   = [f'[rk{n}]' for n in range(self.cfg.quant_size)]
 
         new_tokens = g_tokens + ops + const_nums_id + nums_id + nums_type + nums_rk
         self.tok.add_tokens(new_tokens)
@@ -439,7 +439,7 @@ class MathSolver(nn.Module):
         nums_size = len(nums)
         prev_past_value = None
         step = 0
-        while len(nums) + len(expr_list) < self.cfg.max_nums_size and step < self.cfg.max_step_size:
+        while len(nums) + len(expr_list) < self.cfg.quant_size and step < self.cfg.max_step_size:
             I = MathDataInstance(
                 question=question,
                 nums=nums,
@@ -568,7 +568,7 @@ class MathSolver(nn.Module):
                         next_beams.append(beam.extend(expr=expr, gru_hidden=expr_beam.gru_hidden, score=expr_beam.score, eos=eos))
             filtered_beams: List[StatBeam] = []
             for beam in next_beams:
-                if (len(nums) + len(beam.expr_list) >= self.cfg.max_nums_size or len(beam.expr_list) >= self.cfg.max_step_size) and beam.eos != self.eos1_token:
+                if (len(nums) + len(beam.expr_list) >= self.cfg.quant_size or len(beam.expr_list) >= self.cfg.max_step_size) and beam.eos != self.eos1_token:
                     continue
                 if not beam.end and beam.eos == self.eos1_token:
                     beam.end = True

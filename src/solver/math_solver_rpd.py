@@ -702,7 +702,7 @@ class MathSolverRPD(nn.Module):
                         next_beams.append(beam.extend(gru_hidden_state=expr_beam.gru_hidden_state, expr=expr, score=expr_beam.score, end_token=end_token))
             filtered_beams: List[StatBeam] = []
             for beam in next_beams:
-                if (len(nums) + len(beam.expr_list) >= self.cfg.max_nums_size or len(beam.expr_list) >= self.cfg.max_step_size) and beam.end_token != self.expr_tok.eos_token:
+                if (len(nums) + len(beam.expr_list) >= self.cfg.quant_size or len(beam.expr_list) >= self.cfg.max_step_size) and beam.end_token != self.expr_tok.eos_token:
                     continue
                 if not beam.end and beam.end_token == self.expr_tok.eos_token:
                     beam.end = True

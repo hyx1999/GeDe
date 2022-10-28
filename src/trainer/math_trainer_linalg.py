@@ -47,7 +47,7 @@ class MathTrainerLinalg:
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
-
+        
     def split_data(self):
         raw_train_dataset = self.raw_dataset["train"]
         val_ids = set(np.random.choice(len(raw_train_dataset), size=100, replace=False).tolist())
@@ -93,11 +93,37 @@ class MathTrainerLinalg:
         shuffle_flag = not self.cfg.debug
         loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
 
+        param_dict = {
+            "encoder": [],
+            "decoder": [],
+            "encoder_no_decay": [],
+            "decoder_no_decay": [],
+        }
+        # no_decay = ["bias", "LayerNorm.weight", "LayerNorm.bias"]
+        no_decay = ["LayerNorm"]
+        for name, p in solver.named_parameters():
+            if "encoder" in name:
+                if any(nd in name for nd in no_decay):
+                    param_dict["encoder_no_decay"].append(p)
+                else:
+                    param_dict["encoder"].append(p)
+            elif "decoder" in name:
+                if any(nd in name for nd in no_decay):
+                    param_dict["decoder_no_decay"].append(p)
+                else:
+                    param_dict["decoder"].append(p)
+            else:
+                print("name: {}".format(name))
+                raise ValueError
+
+        alpha = self.cfg.lr_alpha
         optim = AdamW(
             [
-                {'params': solver.parameters(), 'lr': self.cfg.lr},
+                {'params': param_dict["encoder"] , 'lr': self.cfg.lr        , 'weight_decay': self.cfg.weight_decay},
+                {'params': param_dict["decoder"] , 'lr': self.cfg.lr * alpha, 'weight_decay': self.cfg.weight_decay},
+                {'params': param_dict["encoder_no_decay"], 'lr': self.cfg.lr        , 'weight_decay': 0.0},
+                {'params': param_dict["decoder_no_decay"], 'lr': self.cfg.lr * alpha, 'weight_decay': 0.0},
             ],
-            weight_decay=self.cfg.weight_decay
         )
 
         print("num_training_steps = {}".format(self.cfg.num_epochs * len(loader)))
@@ -108,15 +134,10 @@ class MathTrainerLinalg:
             num_training_steps=self.cfg.num_epochs * len(loader)
         )
         
-        for epoch in range(self.cfg.num_epochs):
-            if "svamp" in self.cfg.dataset_name and self.cfg.use_data_aug:
-                self.augment_data()
-                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
-                dataset.data = self.train_dataset
-                
+        for epoch in range(self.cfg.num_epochs):                
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if epoch > self.cfg.num_epochs // 2 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")
@@ -132,8 +153,7 @@ class MathTrainerLinalg:
                         self.best_test_acc = test_acc
                 else:
                     logger.info("[evaluate train-data]")
-                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:100])
-
+                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:5])
 
     def train_one_epoch(
         self,
@@ -202,26 +222,26 @@ class MathTrainerLinalg:
             output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
             target_Expr_list = obj["Expr_list"]
 
-            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
-            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
+            try:
+                output_value = compute_MultiExpr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
+                target_value = compute_MultiExpr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
+            except SyntaxError:
+                output_value = None
+                target_value = None
+            eps = 1e-5
 
-            # try:
-            #     output_value = compute_MultiExpr_list(output_Expr_list, nums, const_nums, self.cfg.max_nums_size)
-            #     target_value = compute_MultiExpr_list(target_Expr_list, nums, const_nums, self.cfg.max_nums_size)
-            # except SyntaxError:
-            #     output_value = None
-            #     target_value = None
-            # eps = 1e-5
-
-            # if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
-            #     Acc.append(1)
-            # else:
-            #     Acc.append(0)
-            
-            if " ".join(expr_list0) == " ".join(expr_list1):
+            if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
                 Acc.append(1)
             else:
                 Acc.append(0)
+
+            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
+            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
+            
+            # if expr_list0 is not None and expr_list1 is not None and " ".join(expr_list0) == " ".join(expr_list1):
+            #     Acc.append(1)
+            # else:
+            #     Acc.append(0)
             
             if self.cfg.save_result:
                 f.write("id: {}\n".format(i))
@@ -229,6 +249,8 @@ class MathTrainerLinalg:
                 f.write("nums={}\n".format(nums))
                 f.write("output={}\n".format(expr_list0))
                 f.write("target={}\n".format(expr_list1))
+                f.write("output value={}\n".format(output_value))
+                f.write("target value={}\n".format(target_value))
                 f.write("correct={}\n".format("True" if Acc[-1] == 1 else "False"))
 
         if self.cfg.save_result:
@@ -239,3 +261,4 @@ class MathTrainerLinalg:
         logger.info(msg)
 
         return answer_mAcc
+

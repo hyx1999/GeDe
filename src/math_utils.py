@@ -444,26 +444,74 @@ def compute_Expr_list(Expr_list: List[Expr], nums: List[str], const_nums: List[s
     return nums_table[Expr_list[-1].arg0] if len(Expr_list) > 0 else None
 
 
-def compute_MultiExpr_list(Expr_list: List[MultiExpr], nums: List[str], const_nums: List[str], max_nums_size: int):
-    if Expr_list is None:
+def compute_MultiExpr_list(MultiExpr_list: List[MultiExpr], nums: List[str], const_nums: List[str], max_nums_size: int):
+    if MultiExpr_list is None:
         return None
     
-    nums = [parse_value(x) for x in nums]
+    nums = [float(x) for x in nums]
     nums_table = nums + [0.0] * (max_nums_size - len(nums))
 
-    const_nums = [parse_value(x) for x in const_nums]
+    const_nums = [float(x) for x in const_nums]
+
+    def parse_quant(tokens):
+        i = parse_num_index(tokens[0])
+        return nums_table[i]
+
+    def parse_vector(tokens: List[Tok]):
+        res = []
+        for tok in tokens[1:-1]:
+            i = parse_num_index(tok)
+            res.append(nums_table[i])
+        return np.array(res)
+
+    def parse_matrix(tokens: List[Tok]):
+        tokens = tokens[1:-1]
+        end_indexs = [i + 1 for i, t in enumerate(tokens) if t == "]"]
+        start_indexs = [0] + [x for x in end_indexs[:-1]]
+        mat = []
+        for x, y in zip(start_indexs, end_indexs):
+            mat.append(parse_vector(tokens[x:y]))
+        mat = np.array(mat)
+        return mat
+
+    def parse_fn(tokens: List[Tok]):
+        # print("op:", "".join(tokens))
+        if tokens[0] == "Sum":
+            return parse_vector(tokens[2:-1]).sum(keepdims=True)
+        elif tokens[0] == "Mul":
+            index = tokens.index(",")
+            vec = parse_vector(tokens[2:index])
+            quant = parse_quant(tokens[index+1:-1])
+            # print("vec:", vec, "quant:", quant)
+            return vec * quant
+        elif tokens[0] == "MatMul":
+            index = tokens.index(",")
+            mat = parse_matrix(tokens[2:index])
+            vec = parse_vector(tokens[index+1:-1])
+            # print("mat:", mat, "vec:", vec)
+            return mat @ vec
+        elif tokens[0] == "MatSolve":
+            index = tokens.index(",")
+            mat = parse_matrix(tokens[2:index])
+            vec = parse_vector(tokens[index+1:-1])
+            # print("mat:", mat, "vec:", vec)
+            return np.linalg.pinv(mat) @ vec
+        raise SyntaxError("[parse fn] parse fn: {}".format("".join(tokens)))
+
 
     def do_OpSeq(expr_toks: List[Tok]):
-        # print("expr_tokens:", expr_toks)
-        ...
+        return parse_fn(expr_toks)
 
     try:
-        for expr in Expr_list:
-            nums_table[expr.arg0] = do_OpSeq(expr.expr_toks)
+        for expr in MultiExpr_list:
+            results = do_OpSeq(expr.expr_toks)
+            for i, index in enumerate(expr.args):
+                # print("i:",i,"index:",index)
+                nums_table[index] = results[i]
     except:
-        logger.warning("decimal.Error: {}".format(Expr_list))
+        logger.warning("decimal.Error: {}".format(MultiExpr_list))
         return None
-    return nums_table[Expr_list[-1].args[0]] if len(Expr_list) > 0 else None
+    return nums_table[MultiExpr_list[-1].args[-1]] if len(MultiExpr_list) > 0 else None
 
 
 """
