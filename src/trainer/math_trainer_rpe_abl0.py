@@ -279,7 +279,7 @@ class MathTrainerRPE_Abl0:
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)
-            f = open("../cache/mwp/{}_{}_{}_rpe.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
+            f = open("../cache/mwp/{}_{}_{}_rpe_abl0.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
         
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
@@ -287,10 +287,6 @@ class MathTrainerRPE_Abl0:
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
-            # if self.cfg.debug:
-            #     print(">")
-            #     print("target:", [" ".join(x.expr_toks) for x in obj["Expr_list"]])
-            # output_Expr_list = solver.generate(input_text, nums, const_nums)
             output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
             target_Expr_list = obj["Expr_list"]
 
@@ -301,15 +297,6 @@ class MathTrainerRPE_Abl0:
                 output_value = None
                 target_value = None
             eps = 1e-5
-
-            # TEST USE
-            # if i < 20:
-            #     logger.info("i: {}".format(i))
-            #     logger.info("input_text: {}".format(input_text))
-            #     logger.info("output_Op_list: {}".format(output_Expr_list))
-            #     logger.info("target_Op_list: {}".format(target_Expr_list))
-            #     logger.info("output_value: {}".format(output_value))
-            #     logger.info("target_value: {}".format(target_value))
 
             if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
                 Acc.append(1)
