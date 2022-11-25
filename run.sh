@@ -197,6 +197,37 @@ then
         --debug
 fi
 
+if [[ ${mod} == "train_mathqa_abl0" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_mathqa.py \
+        --model_type 'rpe_abl0' \
+        --dataset_name 'mathqa' \
+        --log_text ${log} \
+        --data_path '../data/MathQA' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --save_model \
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}'
+
+fi
+
+if [[ ${mod} == "debug_mathqa" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_mathqa.py \
+        --model_type 'rpe_abl0' \
+        --dataset_name 'mathqa' \
+        --log_text '(debug)' \
+        --data_path '../data/MathQA' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}' \
+        --head 100 \
+        --debug
+
+fi
+
 cd ..
 
 # backup

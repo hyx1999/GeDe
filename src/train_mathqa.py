@@ -1,6 +1,6 @@
 from dataset import loadMathQA
-from solver import MathSolverRPD, MathSolverRPE
-from trainer import MathTrainerRPD, MathTrainerRPE
+from solver import MathSolverRPD, MathSolverRPE, MathSolverRPE_Abl0
+from trainer import MathTrainerRPD, MathTrainerRPE, MathTrainerRPE_Abl0
 from cfg import MathConfig
 
 import datetime
@@ -60,17 +60,19 @@ def train_solver(
     cfg: MathConfig,
     solver: Union[MathSolverRPD, MathSolverRPE],
 ):
-    # trainer = MathTrainer(cfg, train_dataset, test_dataset)
-    if args.model_type == "rpe":
-        trainer = MathTrainerRPE(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
-    elif args.model_type == "rpd":
-        trainer = MathTrainerRPD(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    trainer_dict = {
+        "rpe": MathTrainerRPE,
+        "rep_abl0": MathTrainerRPE_Abl0,
+        "rpd": MathTrainerRPD,
+    }
+    if args.model_type in trainer_dict:
+        trainer = trainer_dict[args.model_type](cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
     else:
-        raise ValueError
+        raise ValueError(args.model_type)
 
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-mathqa")
+        solver.save_model(args.save_model_dir, "final-mathqa-{}".format(args.model_type))
     logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
 
@@ -93,13 +95,15 @@ def main(args: argparse.Namespace):
     logger.info("len(const_quant_size): {}".format(len(const_nums)))
     logger.info("const_quants: {}".format(const_nums))
 
-    # solver = MathSolver(cfg, const_nums)
-    if args.model_type == "rpe":
-        solver = MathSolverRPE(cfg)
-    elif args.model_type == "rpd":
-        solver = MathSolverRPD(cfg)
+    solver_dict = {
+        "rpe": MathSolverRPE,
+        "rep_abl0": MathSolverRPE_Abl0,
+        "rpd": MathSolverRPD,
+    }
+    if args.model_type in solver_dict:
+        solver = solver_dict[args.model_type](cfg)
     else:
-        raise ValueError
+        raise ValueError(args.model_type)
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")
