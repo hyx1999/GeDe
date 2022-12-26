@@ -87,7 +87,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}'
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}'
 
 fi
 
@@ -212,7 +212,7 @@ then
 
 fi
 
-if [[ ${mod} == "debug_mathqa" ]];
+if [[ ${mod} == "debug_mathqa_abl0" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_mathqa.py \

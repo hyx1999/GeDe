@@ -62,7 +62,7 @@ def train_solver(
 ):
     trainer_dict = {
         "rpe": MathTrainerRPE,
-        "rep_abl0": MathTrainerRPE_Abl0,
+        "rpe_abl0": MathTrainerRPE_Abl0,
         "rpd": MathTrainerRPD,
     }
     if args.model_type in trainer_dict:
@@ -97,7 +97,7 @@ def main(args: argparse.Namespace):
 
     solver_dict = {
         "rpe": MathSolverRPE,
-        "rep_abl0": MathSolverRPE_Abl0,
+        "rpe_abl0": MathSolverRPE_Abl0,
         "rpd": MathSolverRPD,
     }
     if args.model_type in solver_dict:
