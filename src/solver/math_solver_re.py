@@ -177,10 +177,7 @@ class MathDecoder(nn.Module):
         
         self.attn = Attention(hidden_dim)
         self.gru = nn.GRU(hidden_dim, hidden_dim, batch_first=True)
-
-        # ablation 0: use fix quant states
-        # self.fix_states = nn.Embedding(vocab_size - quant_size, hidden_dim)
-        self.fix_states = nn.Embedding(vocab_size, hidden_dim)
+        self.fix_states = nn.Embedding(vocab_size - quant_size, hidden_dim)
         
         self.transform = nn.Sequential(
             nn.Linear(hidden_dim, hidden_dim),
@@ -194,9 +191,7 @@ class MathDecoder(nn.Module):
     ) -> Tensor:
         input_ids = input_ids.unsqueeze(-1).repeat([1, 1, quant_states.shape[-1]])
         fix_states = self.fix_states.weight.unsqueeze(0).repeat([quant_states.shape[0], 1, 1])
-        # ablation 0: use fix quant states
-        # word_states = torch.cat((fix_states, quant_states), dim=1)  # [N, |W|, H]
-        word_states = fix_states        
+        word_states = torch.cat((fix_states, quant_states), dim=1)  # [N, |W|, H]
         input_states = torch.gather(word_states, dim=1, index=input_ids)
         return word_states, input_states
     
@@ -253,7 +248,7 @@ class MathEncoder(nn.Module):
         return encoder_outputs
 
 
-class MathSolverRPE_Abl0(nn.Module):
+class MathSolverRE(nn.Module):
     
     def __init__(
         self,

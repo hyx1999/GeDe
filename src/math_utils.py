@@ -73,7 +73,7 @@ class MathDataInstance:
         return output_text
 
 
-class LinalgDataInstance:
+class TemplateDataInstance:
     
     def __init__(
         self,
@@ -453,51 +453,50 @@ def compute_MultiExpr_list(MultiExpr_list: List[MultiExpr], nums: List[str], con
 
     const_nums = [float(x) for x in const_nums]
 
-    def parse_quant(tokens):
-        i = parse_num_index(tokens[0])
-        return nums_table[i]
-
-    def parse_vector(tokens: List[Tok]):
-        res = []
-        for tok in tokens[1:-1]:
-            i = parse_num_index(tok)
-            res.append(nums_table[i])
-        return np.array(res)
-
-    def parse_matrix(tokens: List[Tok]):
-        tokens = tokens[1:-1]
-        end_indexs = [i + 1 for i, t in enumerate(tokens) if t == "]"]
-        start_indexs = [0] + [x for x in end_indexs[:-1]]
-        mat = []
-        for x, y in zip(start_indexs, end_indexs):
-            mat.append(parse_vector(tokens[x:y]))
-        mat = np.array(mat)
-        return mat
+    def parse_quants(tokens: List[Tok]):
+        return [parse_num_index(token) for token in tokens]
 
     def parse_fn(tokens: List[Tok]):
         # print("op:", "".join(tokens))
-        if tokens[0] == "Sum":
-            return parse_vector(tokens[2:-1]).sum(keepdims=True)
-        elif tokens[0] == "Mul":
-            index = tokens.index(",")
-            vec = parse_vector(tokens[2:index])
-            quant = parse_quant(tokens[index+1:-1])
-            # print("vec:", vec, "quant:", quant)
-            return vec * quant
-        elif tokens[0] == "MatMul":
-            index = tokens.index(",")
-            mat = parse_matrix(tokens[2:index])
-            vec = parse_vector(tokens[index+1:-1])
-            # print("mat:", mat, "vec:", vec)
-            return mat @ vec
-        elif tokens[0] == "MatSolve":
-            index = tokens.index(",")
-            mat = parse_matrix(tokens[2:index])
-            vec = parse_vector(tokens[index+1:-1])
-            # print("mat:", mat, "vec:", vec)
-            return np.linalg.pinv(mat) @ vec
-        raise SyntaxError("[parse fn] parse fn: {}".format("".join(tokens)))
-
+        # print("tokens:", tokens)
+        quantsIndex = parse_quants(tokens[1:])
+        if tokens[0] == "[solve_linear_equation]":
+            A = np.array(
+                [
+                    [nums_table[quantsIndex[0]], nums_table[quantsIndex[1]]],
+                    [nums_table[quantsIndex[2]], nums_table[quantsIndex[3]]],
+                ]
+            )
+            b = np.array(
+                [nums_table[quantsIndex[4]], nums_table[quantsIndex[5]]]
+            )
+            return (np.linalg.inv(A) @ b).tolist()
+        elif tokens[0] == "[quadratic_function_integral]":
+            def poly3(a, b, c, d, x):
+                return a * (x ** 3) + b * (x ** 2) + c * x + d
+            l, r = nums_table[quantsIndex[0]], nums_table[quantsIndex[1]]
+            a0, a1, a2 = nums_table[quantsIndex[2]], nums_table[quantsIndex[3]], nums_table[quantsIndex[4]]
+            return [poly3(a0 / 3, a1 / 2, a2, 0, r) - poly3(a0 / 3, a1 / 2, a2, 0, l)]
+        elif tokens[0] == "[quadratic_function_extremum]":
+            def poly2(a, b, c, x):
+                return a * (x ** 2) + b * x + c
+            a0, a1, a2 = nums_table[quantsIndex[0]], nums_table[quantsIndex[1]], nums_table[quantsIndex[2]]
+            return [poly2(a0, a1, a2, -a1 / (2 * a0))]
+        elif tokens[0] == "[add]":
+            a0, a1 = nums_table[quantsIndex[0]], nums_table[quantsIndex[1]]
+            return [a0 + a1]
+        elif tokens[0] == "[sub]":
+            a0, a1 = nums_table[quantsIndex[0]], nums_table[quantsIndex[1]]
+            return [a0 + a1]
+        elif tokens[0] == "[mul]":
+            a0, a1 = nums_table[quantsIndex[0]], nums_table[quantsIndex[1]]
+            return [a0 * a1]
+        elif tokens[0] == "[div]":
+            a0, a1 = nums_table[quantsIndex[0]], nums_table[quantsIndex[1]]
+            return [a0 / a1]
+        else:
+            a0, a1 = nums_table[quantsIndex[0]], nums_table[quantsIndex[1]]
+            return [a0 ** a1]
 
     def do_OpSeq(expr_toks: List[Tok]):
         return parse_fn(expr_toks)
@@ -506,13 +505,11 @@ def compute_MultiExpr_list(MultiExpr_list: List[MultiExpr], nums: List[str], con
         for expr in MultiExpr_list:
             results = do_OpSeq(expr.expr_toks)
             for i, index in enumerate(expr.args):
-                # print("i:",i,"index:",index)
                 nums_table[index] = results[i]
     except:
         logger.warning("decimal.Error: {}".format(MultiExpr_list))
         return None
     return nums_table[MultiExpr_list[-1].args[-1]] if len(MultiExpr_list) > 0 else None
-
 
 """
 class OpDataInstance:

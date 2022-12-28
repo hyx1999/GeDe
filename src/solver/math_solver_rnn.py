@@ -318,7 +318,7 @@ class MathEncoder(nn.Module):
         return encoder_outputs
 
 
-class MathSolverRPD(nn.Module):
+class MathSolverRNN(nn.Module):
     
     def __init__(
         self,

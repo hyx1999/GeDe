@@ -153,7 +153,7 @@ def loadMath23KRaw(data_path: str, head: Optional[int] = None) -> Tuple[List[Dic
     return train_data, test_data
 
 
-def loadToyLinalg(file_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
+def loadTemplate(file_path: str, head: Optional[int] = None) -> Tuple[List[Dict], List[Dict]]:
     train_data = []
     dev_data   = []
     test_data  = []

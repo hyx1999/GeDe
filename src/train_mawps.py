@@ -1,6 +1,6 @@
 from dataset import loadMAWPS
-from solver import MathSolverRPE, MathSolverRPD
-from trainer import MathTrainerRPE, MathTrainerRPD
+from solver import MathSolverRE, MathSolverRNN
+from trainer import MathTrainerRE, MathTrainerRNN
 from cfg import MathConfig
 
 import datetime
@@ -58,12 +58,12 @@ def train_solver(
     train_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolverRPE,
+    solver: MathSolverRE,
 ):
     if args.model_type == "rpe":
-        trainer = MathTrainerRPE(cfg, train_dataset, test_dataset, use_dev=False)
+        trainer = MathTrainerRE(cfg, train_dataset, test_dataset, use_dev=False)
     elif args.model_type == "rpd":
-        trainer = MathTrainerRPD(cfg, train_dataset, test_dataset, use_dev=False)
+        trainer = MathTrainerRNN(cfg, train_dataset, test_dataset, use_dev=False)
     else:
         raise ValueError
     trainer.train(solver)
@@ -89,12 +89,14 @@ def main(args: argparse.Namespace):
         cfg.debug = args.debug
         cfg.const_quant_size = len(const_nums)
         
-        if args.model_type == "rpe":
-            solver = MathSolverRPE(cfg)
-        elif args.model_type == "rpd":
-            solver = MathSolverRPD(cfg)
+        solver_dict = {
+            "re": MathSolverRE,
+            "rnn": MathSolverRNN,
+        }
+        if args.model_type in solver_dict:
+            solver = solver_dict[args.model_type](cfg)
         else:
-            raise ValueError
+            raise ValueError(args.model_type)
         
         if args.save_model:
             solver.save_model(args.save_model_dir, "test")

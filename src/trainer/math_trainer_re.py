@@ -2,7 +2,7 @@ import json
 import os
 import math
 import random
-from solver import MathSolverRPE
+from solver import MathSolverRE
 from scheduler import GradualWarmupScheduler
 from math_utils import MathDataset, compute_Expr_list
 from cfg import MathConfig
@@ -23,7 +23,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class MathTrainerRPE:
+class MathTrainerRE:
 
     def __init__(
         self, 
@@ -145,7 +145,7 @@ class MathTrainerRPE:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolverRPE):
+    def train(self, solver: MathSolverRE):
         solver.to(self.cfg.device)
         
         dataset = MathDataset(self.train_dataset)
@@ -223,7 +223,7 @@ class MathTrainerRPE:
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolverRPE,
+        solver: MathSolverRE,
         optim: Union[Adam, AdamW],
         scheduler: LambdaLR,
         loader: DataLoader
@@ -265,7 +265,7 @@ class MathTrainerRPE:
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolverRPE,
+        solver: MathSolverRE,
         test_data: List[Dict]
     ) -> float:
         solver.eval()

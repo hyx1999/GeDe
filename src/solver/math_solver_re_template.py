@@ -1,5 +1,6 @@
 # math solver with multidecoder
 
+from lib2to3.pgen2 import token
 import re
 import random
 import numpy as np
@@ -20,7 +21,7 @@ from typing import Dict, List, Any, AnyStr, Optional, Tuple, Union
 from tqdm import tqdm
 
 from loguru import logger
-from math_utils import Expr, Tok, MathDataInstance
+from math_utils import MultiExpr, Tok, TemplateDataInstance
 from cfg import MathConfig
 
 
@@ -58,9 +59,19 @@ class ExprTokenizer:
         self.pad_token_id = 2
         self.tokens = \
             [self.bos_token, self.eos_token, self.pad_token] + \
-            ["+", "-", "*", "/"] + ext_tokens + \
+            [
+                "[solve_linear_equation]", 
+                "[quadratic_function_integral]", 
+                "[quadratic_function_extremum]",
+                "[add]",
+                "[sub]",
+                "[mul]",
+                "[div]",
+                "[pow]"
+            ] + ext_tokens + \
             [f"[c{i}]" for i in range(const_quant_size)] + \
             [f"[num{i}]" for i in range(quant_size)]
+        self.sorted_tokens = sorted(self.tokens, key=lambda x: len(x), reverse=True)
         self.token_id = {
             token: index for index, token in enumerate(self.tokens)
         }
@@ -70,6 +81,7 @@ class ExprTokenizer:
         batch_text: List[str], 
         padding: bool = True
     ) -> List[List[int]]:
+        # print(batch_text)
         batch_result: List[List[int]] = []
         for text in batch_text:
             result = []
@@ -80,7 +92,7 @@ class ExprTokenizer:
                     index += 1
                     continue
                 match_token = None
-                for token in self.tokens:   # 按理说需要按照长度排序, 这里没有单词是前缀的情况
+                for token in self.sorted_tokens:
                     if text[index:index + len(token)] == token:
                         match_token = token
                         index += len(token)
@@ -248,7 +260,7 @@ class MathEncoder(nn.Module):
         return encoder_outputs
 
 
-class MathSolverRPE(nn.Module):
+class MathSolverRETemplate(nn.Module):
     
     def __init__(
         self,
@@ -282,7 +294,7 @@ class MathSolverRPE(nn.Module):
 
         self.update_vocab(cfg.ext_tokens)
         self.encoder.bert.resize_token_embeddings(len(self.lang_tok))
-        
+                
     def save_model(self, dir_path: str, suffix: str = "") -> None:
         path = os.path.join(dir_path, f"model_{suffix}.pth")
         torch.save(self.state_dict(), path)
@@ -295,11 +307,18 @@ class MathSolverRPE(nn.Module):
         if ext_tokens is None:
             ext_tokens = []
         tokens = \
-            ["+", "-", "*", "/"] + ext_tokens + \
-            ['[int]', '[float]', '[frac]', '[perc]'] + \
+            [
+                "[solve_linear_equation]", 
+                "[quadratic_function_integral]", 
+                "[quadratic_function_extremum]",
+                "[add]",
+                "[sub]",
+                "[mul]",
+                "[div]",
+                "[pow]"
+            ] + ext_tokens + \
             [f"[c{i}]"   for i in range(self.cfg.const_quant_size)] + \
-            [f"[num{i}]" for i in range(self.cfg.quant_size)] + \
-            [f'[rk{i}]'  for i in range(self.cfg.quant_size)]
+            [f"[num{i}]" for i in range(self.cfg.quant_size)]
         self.lang_tok.add_tokens(tokens)
 
         self.quant_tokens_id = list(self.lang_tok.convert_tokens_to_ids(
@@ -378,7 +397,7 @@ class MathSolverRPE(nn.Module):
     ) -> Tuple[Tensor, Tensor]:
         return self.decoder(*args, **kwargs)
     
-    def forward(self, batch: List[MathDataInstance]) -> Tensor:
+    def forward(self, batch: List[TemplateDataInstance]) -> Tensor:
         input_dict, quant_ids = self.prepare_input(
             [I.parse_input("#") for I in batch]
         )
@@ -404,88 +423,11 @@ class MathSolverRPE(nn.Module):
 
         return loss, Acc
 
-    def parse_expr(self, expr_str: str, arg0: int) -> Expr:
-        expr_toks = [t for t in re.split(r"([\*\/\^\+\-\(\)])", expr_str) if t != ""]
-        return Expr(arg0=arg0, expr_toks=expr_toks, expr_str=expr_str)
-
-    @torch.no_grad()
-    def expr_generate(
-        self,
-        input_text: str, 
-        max_length: int = 4,
-    ) -> str:
-
-        input_dict, num_ids = self.prepare_input([input_text])
-        hidden_state, memory_states, quant_states, vocab_mask = self.encode(input_dict, num_ids)
-
-        decoder_input_ids = torch.tensor(
-            self.expr_tok.bos_token_id, 
-            dtype=torch.long,
-            device=hidden_state.device
-        ).view(1, 1)
-
-        predict_ids = []
-
-        while len(predict_ids) < max_length:
-            next_token_logits, hidden_state = self.decode(
-                decoder_input_ids=decoder_input_ids[..., -1:],
-                hidden_state=hidden_state,
-                quant_states=quant_states,
-                memory_states=memory_states,
-                vocab_mask=vocab_mask,
-            )
-
-            next_token_id = torch.argmax(next_token_logits.view(-1), dim=0)
-            predict_ids.append(next_token_id.item())
-
-            if predict_ids[-1] in [self.expr_tok.bos_token_id, self.expr_tok.eos_token_id]:
-                break
-            else:
-                decoder_input_ids = torch.cat((decoder_input_ids, next_token_id), dim=1)  # [1, L] -> [1, L + 1]
-        
-        predict_tokens = self.expr_tok.convert_ids_to_tokens(predict_ids)
-        predict_text = "".join(predict_tokens)\
-            .replace(self.expr_tok.bos_token, "")\
-            .replace(self.expr_tok.eos_token, "")
-        exit_flag = (len(predict_ids) == 0 or predict_ids[-1] == self.expr_tok.eos_token_id)
-        return predict_text, exit_flag
-
-    @torch.no_grad()
-    def generate(
-        self, 
-        question: str, 
-        quants: List[str], 
-        const_quants: List[str]
-    ) -> List[Expr]:
-        expr_list: List[Expr] = []
-        quant_size = len(quants)
-        step = 0
-        while len(quants) + len(expr_list) < self.cfg.quant_size and step < self.cfg.max_step_size:
-            I = MathDataInstance(
-                question=question,
-                nums=quants,
-                const_nums=const_quants,
-                expr_list=expr_list
-            )
-            op_text, exit_flag = self.expr_generate(
-                I.parse_input("#")
-            )
-            try:
-                expr = self.parse_expr(op_text, quant_size)
-                expr_list.append(expr)
-            except:
-                break
-            quant_size += 1
-            step += 1
-            if exit_flag:
-                break
-        return expr_list
-
     @torch.no_grad()
     def expr_beam_search(
         self,
         input_text: str,
-        max_length: int = 4,
+        max_length: int = 20,
         beam_size: int = 4,
     ):
         input_dict, quant_ids = self.prepare_input([input_text])
@@ -498,7 +440,8 @@ class MathSolverRPE(nn.Module):
         ).view(1, 1)
         
         beams = [ExprBeam([], decoder_input_id, hidden_state, 0.0)]
-        
+        end_beams = []
+        step = 0
         while len(beams) > 0:
             do_search = False
             for beam in beams:
@@ -528,16 +471,15 @@ class MathSolverRPE(nn.Module):
                 tokens = self.expr_tok.convert_ids_to_tokens(beam.predict_ids)
                 if not grammar_test(tokens, max_length, self.expr_tok.bos_token, self.expr_tok.eos_token):
                     continue
-                if not constraint_test(tokens):  # common constraint
-                    continue
                 if not beam.end and tokens[-1] in [self.expr_tok.bos_token, self.expr_tok.eos_token]:
                     beam.end = True
+                    end_beams.append(beam)
+
                 filtered_beams.append(beam)
             beams = filtered_beams
             beams = sorted(beams, key=lambda b: b.score, reverse=True)[:beam_size]
 
         return beams
-
 
     @torch.no_grad()
     def beam_search(
@@ -546,7 +488,7 @@ class MathSolverRPE(nn.Module):
         nums: List[str], 
         const_nums: List[str],
         beam_size: int = 4
-    ) -> List[Expr]:
+    ) -> List[MultiExpr]:
         beams: List[StatBeam] = [StatBeam([], 0.0, self.expr_tok.bos_token)]
         while len(beams) > 0:
             do_search = False
@@ -559,7 +501,7 @@ class MathSolverRPE(nn.Module):
                 if beam.end:
                     next_beams.append(beam)
                 else:
-                    I = MathDataInstance(
+                    I = TemplateDataInstance(
                         question=question,
                         nums=nums,
                         const_nums=const_nums,
@@ -571,13 +513,16 @@ class MathSolverRPE(nn.Module):
                     )
                     for expr_beam in expr_beams:
                         tokens = self.expr_tok.convert_ids_to_tokens(expr_beam.predict_ids)
-                        arg0 = len(nums) + len(beam.expr_list)
-                        expr = Expr(arg0=arg0, expr_toks=tokens[:-1], expr_str=" ".join(tokens[:-1]))
+                        start_num = beam.expr_list[-1].args[-1] + 1 if len(beam.expr_list) > 0 else len(nums)
+                        args = [start_num + i for i in range(parse_fn_dim(tokens[:-1]))]  # erae bos and eos
+                        expr = MultiExpr(args=args, expr_toks=tokens[:-1], expr_str=" ".join(tokens[:-1]))
                         end_token = tokens[-1]
                         next_beams.append(beam.extend(expr=expr, score=expr_beam.score, end_token=end_token))
             filtered_beams: List[StatBeam] = []
             for beam in next_beams:
-                if (len(nums) + len(beam.expr_list) >= self.cfg.quant_size or len(beam.expr_list) >= self.cfg.max_step_size) and beam.end_token != self.expr_tok.eos_token:
+                if len(beam.expr_list) > 0 and beam.expr_list[-1].args[-1] > self.cfg.quant_size:
+                    continue
+                if len(beam.expr_list) >= self.cfg.max_step_size and beam.end_token != self.expr_tok.eos_token:
                     continue
                 if not beam.end and beam.end_token == self.expr_tok.eos_token:
                     beam.end = True
@@ -618,7 +563,7 @@ class ExprBeam:
 class StatBeam:
     
     def __init__(self, 
-        expr_list: List[Expr],
+        expr_list: List[MultiExpr],
         score: float,
         end_token: str
     ) -> None:
@@ -627,7 +572,7 @@ class StatBeam:
         self.end_token = end_token
         self.end = False
     
-    def extend(self, expr: Expr, score: float, end_token: str) -> 'StatBeam':
+    def extend(self, expr: MultiExpr, score: float, end_token: str) -> 'StatBeam':
         length = len(self.expr_list)
         next_beam = StatBeam(
             expr_list=self.expr_list + [expr],
@@ -637,41 +582,76 @@ class StatBeam:
         return next_beam
 
 
+def parse_quants_test(tokens: List[Tok]):
+    pat = re.compile("\[num\d+\]")
+    if any(not pat.match(tokens[i]) for i in range(len(tokens))):
+        return False
+    return True
+
+def parse_fn_test(tokens: List[Tok], end: bool = False):
+    if tokens[0] == "[solve_linear_equation]":
+        if end:
+            return len(tokens) == 7 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])
+    elif tokens[0] == "[quadratic_function_integral]":
+        if end:
+            return len(tokens) == 6 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])            
+    elif tokens[0] == "[quadratic_function_extremum]":
+        if end:
+            return len(tokens) == 4 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])
+    elif tokens[0] == "[add]":
+        if end:
+            return len(tokens) == 3 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])
+    elif tokens[0] == "[sub]":
+        if end:
+            return len(tokens) == 3 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])
+    elif tokens[0] == "[mul]":
+        if end:
+            return len(tokens) == 3 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])
+    elif tokens[0] == "[div]":
+        if end:
+            return len(tokens) == 3 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])
+    elif tokens[0] == "[pow]":
+        if end:
+            return len(tokens) == 3 and parse_quants_test(tokens[1:])
+        else:
+            return parse_quants_test(tokens[1:])
+
 def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: str) -> bool:
     if len(tokens) >= max_length and tokens[-1] not in [bos_token, eos_token]:
         return False
-    end = tokens[-1] in [bos_token, eos_token]
-    if end:
-        tokens = tokens[:-1]
-    pat = re.compile("\[num\d+\]|\[c\d+\]")
-    n_stk = []
-    o_stk = []
-    try:
-        for i, tok in enumerate(tokens):
-            if pat.match(tok):
-                if i > 0 and tokens[i - 1] not in '+-*/^(':
-                    return False
-                n_stk.append('n')
-            elif tok in '+-*/^':
-                if i > 0 and tokens[i - 1] in '+-*/^(':
-                    return False
-                o_stk.append(tok)
-        if end:
-            while len(o_stk) > 0:
-                o_stk.pop()
-                n_stk.pop()
-                n_stk.pop()
-                n_stk.append('n')
-            if len(n_stk) != 1:
-                return False
-    except:
-        return False 
-    return True
-
-
-def constraint_test(tokens: List[Tok]):
-    if len(tokens) < 3:
-        return True
-    if tokens[0] == tokens[2] and tokens[1] in "-/^":
+    if len(tokens) > 0 and tokens[0] not in [
+        "[solve_linear_equation]", 
+        "[quadratic_function_integral]", 
+        "[quadratic_function_extremum]",
+        "[add]",
+        "[sub]",
+        "[mul]",
+        "[div]",
+        "[pow]",
+    ]:
         return False
-    return True
+    end = False
+    if tokens[-1] in [bos_token, eos_token]:
+        end = True
+        tokens = tokens[:-1]  # remove [bos], [eos]
+    return parse_fn_test(tokens, end)
+
+def parse_fn_dim(tokens: List[Tok]):
+    if tokens[0] == "[solve_linear_equation]":
+        return 2
+    else:
+        return 1

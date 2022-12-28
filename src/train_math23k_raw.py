@@ -1,6 +1,6 @@
 from dataset import loadMath23KRaw, build_ext_words, join_const_nums, join_Expr_list
-from solver import MathSolverRPD, MathSolverRPE
-from trainer import MathTrainerRPD, MathTrainerRPE
+from solver import MathSolverRNN, MathSolverRE
+from trainer import MathTrainerRNN, MathTrainerRE
 from cfg import MathConfig
 
 import datetime
@@ -58,12 +58,12 @@ def train_solver(
     train_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: Union[MathSolverRPE, MathSolverRPD],
+    solver: Union[MathSolverRE, MathSolverRNN],
 ):
     if args.model_type == "rpe":
-        trainer = MathTrainerRPE(cfg, train_dataset, test_dataset)
+        trainer = MathTrainerRE(cfg, train_dataset, test_dataset)
     elif args.model_type == "rpd":
-        trainer = MathTrainerRPD(cfg, train_dataset, test_dataset)
+        trainer = MathTrainerRNN(cfg, train_dataset, test_dataset)
     else:
         raise ValueError
     trainer.train(solver)
@@ -95,10 +95,10 @@ def main(args: argparse.Namespace):
     cfg.const_quant_size = len(const_nums)
     cfg.ext_tokens = ['^']
     
-    if args.model_type == "rpe":
-        solver = MathSolverRPE(cfg)
-    elif args.model_type == "rpd":
-        solver = MathSolverRPD(cfg)
+    if args.model_type == "re":
+        solver = MathSolverRE(cfg)
+    elif args.model_type == "rnn":
+        solver = MathSolverRNN(cfg)
     else:
         raise ValueError
     

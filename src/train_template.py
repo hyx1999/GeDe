@@ -1,6 +1,6 @@
-from dataset import loadToyLinalg
-from solver import MathSolverLinalg
-from trainer import MathTrainerLinalg
+from dataset import loadTemplate
+from solver import MathSolverRETemplate
+from trainer import MathTrainerRETemplate
 from cfg import MathConfig
 
 import datetime
@@ -57,9 +57,9 @@ def train_solver(
     dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolverLinalg,
+    solver: MathSolverRETemplate,
 ):
-    trainer = MathTrainerLinalg(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    trainer = MathTrainerRETemplate(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
 
     trainer.train(solver)
     if args.save_model:
@@ -74,7 +74,7 @@ def main(args: argparse.Namespace):
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
-    train_dataset, dev_dataset, test_dataset = loadToyLinalg(args.data_path, head=args.head)
+    train_dataset, dev_dataset, test_dataset = loadTemplate(args.data_path, head=args.head)
     
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
@@ -85,7 +85,7 @@ def main(args: argparse.Namespace):
     logger.info("len(const_quant_size): {}".format(0))
     logger.info("const_quants: {}".format([]))
 
-    solver = MathSolverLinalg(cfg)
+    solver = MathSolverRETemplate(cfg)
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")

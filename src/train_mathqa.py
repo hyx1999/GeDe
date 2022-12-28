@@ -1,6 +1,6 @@
 from dataset import loadMathQA
-from solver import MathSolverRPD, MathSolverRPE, MathSolverRPE_Abl0
-from trainer import MathTrainerRPD, MathTrainerRPE, MathTrainerRPE_Abl0
+from solver import MathSolverRNN, MathSolverRE, MathSolverRE_Abl0
+from trainer import MathTrainerRNN, MathTrainerRE, MathTrainerRE_Abl0
 from cfg import MathConfig
 
 import datetime
@@ -58,12 +58,12 @@ def train_solver(
     dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: Union[MathSolverRPD, MathSolverRPE],
+    solver: Union[MathSolverRNN, MathSolverRE],
 ):
     trainer_dict = {
-        "rpe": MathTrainerRPE,
-        "rpe_abl0": MathTrainerRPE_Abl0,
-        "rpd": MathTrainerRPD,
+        "rpe": MathTrainerRE,
+        "rpe_abl0": MathTrainerRE_Abl0,
+        "rpd": MathTrainerRNN,
     }
     if args.model_type in trainer_dict:
         trainer = trainer_dict[args.model_type](cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
@@ -96,9 +96,9 @@ def main(args: argparse.Namespace):
     logger.info("const_quants: {}".format(const_nums))
 
     solver_dict = {
-        "rpe": MathSolverRPE,
-        "rpe_abl0": MathSolverRPE_Abl0,
-        "rpd": MathSolverRPD,
+        "re": MathSolverRE,
+        "re_abl0": MathSolverRE_Abl0,
+        "rnn": MathSolverRNN,
     }
     if args.model_type in solver_dict:
         solver = solver_dict[args.model_type](cfg)

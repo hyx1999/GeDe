@@ -2,11 +2,11 @@ import json
 import os
 import math
 import random
-from solver import MathSolverRPE_Abl0
+from solver import MathSolverRETemplate
 from scheduler import GradualWarmupScheduler
-from math_utils import MathDataset, compute_Expr_list
+from math_utils import TemplateDataInstance, MathDataset, compute_MultiExpr_list
 from cfg import MathConfig
-from math_utils import MathDataInstance
+from math_utils import TemplateDataInstance
 from transformers import get_linear_schedule_with_warmup
 
 import numpy as np
@@ -23,11 +23,8 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class MathTrainerRPE_Abl0:
-    """
-    @ Ablation Study 0
-    @ 验证动态数值表示的作用
-    """
+class MathTrainerRETemplate:
+
     def __init__(
         self, 
         cfg: MathConfig,
@@ -50,15 +47,7 @@ class MathTrainerRPE_Abl0:
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
-    
-    def augment_data(self):
-        logger.info("data augumentation[shuffle,mix]")
-        shuffle_train_dataset = self.add_shuffle(self.raw_dataset["raw_train"])
-        mix_train_dataset = self.add_mix(self.raw_dataset["raw_train"])
-        self.raw_dataset["train"] = deepcopy(self.raw_dataset["raw_train"])
-        self.raw_dataset["train"].extend(shuffle_train_dataset)
-        self.raw_dataset["train"].extend(mix_train_dataset)
-
+        
     def split_data(self):
         raw_train_dataset = self.raw_dataset["train"]
         val_ids = set(np.random.choice(len(raw_train_dataset), size=100, replace=False).tolist())
@@ -72,66 +61,15 @@ class MathTrainerRPE_Abl0:
         self.raw_dataset["train"] = train_dataset
         self.raw_dataset["dev"] = dev_dataset
 
-    def add_shuffle(self, data: List[Dict], num: int = 1000):
-        num = min(num, len(data))
-        indices = np.random.choice(range(len(data)), num, replace=False)
-        data = [data[i] for i in indices]
-        new_data = []
-        for obj in data:
-            obj = deepcopy(obj)
-            text: str = obj["seg_text"]
-            seg_text = text.split(".")
-            seg_text, q_text = seg_text[:-1], seg_text[-1:]
-            random.shuffle(seg_text)
-            seg_text = ".".join(seg_text + q_text)
-            obj["id"] = -1
-            obj["seg_text"] = seg_text
-            new_data.append(obj)
-        return new_data
-
-    def add_mix(self, data: List[Dict], num: int = 1000):
-        num = min(num, len(data))
-        indices1 = np.random.choice(range(len(data)), num, replace=False)
-        indices2 = np.random.choice(range(len(data)), num, replace=False)
-        new_data = []
-        for i, j in zip(indices1, indices2):
-            if i == j:
-                continue
-            obj1 = data[i]
-            obj2 = data[j]
-            nums_size1 = len(obj1["nums"])
-            nums_size2 = len(obj2["nums"])
-            text1: str = obj1["seg_text"]
-            text2: str = obj2["seg_text"]
-            for i in range(nums_size2 - 1, -1, -1):
-                text2 = text2.replace(f"[num{i}]", f"[num{i+nums_size1}]")
-            seg_text1 = text1.split(".")
-            seg_text2 = text2.split(".")
-            ctx = seg_text1[:-1] + seg_text2[:-1]
-            q_text = seg_text1[-1:]
-            random.shuffle(ctx)
-            text = ".".join(ctx + q_text)
-            nums = obj1["nums"] + obj2["nums"]
-            obj = {
-                "id": -2,
-                "sample_id": obj1["sample_id"],
-                "seg_text": text,
-                "nums": nums,
-                "const_nums": obj1["const_nums"],
-                "Expr_list": obj1["Expr_list"]
-            }
-            new_data.append(obj)
-        return new_data
-
-    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[MathDataInstance]:
+    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[TemplateDataInstance]:
         new_dataset = []
         for obj in dataset:
-            question = "".join(obj["seg_text"])
+            question = " ".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
             for i in range(len(expr_list)):
-                new_dataset.append(MathDataInstance(
+                new_dataset.append(TemplateDataInstance(
                     question=question,
                     nums=nums,
                     const_nums=const_nums,
@@ -148,7 +86,7 @@ class MathTrainerRPE_Abl0:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolverRPE_Abl0):
+    def train(self, solver: MathSolverRETemplate):
         solver.to(self.cfg.device)
         
         dataset = MathDataset(self.train_dataset)
@@ -196,15 +134,10 @@ class MathTrainerRPE_Abl0:
             num_training_steps=self.cfg.num_epochs * len(loader)
         )
         
-        for epoch in range(self.cfg.num_epochs):
-            if "svamp" in self.cfg.dataset_name and self.cfg.use_data_aug:
-                self.augment_data()
-                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
-                dataset.data = self.train_dataset
-                
+        for epoch in range(self.cfg.num_epochs):                
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if epoch % 5 == 0 and epoch > 50 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")
@@ -220,13 +153,12 @@ class MathTrainerRPE_Abl0:
                         self.best_test_acc = test_acc
                 else:
                     logger.info("[evaluate train-data]")
-                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:100])
-
+                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:5])
 
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolverRPE_Abl0,
+        solver: MathSolverRETemplate,
         optim: Union[Adam, AdamW],
         scheduler: LambdaLR,
         loader: DataLoader
@@ -268,7 +200,7 @@ class MathTrainerRPE_Abl0:
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolverRPE_Abl0,
+        solver: MathSolverRETemplate,
         test_data: List[Dict]
     ) -> float:
         solver.eval()
@@ -279,11 +211,11 @@ class MathTrainerRPE_Abl0:
         
         if self.cfg.save_result:
             os.makedirs("../cache/mwp", exist_ok=True)
-            f = open("../cache/mwp/{}_{}_{}_rpe_abl0.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
+            f = open("../cache/mwp/{}_{}_{}_rpe.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
         
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
-            input_text = "".join(obj["seg_text"])
+            input_text = " ".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
@@ -291,8 +223,8 @@ class MathTrainerRPE_Abl0:
             target_Expr_list = obj["Expr_list"]
 
             try:
-                output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
-                target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
+                output_value = compute_MultiExpr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
+                target_value = compute_MultiExpr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
             except SyntaxError:
                 output_value = None
                 target_value = None
@@ -302,15 +234,23 @@ class MathTrainerRPE_Abl0:
                 Acc.append(1)
             else:
                 Acc.append(0)
-            
+
             expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
             expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
+            
+            # if expr_list0 is not None and expr_list1 is not None and " ".join(expr_list0) == " ".join(expr_list1):
+            #     Acc.append(1)
+            # else:
+            #     Acc.append(0)
+            
             if self.cfg.save_result:
                 f.write("id: {}\n".format(i))
                 f.write("input={}\n".format(input_text))
                 f.write("nums={}\n".format(nums))
                 f.write("output={}\n".format(expr_list0))
                 f.write("target={}\n".format(expr_list1))
+                f.write("output value={}\n".format(output_value))
+                f.write("target value={}\n".format(target_value))
                 f.write("correct={}\n".format("True" if Acc[-1] == 1 else "False"))
 
         if self.cfg.save_result:
@@ -321,3 +261,4 @@ class MathTrainerRPE_Abl0:
         logger.info(msg)
 
         return answer_mAcc
+
