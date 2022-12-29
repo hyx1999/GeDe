@@ -1,12 +1,11 @@
-import json
 import os
 import math
 import random
-from solver import MathSolverRETemplate
+from solver import MathSolverSeq2Seq
 from scheduler import GradualWarmupScheduler
-from math_utils import TemplateDataInstance, MathDataset, compute_MultiExpr_list
+from math_utils import MathDataset, compute_PreOrder
 from cfg import MathConfig
-from math_utils import TemplateDataInstance
+from math_utils import MathDataInstance
 from transformers import get_linear_schedule_with_warmup
 
 import numpy as np
@@ -14,7 +13,7 @@ import torch
 import torch.nn.functional as F
 from torch import Tensor
 from torch.optim import AdamW, Adam
-from torch.optim.lr_scheduler import LambdaLR
+from torch.optim.lr_scheduler import StepLR, LambdaLR
 from torch.utils.data import Dataset, DataLoader
 
 from loguru import logger
@@ -23,7 +22,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class MathTrainerRETemplate:
+class MathTrainerSeq2Seq:
 
     def __init__(
         self, 
@@ -41,43 +40,28 @@ class MathTrainerRETemplate:
             "test": deepcopy(test_dataset),
             "dev": deepcopy(dev_dataset),
         }
-        
         if self.use_dev and dev_dataset is None:
             self.split_data()
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
-        
-    def split_data(self):
-        raw_train_dataset = self.raw_dataset["train"]
-        val_ids = set(np.random.choice(len(raw_train_dataset), size=100, replace=False).tolist())
-        train_dataset = []
-        dev_dataset   = []
-        for i in range(len(raw_train_dataset)):
-            if i in val_ids:
-                dev_dataset.append(raw_train_dataset[i])
-            else:
-                train_dataset.append(raw_train_dataset[i])
-        self.raw_dataset["train"] = train_dataset
-        self.raw_dataset["dev"] = dev_dataset
 
-    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[TemplateDataInstance]:
+    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[MathDataInstance]:
         new_dataset = []
         for obj in dataset:
-            question = " ".join(obj["seg_text"])
+            question = "".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
-            for i in range(len(expr_list)):
-                new_dataset.append(TemplateDataInstance(
-                    question=question,
-                    nums=nums,
-                    const_nums=const_nums,
-                    expr_list=expr_list[:i],
-                    target=[expr_list[i]],
-                    id=obj["sample_id"],
-                    end=(i + 1 == len(expr_list))
-                ))
+            new_dataset.append(MathDataInstance(
+                question=question,
+                nums=nums,
+                const_nums=const_nums,
+                expr_list=expr_list,
+                target=expr_list,
+                id=obj["sample_id"]
+            ))
+
         return new_dataset
 
     def collate_fn(
@@ -86,7 +70,7 @@ class MathTrainerRETemplate:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolverRETemplate):
+    def train(self, solver: MathSolverSeq2Seq):
         solver.to(self.cfg.device)
         
         dataset = MathDataset(self.train_dataset)
@@ -125,19 +109,22 @@ class MathTrainerRETemplate:
                 {'params': param_dict["decoder_no_decay"], 'lr': self.cfg.lr * alpha, 'weight_decay': 0.0},
             ],
         )
-
-        print("num_training_steps = {}".format(self.cfg.num_epochs * len(loader)))
-
+        
         scheduler = get_linear_schedule_with_warmup(
             optim, 
             num_warmup_steps=0,
             num_training_steps=self.cfg.num_epochs * len(loader)
         )
-        
-        for epoch in range(self.cfg.num_epochs):                
+
+        for epoch in range(self.cfg.num_epochs):
+            if "svamp" in self.cfg.dataset_name and self.cfg.use_data_aug:
+                self.augment_data()
+                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
+                dataset.data = self.train_dataset
+
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            if epoch % 5 == 0 and epoch > 50 or epoch > self.cfg.num_epochs - 5:
+            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")
@@ -153,12 +140,12 @@ class MathTrainerRETemplate:
                         self.best_test_acc = test_acc
                 else:
                     logger.info("[evaluate train-data]")
-                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:5])
+                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:100])
 
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolverRETemplate,
+        solver: MathSolverSeq2Seq,
         optim: Union[Adam, AdamW],
         scheduler: LambdaLR,
         loader: DataLoader
@@ -172,7 +159,7 @@ class MathTrainerRETemplate:
         for i, batch in enumerate(pbar):            
             if i < 5 and epoch == 0:
                 for x in [
-                    I.parse_input("#") \
+                    I.parse_input(sep_token="", use_expr=False) \
                     + " ---> " \
                     + I.parse_output(solver.expr_tok.bos_token, solver.expr_tok.eos_token) for I in batch
                 ]:
@@ -200,7 +187,7 @@ class MathTrainerRETemplate:
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolverRETemplate,
+        solver: MathSolverSeq2Seq,
         test_data: List[Dict]
     ) -> float:
         solver.eval()
@@ -215,16 +202,16 @@ class MathTrainerRETemplate:
         
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
-            input_text = " ".join(obj["seg_text"])
+            input_text = "".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
-            output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
-            target_Expr_list = obj["Expr_list"]
+            output_PreOrder = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
+            target_PreOrder = obj["Expr_list"][0]["expr_toks"]
 
             try:
-                output_value = compute_MultiExpr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
-                target_value = compute_MultiExpr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
+                output_value = compute_PreOrder(output_PreOrder, nums, const_nums, self.cfg.quant_size)
+                target_value = compute_PreOrder(target_PreOrder, nums, const_nums, self.cfg.quant_size)
             except SyntaxError:
                 output_value = None
                 target_value = None
@@ -234,23 +221,15 @@ class MathTrainerRETemplate:
                 Acc.append(1)
             else:
                 Acc.append(0)
-
-            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
-            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
             
-            # if expr_list0 is not None and expr_list1 is not None and " ".join(expr_list0) == " ".join(expr_list1):
-            #     Acc.append(1)
-            # else:
-            #     Acc.append(0)
-            
+            expr_list0 = output_PreOrder
+            expr_list1 = target_PreOrder
             if self.cfg.save_result:
                 f.write("id: {}\n".format(i))
                 f.write("input={}\n".format(input_text))
                 f.write("nums={}\n".format(nums))
                 f.write("output={}\n".format(expr_list0))
                 f.write("target={}\n".format(expr_list1))
-                f.write("output value={}\n".format(output_value))
-                f.write("target value={}\n".format(target_value))
                 f.write("correct={}\n".format("True" if Acc[-1] == 1 else "False"))
 
         if self.cfg.save_result:
@@ -261,4 +240,3 @@ class MathTrainerRETemplate:
         logger.info(msg)
 
         return answer_mAcc
-

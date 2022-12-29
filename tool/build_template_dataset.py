@@ -32,7 +32,7 @@ templates = {
     ],
     "integral": [
         {
-            "text": "Determine [o0] as the definite integral of quadratic function [q0] * x^2 + [q1] * x + q[2] in the range [q[3] to [q[4]].",
+            "text": "Determine [o0] as the definite integral of quadratic function [q0] * x^2 + [q1] * x + [q2] in the range [[q3] to [[q4]].",
             "op": "[quadratic_function_integral] [q3] [q4] [q0] [q1] [q2]",
             "in_num": 5,
             "out_num": 1,
@@ -40,7 +40,7 @@ templates = {
     ],
     "extremum": [
         {
-            "text": "Determine [o0] as the the extremum value of quadratic function [q0] * x^2 + [q1] * x + q[2] .",
+            "text": "Determine [o0] as the the extremum value of quadratic function [q0] * x^2 + [q1] * x + [q2] .",
             "op": "[quadratic_function_extremum] [q0] [q1] [q2]",
             "in_num": 3,
             "out_num": 1,

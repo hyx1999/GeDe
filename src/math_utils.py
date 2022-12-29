@@ -511,6 +511,56 @@ def compute_MultiExpr_list(MultiExpr_list: List[MultiExpr], nums: List[str], con
         return None
     return nums_table[MultiExpr_list[-1].args[-1]] if len(MultiExpr_list) > 0 else None
 
+def compute_PreOrder(tokens: List[Tok], nums: List[str], const_nums: List[str], max_nums_size: int):    
+    nums = [parse_value(x) for x in nums]
+    def compute_tokens(expr_toks: List[Tok]):
+
+        op_stack = []
+        v_stack = []
+
+        def pop_stack():
+            o = op_stack.pop()
+            v1 = v_stack.pop()
+            v0 = v_stack.pop()
+            # print("do_op: [{} {} {}]".format(v0, o, v1))
+            if o not in '+-*/^':
+                raise SyntaxError
+            if o == '^':
+                v_stack.append(pow(v0, v1))
+            elif o == '+':
+                v_stack.append(v0 + v1)
+            elif o == '-':
+                v_stack.append(v0 - v1)
+            elif o == '*':
+                v_stack.append(v0 * v1)
+            elif o == '/':
+                v_stack.append(v0 / v1)
+
+        for t in expr_toks:
+            if t.replace(" ", "") == "":
+                continue
+            if t in '+-*/^':
+                op_stack.append(t)
+            else:
+                if re.match('\[num\d+\]', t):
+                    i = parse_num_index(t)
+                    v_stack.append(Decimal(nums[i]))
+                else:
+                    i = parse_const_num_index(t)
+                    v_stack.append(Decimal(const_nums[i]))
+            
+        if not (len(v_stack) == 1 and len(op_stack) == 0):
+            raise SyntaxError
+        return v_stack[-1]
+
+    try:
+        value = compute_tokens(tokens)
+    except:
+        logger.warning("decimal.Error: {}".format(tokens))
+        return None
+    return value
+
+
 """
 class OpDataInstance:
     

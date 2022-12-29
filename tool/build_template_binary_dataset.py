@@ -9,11 +9,12 @@ from collections import namedtuple
 from scipy import linalg
 from tqdm import tqdm
 
-const_nums = [1]
+const_nums = [1, 2, 3]
 
 q_pat = re.compile('\[q(\d+)\]')
 o_pat = re.compile('\[o(\d+)\]')
 n_pat = re.compile('\[n(\d+)\]')
+num_pat = re.compile('\[num(\d+)\]')
 
 templates = {
     "linalg": [
@@ -170,28 +171,104 @@ def genDataInstance(data_id: int):
             ws = [0.8 * x for x in ws] + [1.0] * O["out_num"]
             N_Q += O["out_num"]
     
-    rawText = " ".join(segText + extSegText) + " Output the value of [q{}] .".format(N_Q - 1)
-    
-    # shuffle sentence
-    # extSegText = " ".join(extSegText)
-    # extSegText = extSegText.split(".")[:-1]
-    # random.shuffle(extSegText)
-    # extSegText = ".".join(extSegText).split() + ["."]
-    
+    rawText = " ".join(segText + extSegText) + " Output the value of [q{}] .".format(N_Q - 1)    
     segText = segText + extSegText + " Output the value of [q{}] .".format(N_Q - 1).split()
+    
+    # translate exprList to one expression
+    tree = namedtuple('tree', ['value', 'left', 'right'])
+    trees = [tree(value=f'[num{i}]', left=None, right=None) for i in range(N)]
+    
+    def add(a, b):
+        return tree('+', a, b)
+    def sub(a, b):
+        return tree('-', a, b)
+    def mul(a, b):
+        return tree('*', a, b)
+    def div(a, b):
+        return tree('/', a, b)
+    def pow(a, b):
+        return tree('^', a, b)
+    C = {
+        1: tree('[c0]', None, None),
+        2: tree('[c1]', None, None),
+        3: tree('[c2]', None, None),
+        -1: tree('[c3]', None, None)
+    }
+    
+    
+    for expr in exprList:
+        parseIndex = lambda x: int(num_pat.match(x).group(1))
+        indices = [parseIndex(x) for x in expr["expr_toks"][1:]]
+        if expr["expr_toks"][0] == "[solve_linear_equation]":
+            a = trees[indices[0]]
+            b = trees[indices[1]]
+            c = trees[indices[2]]
+            d = trees[indices[3]]
+            x = trees[indices[4]]
+            y = trees[indices[5]]
+            det = sub(mul(a, d), mul(c, b))
+            t_o0 = div(sub(mul(d,x),mul(b,y)),det)
+            t_o1 = div(sub(mul(a,x),mul(c,y)),det)
+            trees.append(t_o0)
+            trees.append(t_o1)
+        elif expr["expr_toks"][0] == "[quadratic_function_integral]":
+            xl = trees[indices[0]]
+            xr = trees[indices[1]]
+            a = trees[indices[2]]
+            b = trees[indices[3]]
+            c = trees[indices[4]]
+            xl3 = pow(xl, C[3])
+            xl2 = pow(xl, C[2])
+            xr3 = pow(xr, C[3])
+            xr2 = pow(xr, C[2])
+            vl = add(mul(div(a, C[3]), xl3), add(mul(div(b, C[2]), xl2), mul(c, xl)))
+            vr = add(mul(div(a, C[3]), xr3), add(mul(div(b, C[2]), xr2), mul(c, xr)))
+            t_o = sub(vr, vl)
+            trees.append(t_o)
+        elif expr["expr_toks"][0] == "[quadratic_function_extremum]":
+            a = trees[indices[0]]
+            b = trees[indices[1]]
+            c = trees[indices[2]]
+            x = mul(C[-1], div(b, mul(C[2], a)))
+            x2 = pow(x, C[2])
+            t_o = add(mul(a, x2), add(mul(b, x), c))
+            trees.append(t_o)
+        elif expr["expr_toks"][0] == "[add]":
+            trees.append(tree('+', left=trees[indices[0]], right=trees[indices[1]]))
+        elif expr["expr_toks"][0] == "[sub]":
+            trees.append(tree('-', left=trees[indices[0]], right=trees[indices[1]]))
+        elif expr["expr_toks"][0] == "[mul]":
+            trees.append(tree('*', left=trees[indices[0]], right=trees[indices[1]]))
+        elif expr["expr_toks"][0] == "[div]":
+            trees.append(tree('/', left=trees[indices[0]], right=trees[indices[1]]))
+        elif expr["expr_toks"][0] == "[pow]":
+            trees.append(tree('^', left=trees[indices[0]], right=trees[indices[1]]))
+    
+    def genExpr(x: tree) -> list[str]:
+        o = [x.value]
+        if x.left:
+            o.extend(genExpr(x.left))
+        if x.right:
+            o.extend(genExpr(x.right))
+        return o
     
     return {
         "sample_id": data_id,
         "raw_text": rawText,
         "seg_text": segText,
-        "Expr_list": exprList,
-        "const_nums": [],
+        "Expr_list": [
+            {
+                "args": [N],
+                "expr_toks": genExpr(trees[-1])
+            }    
+        ],
+        "const_nums": [1, 2, 3, -1],
         "nums": qs
     }
 
 if __name__ == '__main__':
     setup_seend()
-    folder_path = "../data/MathTemplate"
+    folder_path = "../data/MathTemplateBinary"
 
     train_path = os.path.join(folder_path, "train.json")
     dev_path = os.path.join(folder_path, "dev.json")
