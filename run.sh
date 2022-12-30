@@ -192,10 +192,38 @@ then
         --data_path '../data/MathTemplate' \
         --load_model_dir 'models' \
         --save_model_dir 'models' \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}' \
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":true}' \
         --head 100 \
         --debug
 fi
+
+if [[ ${mod} == "train_template_binary" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_template_binary.py \
+        --dataset_name 'templateBinary' \
+        --log_text ${log} \
+        --data_path '../data/MathTemplateBinary' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --save_model \
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":true}'
+fi
+
+# debug
+if [[ ${mod} == "debug_template_binary" ]];
+then
+    CUDA_VISIBLE_DEVICES=${device} python train_template_binary.py \
+        --dataset_name 'templateBinary' \
+        --log_text '(debug)' \
+        --data_path '../data/MathTemplateBinary' \
+        --load_model_dir 'models' \
+        --save_model_dir 'models' \
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":true}' \
+        --head 100 \
+        --debug
+fi
+
 
 if [[ ${mod} == "train_mathqa_abl0" ]];
 then

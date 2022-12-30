@@ -382,19 +382,28 @@ class MathSolverSeq2Seq(nn.Module):
 
     @torch.no_grad()
     def beam_search(
-        self,
-        hidden_state: Tensor, 
-        memory_states: Tensor,
-        beam_size: int = 4,
-    ):
+        self, 
+        question: str, 
+        nums: List[str], 
+        const_nums: List[str],
+        beam_size: int = 4
+    ) -> List[Expr]:
+        I0 = MathDataInstance(
+            question=question,
+            nums=nums,
+            const_nums=const_nums,
+            expr_list=[]
+        )
+        input_dict = self.prepare_input([I0.parse_input("", use_expr=False)])        
+        hidden_state, memory_states = self.encode(input_dict)
+
         decoder_input_id = torch.tensor(
             self.expr_tok.bos_token_id,
             dtype=torch.long,
             device=hidden_state.device
         ).view(1, 1)
         
-        if gru_hidden_state is None:
-            gru_hidden_state = hidden_state
+        gru_hidden_state = hidden_state
         
         beams = [ExprBeam([], decoder_input_id, gru_hidden_state, 0.0)]
         
@@ -423,13 +432,17 @@ class MathSolverSeq2Seq(nn.Module):
             filtered_beams = []
             for beam in next_beams:
                 tokens = self.expr_tok.convert_ids_to_tokens(beam.predict_ids)
-                if not grammar_test(tokens, 256, self.expr_tok.bos_token, self.expr_tok.eos_token):
+                if not grammar_test(tokens, 20, self.expr_tok.bos_token, self.expr_tok.eos_token):   # DEBUG: 256 -> 20
                     continue
                 if not beam.end and tokens[-1] in [self.expr_tok.bos_token, self.expr_tok.eos_token]:
                     beam.end = True
                 filtered_beams.append(beam)
             beams = sorted(filtered_beams, key=lambda b: b.score, reverse=True)[:beam_size]
-        return next_beams
+
+        if len(beams) == 0:
+            return None
+        tokens = self.expr_tok.convert_ids_to_tokens(beams[0].predict_ids)[:-1]
+        return tokens
 
 class ExprBeam:
     

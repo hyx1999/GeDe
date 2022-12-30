@@ -49,7 +49,7 @@ class MathTrainerSeq2Seq:
     def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[MathDataInstance]:
         new_dataset = []
         for obj in dataset:
-            question = "".join(obj["seg_text"])
+            question = " ".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
@@ -117,10 +117,6 @@ class MathTrainerSeq2Seq:
         )
 
         for epoch in range(self.cfg.num_epochs):
-            if "svamp" in self.cfg.dataset_name and self.cfg.use_data_aug:
-                self.augment_data()
-                self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
-                dataset.data = self.train_dataset
 
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
@@ -183,6 +179,28 @@ class MathTrainerSeq2Seq:
 # --------------------------------------------- evaluate ------------------------------------------------------
 
     @torch.no_grad()
+    def evaluate_test(
+        self,
+        test_data: List[Dict]
+    ) -> float:        
+
+        test_dataset = MathDataset(test_data)
+                
+        for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
+            obj = test_dataset[i]
+            nums = obj["nums"]
+            const_nums = obj["const_nums"]
+            
+            target_PreOrder = obj["Expr_list"][0].expr_toks
+
+            try:
+                target_value = compute_PreOrder(target_PreOrder, nums, const_nums, self.cfg.quant_size)
+            except SyntaxError:
+                target_value = None
+            print(target_value)
+
+
+    @torch.no_grad()
     def evaluate(
         self,
         dataset_type: str,
@@ -202,12 +220,12 @@ class MathTrainerSeq2Seq:
         
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
-            input_text = "".join(obj["seg_text"])
+            input_text = " ".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
             output_PreOrder = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
-            target_PreOrder = obj["Expr_list"][0]["expr_toks"]
+            target_PreOrder = obj["Expr_list"][0].expr_toks
 
             try:
                 output_value = compute_PreOrder(output_PreOrder, nums, const_nums, self.cfg.quant_size)

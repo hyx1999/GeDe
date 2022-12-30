@@ -9,6 +9,8 @@ from collections import namedtuple
 from scipy import linalg
 from tqdm import tqdm
 
+avg_len = []
+
 const_nums = [1]
 
 q_pat = re.compile('\[q(\d+)\]')
@@ -73,7 +75,7 @@ templates = {
     "div": [
         {
             "text": "Determine [o0] as the [q0] divided by [q1] .",
-            "op": "[mul] [q0] [q1]",
+            "op": "[div] [q0] [q1]",
             "in_num": 2,
             "out_num": 1,
         }
@@ -133,8 +135,7 @@ def genDataInstance(data_id: int):
     )
     for i in range(N_O):
         O = Os[i]
-        p = np.array(ws) / np.sum(ws)
-        in_indices: List[int] = np.random.choice(N_Q, O["in_num"], replace=False, p=p)
+        in_indices: List[int] = np.random.choice(N_Q - 1, O["in_num"] - 1, replace=False).tolist() + [N_Q - 1]
         curSegText: List[str] = O["text"].split()
         curSegOp: List[str] = O["op"].split()
         # names: List[str] = [rand_name(nameSet) for _ in range(O["n_num"])]
@@ -180,6 +181,8 @@ def genDataInstance(data_id: int):
     
     segText = segText + extSegText + " Output the value of [q{}] .".format(N_Q - 1).split()
     
+    avg_len.append(sum(len(x["expr_toks"]) for x in exprList))
+    
     return {
         "sample_id": data_id,
         "raw_text": rawText,
@@ -201,3 +204,5 @@ if __name__ == '__main__':
         data = [genDataInstance(str(_)) for _ in tqdm(range(num), total=num)]
         with open(path, "w") as f:
             f.write(json.dumps(data, ensure_ascii=False))
+
+print(sum(avg_len) / len(avg_len))

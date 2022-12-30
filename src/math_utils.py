@@ -511,8 +511,7 @@ def compute_MultiExpr_list(MultiExpr_list: List[MultiExpr], nums: List[str], con
         return None
     return nums_table[MultiExpr_list[-1].args[-1]] if len(MultiExpr_list) > 0 else None
 
-def compute_PreOrder(tokens: List[Tok], nums: List[str], const_nums: List[str], max_nums_size: int):    
-    nums = [parse_value(x) for x in nums]
+def compute_PreOrder(tokens: List[Tok], nums: List[float], const_nums: List[float], max_nums_size: int):    
     def compute_tokens(expr_toks: List[Tok]):
 
         op_stack = []
@@ -548,7 +547,9 @@ def compute_PreOrder(tokens: List[Tok], nums: List[str], const_nums: List[str], 
                 else:
                     i = parse_const_num_index(t)
                     v_stack.append(Decimal(const_nums[i]))
-            
+                if len(v_stack) == 2:
+                    pop_stack()
+
         if not (len(v_stack) == 1 and len(op_stack) == 0):
             raise SyntaxError
         return v_stack[-1]

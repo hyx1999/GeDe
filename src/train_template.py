@@ -83,7 +83,6 @@ def main(args: argparse.Namespace):
     cfg.ext_tokens = []
     
     logger.info("len(const_quant_size): {}".format(0))
-    logger.info("const_quants: {}".format([]))
 
     solver = MathSolverRETemplate(cfg)
     
