@@ -535,11 +535,12 @@ def compute_PreOrder(tokens: List[Tok], nums: List[float], const_nums: List[floa
             elif o == '/':
                 v_stack.append(v0 / v1)
 
-        for t in expr_toks:
+        for t in expr_toks[::-1]:
             if t.replace(" ", "") == "":
                 continue
             if t in '+-*/^':
                 op_stack.append(t)
+                pop_stack()
             else:
                 if re.match('\[num\d+\]', t):
                     i = parse_num_index(t)
@@ -547,8 +548,6 @@ def compute_PreOrder(tokens: List[Tok], nums: List[float], const_nums: List[floa
                 else:
                     i = parse_const_num_index(t)
                     v_stack.append(Decimal(const_nums[i]))
-                if len(v_stack) == 2:
-                    pop_stack()
 
         if not (len(v_stack) == 1 and len(op_stack) == 0):
             raise SyntaxError

@@ -179,7 +179,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":true}'
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}'
 
 fi
 
@@ -192,7 +192,7 @@ then
         --data_path '../data/MathTemplate' \
         --load_model_dir 'models' \
         --save_model_dir 'models' \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":true}' \
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}' \
         --head 100 \
         --debug
 fi
@@ -207,7 +207,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":true}'
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}'
 fi
 
 # debug
@@ -219,7 +219,7 @@ then
         --data_path '../data/MathTemplateBinary' \
         --load_model_dir 'models' \
         --save_model_dir 'models' \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":true}' \
+        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}' \
         --head 100 \
         --debug
 fi

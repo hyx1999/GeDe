@@ -45,6 +45,8 @@ class MathTrainerSeq2Seq:
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
+        
+        # self.evaluate_test(self.raw_dataset["test"])
 
     def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[MathDataInstance]:
         new_dataset = []
@@ -198,6 +200,8 @@ class MathTrainerSeq2Seq:
             except SyntaxError:
                 target_value = None
             print(target_value)
+
+        exit(0)
 
 
     @torch.no_grad()

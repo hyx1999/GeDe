@@ -35,7 +35,7 @@ templates = {
     ],
     "integral": [
         {
-            "text": "Determine [o0] as the definite integral of quadratic function [q0] * x^2 + [q1] * x + [q2] in the range [[q3] to [[q4]].",
+            "text": "Determine [o0] as the definite integral of quadratic function [q0] * x^2 + [q1] * x + [q2] Determine [o0] as the definite integral of quadratic function [q0] * x^2 + [q1] * x + [q2] between the intervals [q3] and [q4] .",
             "op": "[quadratic_function_integral] [q3] [q4] [q0] [q1] [q2]",
             "in_num": 5,
             "out_num": 1,
