@@ -9,3 +9,4 @@ tmp/*
 test.py
 math_test.py
 kbqa_test.py
+*.zip

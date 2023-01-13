@@ -63,7 +63,7 @@ def train_solver(
 
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-linalg")
+        solver.save_model(args.save_model_dir, "final-cmwpa-binary")
     logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
 

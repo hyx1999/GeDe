@@ -1,8 +1,9 @@
-from dataset import loadMath23KRaw, build_ext_words, join_const_nums, join_Expr_list
+from dataset import loadMath23K
 from solver import MathSolverRNN, MathSolverRE
 from trainer import MathTrainerRNN, MathTrainerRE
 from cfg import MathConfig
 
+import os
 import datetime
 import argparse
 import json
@@ -49,27 +50,29 @@ def get_args():
     parser.add_argument("--cfg", type=str, default="{}")
     parser.add_argument("--save_model", action="store_true")
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--expr_mode", type=str, default="v3")
     return parser.parse_args()
 
 
-def train_solver(
+def test_solver(
     args: argparse.Namespace,
     train_dataset: List[Dict],
+    dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: Union[MathSolverRE, MathSolverRNN],
+    solver: Union[MathSolverRNN, MathSolverRE],
 ):
+    # trainer = MathTrainer(cfg, train_dataset, test_dataset)
     if args.model_type == "re":
-        trainer = MathTrainerRE(cfg, train_dataset, test_dataset)
+        trainer = MathTrainerRE(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
     elif args.model_type == "rnn":
-        trainer = MathTrainerRNN(cfg, train_dataset, test_dataset)
+        trainer = MathTrainerRNN(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
     else:
         raise ValueError
-    trainer.train(solver)
-    if args.save_model:
-        solver.save_model(args.save_model_dir, "final-math23k")
-    logger.info("[finish train solver]")
+
+    solver.to(cfg.device)
+    solver.eval()
+    trainer.evaluate("testGreedy", -1, solver, test_dataset)
+    logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 def main(args: argparse.Namespace):
@@ -77,17 +80,13 @@ def main(args: argparse.Namespace):
         setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
+    logger.info("model type: {}".format(args.model_type))
     
-    train_dataset, test_dataset = loadMath23KRaw(args.data_path, head=args.head)
-    ext_words = build_ext_words(train_dataset + test_dataset)
-
-    const_nums = [word for word in ext_words if word not in '+-*/^()=']
-    if '-1' not in const_nums:
-        const_nums.append('-1')
-    print(const_nums)
-
-    train_dataset = join_Expr_list(join_const_nums(train_dataset, const_nums), args.expr_mode)
-    test_dataset  = join_Expr_list(join_const_nums(test_dataset , const_nums), args.expr_mode)
+    train_dataset, dev_dataset, test_dataset, const_nums = loadMath23K(args.data_path, head=args.head)
+    
+    logger.info("train dataset size: {}".format(len(train_dataset)))
+    logger.info("test dataset size: {}".format(len(test_dataset)))
+    logger.info("dev dataset size: {}".format(len(dev_dataset)))
     
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
@@ -95,20 +94,24 @@ def main(args: argparse.Namespace):
     cfg.const_quant_size = len(const_nums)
     cfg.ext_tokens = ['^']
     
-    if args.model_type == "re":
-        solver = MathSolverRE(cfg)
-    elif args.model_type == "rnn":
-        solver = MathSolverRNN(cfg)
-    else:
-        raise ValueError
-    
-    assert args.expr_mode == "v3"
-    print("expr-mode:", args.expr_mode)
+    logger.info("len(const_quant_size): {}".format(len(const_nums)))
+    logger.info("const_quants: {}".format(const_nums))
 
-    if args.save_model:
-        solver.save_model(args.save_model_dir, "test")
+    # solver = MathSolver(cfg, const_nums)
+    solver_dict = {
+        "re": MathSolverRE,
+        "rnn": MathSolverRNN,
+    }
+    if args.model_type in solver_dict:
+        solver: torch.nn.Module = solver_dict[args.model_type](cfg)
+    else:
+        raise ValueError(args.model_type)
+
+    model_name = "final-math23k-{}".format(args.model_type)
+    model_path = os.path.join(args.load_model_dir, f"model_{model_name}.pth")
+    solver.load_state_dict(torch.load(model_path))
     
-    train_solver(args, train_dataset, test_dataset, cfg, solver)
+    test_solver(args, train_dataset, dev_dataset, test_dataset, cfg, solver)
 
 
 if __name__ == '__main__':

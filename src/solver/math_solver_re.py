@@ -545,7 +545,8 @@ class MathSolverRE(nn.Module):
         question: str, 
         nums: List[str], 
         const_nums: List[str],
-        beam_size: int = 4
+        beam_size: int = 4,
+        return_all: bool = False
     ) -> List[Expr]:
         beams: List[StatBeam] = [StatBeam([], 0.0, self.expr_tok.bos_token)]
         while len(beams) > 0:
@@ -569,11 +570,18 @@ class MathSolverRE(nn.Module):
                         I.parse_input("#"),
                         beam_size=beam_size
                     )
+                    tem = 1.0
+                    expr_beam_scores = torch.tensor([expr_beam.score for expr_beam in expr_beams])
+                    expr_beam_log_probs = torch.log_softmax(expr_beam_scores * tem, dim=-1)
+                    for expr_beam, log_p in zip(expr_beams, expr_beam_log_probs.tolist()):
+                        expr_beam.score = log_p
+                    # logger.info("-" * 50)
                     for expr_beam in expr_beams:
                         tokens = self.expr_tok.convert_ids_to_tokens(expr_beam.predict_ids)
                         arg0 = len(nums) + len(beam.expr_list)
                         expr = Expr(arg0=arg0, expr_toks=tokens[:-1], expr_str=" ".join(tokens[:-1]))
                         end_token = tokens[-1]
+                        # logger.info("tokens: {}, score: {}".format(tokens, expr_beam.score))
                         next_beams.append(beam.extend(expr=expr, score=expr_beam.score, end_token=end_token))
             filtered_beams: List[StatBeam] = []
             for beam in next_beams:
@@ -584,9 +592,14 @@ class MathSolverRE(nn.Module):
                 filtered_beams.append(beam)
             beams = filtered_beams
             beams = sorted(beams, key=lambda b: b.score, reverse=True)[:beam_size]
+            # logger.info("-" * 50)
+            # for beam in beams:
+            #     logger.info("beam score: {}".format(beam.score))
 
         if len(beams) == 0:
             return None
+        if return_all:
+            return [(beam.expr_list, beam.score) for beam in beams]
         return beams[0].expr_list
 
 

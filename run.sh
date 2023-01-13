@@ -87,9 +87,25 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}'
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200,"save_result":true}'
 
 fi
+
+if [[ ${mod} == "test_mathqa" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python test_mathqa.py \
+        --model_type 're' \
+        --dataset_name 'mathqa' \
+        --log_text ${log} \
+        --data_path '../data/MathQA' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --save_model \
+        --cfg '{"model_name":"roberta-base","beam_size":4}'
+
+fi
+
 
 if [[ ${mod} == "debug_mathqa" ]];
 then
@@ -118,9 +134,26 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","num_epochs":200,"lr":2e-5,"lr_alpha":1.0}'
+        --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","num_epochs":200,"lr":2e-5,"lr_alpha":1.0,"save_result":true}'
 
 fi
+
+
+if [[ ${mod} == "test_math23k" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python test_math23k.py \
+        --model_type 're' \
+        --dataset_name 'math23k' \
+        --log_text ${log} \
+        --data_path '../data/Math23K' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --save_model \
+        --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","beam_size":4}'
+
+fi
+
 
 # debug
 if [[ ${mod} == "debug_math23k" ]];

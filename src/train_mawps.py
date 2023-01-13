@@ -60,15 +60,15 @@ def train_solver(
     cfg: MathConfig,
     solver: MathSolverRE,
 ):
-    if args.model_type == "rpe":
+    if args.model_type == "re":
         trainer = MathTrainerRE(cfg, train_dataset, test_dataset, use_dev=False)
-    elif args.model_type == "rpd":
+    elif args.model_type == "rnn":
         trainer = MathTrainerRNN(cfg, train_dataset, test_dataset, use_dev=False)
     else:
         raise ValueError
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-mawps")
+        solver.save_model(args.save_model_dir, "final-mawps-{}".format(args.model_type))
     logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
     fold_Acc.append(trainer.best_test_acc)

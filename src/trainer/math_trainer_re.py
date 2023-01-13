@@ -201,7 +201,7 @@ class MathTrainerRE:
                 
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            if epoch > 0 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5:
+            if (epoch > self.cfg.num_epochs // 2 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5) or (epoch == 0):
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")
@@ -273,10 +273,9 @@ class MathTrainerRE:
         Acc  = []
 
         test_dataset = MathDataset(test_data)
-        
-        if self.cfg.save_result:
-            os.makedirs("../cache/mwp", exist_ok=True)
-            f = open("../cache/mwp/{}_{}_{}_rpe.txt".format(self.cfg.dataset_name, dataset_type, epoch), "w")
+                
+        hist_count   = [0 for _ in range(20)]
+        hist_correct = [0 for _ in range(20)]
         
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
@@ -284,13 +283,11 @@ class MathTrainerRE:
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             
-            # if self.cfg.debug:
-            #     print(">")
-            #     print("target:", [" ".join(x.expr_toks) for x in obj["Expr_list"]])
-            # output_Expr_list = solver.generate(input_text, nums, const_nums)
             output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
             target_Expr_list = obj["Expr_list"]
 
+            length = len(target_Expr_list)
+            
             try:
                 output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
                 target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
@@ -298,32 +295,99 @@ class MathTrainerRE:
                 output_value = None
                 target_value = None
             eps = 1e-5
-
-            # TEST USE
-            # if i < 20:
-            #     logger.info("i: {}".format(i))
-            #     logger.info("input_text: {}".format(input_text))
-            #     logger.info("output_Op_list: {}".format(output_Expr_list))
-            #     logger.info("target_Op_list: {}".format(target_Expr_list))
-            #     logger.info("output_value: {}".format(output_value))
-            #     logger.info("target_value: {}".format(target_value))
-
+            
             if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
                 Acc.append(1)
+                hist_count[length]   += 1
+                hist_correct[length] += 1
             else:
                 Acc.append(0)
-            
-            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
-            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
-            if self.cfg.save_result:
-                f.write("id: {}\n".format(i))
-                f.write("input={}\n".format(input_text))
-                f.write("nums={}\n".format(nums))
-                f.write("output={}\n".format(expr_list0))
-                f.write("target={}\n".format(expr_list1))
-                f.write("correct={}\n".format("True" if Acc[-1] == 1 else "False"))
+                hist_count[length]   += 1
 
         if self.cfg.save_result:
+            os.makedirs("../cache/mwp", exist_ok=True)
+            hist_acc = [hist_correct[i] / (hist_count[i] + 1e-5) for i in range(20)]
+            f = open("../cache/mwp/{}_{}_{}_re.json".format(self.cfg.dataset_name, dataset_type, epoch), "w")
+            f.write(json.dumps(hist_acc))
+            f.close()
+
+        answer_mAcc = sum(Acc) / len(Acc)
+        msg = "epoch: {} answer-mAcc: {}".format(epoch, answer_mAcc)
+        logger.info(msg)
+
+        return answer_mAcc
+
+
+    @torch.no_grad()
+    def evaluate_all_beams(
+        self,
+        dataset_type: str,
+        epoch: int,
+        solver: MathSolverRE,
+        test_data: List[Dict]
+    ) -> float:
+        solver.eval()
+        
+        Acc  = []
+
+        test_dataset = MathDataset(test_data)
+                
+        hist_count   = [0 for _ in range(20)]
+        hist_correct = [0 for _ in range(20)]
+        
+        for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
+            obj = test_dataset[i]
+            input_text = "".join(obj["seg_text"])
+            nums = obj["nums"]
+            const_nums = obj["const_nums"]
+            
+            output_Expr_lists = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size, return_all=True)
+            target_Expr_list = obj["Expr_list"]
+
+            length = len(target_Expr_list)
+            target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)            
+            
+            if output_Expr_lists is None:
+                Acc.append(0)
+                hist_count[length]   += 1
+            else:
+                o_values = []
+                o_lengths = []
+                b_scores = []
+                for output_Expr_list, score in output_Expr_lists:
+                    try:
+                        o_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
+                    except SyntaxError:
+                        o_value = None
+                    if o_value is not None:
+                        o_lengths.append(len(output_Expr_list))
+                        b_scores.append(score)
+                        o_values.append(o_value)
+
+                eps = 1e-5
+                def eq(x, y):
+                    return abs(x - y) < eps
+                
+                if len(o_values) == 2 and not eq(o_values[0], target_value) and eq(o_values[1], target_value):
+                    logger.info("o_values={}, b_scores={}, o_lengths={}.".format(o_values, b_scores, o_lengths))
+                
+                p_value = None
+                if len(o_values) > 0:
+                    p_value = o_values[0]
+                
+                if p_value is not None and eq(p_value, target_value):
+                    Acc.append(1)
+                    hist_count[length]   += 1
+                    hist_correct[length] += 1
+                else:
+                    Acc.append(0)
+                    hist_count[length]   += 1
+
+        if self.cfg.save_result:
+            os.makedirs("../cache/mwp", exist_ok=True)
+            hist_acc = [hist_correct[i] / (hist_count[i] + 1e-5) for i in range(20)]
+            f = open("../cache/mwp/{}_{}_{}_re.json".format(self.cfg.dataset_name, dataset_type, epoch), "w")
+            f.write(json.dumps(hist_acc))
             f.close()
 
         answer_mAcc = sum(Acc) / len(Acc)

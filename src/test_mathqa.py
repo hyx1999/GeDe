@@ -1,8 +1,9 @@
-from dataset import loadTemplate
-from solver import MathSolverRETemplate
-from trainer import MathTrainerRETemplate
+from dataset import loadMathQA
+from solver import MathSolverRNN, MathSolverRE, MathSolverRE_Abl0
+from trainer import MathTrainerRNN, MathTrainerRE, MathTrainerRE_Abl0
 from cfg import MathConfig
 
+import os
 import datetime
 import argparse
 import json
@@ -39,6 +40,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model_type", type=str, default="test")
     parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
@@ -51,45 +53,63 @@ def get_args():
     return parser.parse_args()
 
 
-def train_solver(
+def test_solver(
     args: argparse.Namespace,
     train_dataset: List[Dict],
     dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolverRETemplate,
+    solver: Union[MathSolverRNN, MathSolverRE],
 ):
-    trainer = MathTrainerRETemplate(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    trainer_dict = {
+        "re": MathTrainerRE,
+        "re_abl0": MathTrainerRE_Abl0,
+        "rnn": MathTrainerRNN,
+    }
+    if args.model_type in trainer_dict:
+        trainer = trainer_dict[args.model_type](cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    else:
+        raise ValueError(args.model_type)
 
-    trainer.train(solver)
-    if args.save_model:
-        solver.save_model(args.save_model_dir, "final-cmwpa")
-    logger.info("[finish train solver]")
+    solver.to(cfg.device)
+    solver.eval()
+    trainer.evaluate_all_beams("testVote", -1, solver, test_dataset)
     logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 def main(args: argparse.Namespace):
-    # if not args.debug:
-    setup_logger()
+    if not args.debug:
+        setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
+    logger.info("model type: {}".format(args.model_type))
     
-    train_dataset, dev_dataset, test_dataset = loadTemplate(args.data_path, head=args.head)
+    train_dataset, dev_dataset, test_dataset, const_nums = loadMathQA(args.data_path, head=args.head)
     
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
     cfg.debug = args.debug
-    cfg.const_quant_size = 0
-    cfg.ext_tokens = []
+    cfg.const_quant_size = len(const_nums)
+    cfg.ext_tokens = ['^']
     
-    logger.info("len(const_quant_size): {}".format(0))
+    logger.info("len(const_quant_size): {}".format(len(const_nums)))
+    logger.info("const_quants: {}".format(const_nums))
 
-    solver = MathSolverRETemplate(cfg)
+    solver_dict = {
+        "re": MathSolverRE,
+        "re_abl0": MathSolverRE_Abl0,
+        "rnn": MathSolverRNN,
+    }
+    if args.model_type in solver_dict:
+        solver: torch.nn.Module = solver_dict[args.model_type](cfg)
+    else:
+        raise ValueError(args.model_type)
+
+    model_name = "final-mathqa-{}".format(args.model_type)
+    model_path = os.path.join(args.load_model_dir, f"model_{model_name}.pth")
+    solver.load_state_dict(torch.load(model_path))
     
-    if args.save_model:
-        solver.save_model(args.save_model_dir, "test")
-    
-    train_solver(args, train_dataset, dev_dataset, test_dataset, cfg, solver)
+    test_solver(args, train_dataset, dev_dataset, test_dataset, cfg, solver)
 
 
 if __name__ == '__main__':

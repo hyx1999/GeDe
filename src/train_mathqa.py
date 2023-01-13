@@ -61,9 +61,9 @@ def train_solver(
     solver: Union[MathSolverRNN, MathSolverRE],
 ):
     trainer_dict = {
-        "rpe": MathTrainerRE,
-        "rpe_abl0": MathTrainerRE_Abl0,
-        "rpd": MathTrainerRNN,
+        "re": MathTrainerRE,
+        "re_abl0": MathTrainerRE_Abl0,
+        "rnn": MathTrainerRNN,
     }
     if args.model_type in trainer_dict:
         trainer = trainer_dict[args.model_type](cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)

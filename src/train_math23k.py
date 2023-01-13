@@ -61,16 +61,16 @@ def train_solver(
     solver: Union[MathSolverRNN, MathSolverRE],
 ):
     # trainer = MathTrainer(cfg, train_dataset, test_dataset)
-    if args.model_type == "rpe":
+    if args.model_type == "re":
         trainer = MathTrainerRE(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
-    elif args.model_type == "rpd":
+    elif args.model_type == "rnn":
         trainer = MathTrainerRNN(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
     else:
         raise ValueError
 
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-mathqa")
+        solver.save_model(args.save_model_dir, "final-math23k-{}".format(args.model_type))
     logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
 
