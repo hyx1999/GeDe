@@ -287,7 +287,11 @@ class MathTrainerRE:
             target_Expr_list = obj["Expr_list"]
 
             length = len(target_Expr_list)
-            
+            if length >= 20:
+                length = 19
+                logger.info("WTF?? {}".format(input_text))
+                logger.info("WTF?? {}".format(target_Expr_list))
+
             try:
                 output_value = compute_Expr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
                 target_value = compute_Expr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)

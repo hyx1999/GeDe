@@ -1,9 +1,8 @@
-from dataset import loadMathQA
-from solver import MathSolverRNN, MathSolverRE, MathSolverRE_Abl0
-from trainer import MathTrainerRNN, MathTrainerRE, MathTrainerRE_Abl0
+from dataset import loadMath23K_5fold
+from solver import MathSolverRNN, MathSolverRE
+from trainer import MathTrainerRNN, MathTrainerRE
 from cfg import MathConfig
 
-import os
 import datetime
 import argparse
 import json
@@ -16,6 +15,7 @@ import random
 import torch
 import numpy as np
 
+fold_Acc = []
 
 def setup_logger():
     format_time = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -53,28 +53,28 @@ def get_args():
     return parser.parse_args()
 
 
-def test_solver(
+def train_solver(
     args: argparse.Namespace,
     train_dataset: List[Dict],
-    dev_dataset: List[Dict],
     test_dataset: List[Dict],
+    fold: int,
     cfg: MathConfig,
     solver: Union[MathSolverRNN, MathSolverRE],
 ):
-    trainer_dict = {
-        "re": MathTrainerRE,
-        "re_abl0": MathTrainerRE_Abl0,
-        "rnn": MathTrainerRNN,
-    }
-    if args.model_type in trainer_dict:
-        trainer = trainer_dict[args.model_type](cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    # trainer = MathTrainer(cfg, train_dataset, test_dataset)
+    if args.model_type == "re":
+        trainer = MathTrainerRE(cfg, train_dataset, test_dataset, use_dev=False)
+    elif args.model_type == "rnn":
+        trainer = MathTrainerRNN(cfg, train_dataset, test_dataset, use_dev=False)
     else:
-        raise ValueError(args.model_type)
+        raise ValueError
 
-    solver.to(cfg.device)
-    solver.eval()
-    trainer.evaluate("testVote", -1, solver, test_dataset)
+    trainer.train(solver)
+    if args.save_model:
+        solver.save_model(args.save_model_dir, "final-math23k_5fold-{}-{}-rev".format(fold, args.model_type))
+    logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
+    fold_Acc.append(trainer.best_test_acc)
 
 
 def main(args: argparse.Namespace):
@@ -84,32 +84,36 @@ def main(args: argparse.Namespace):
     logger.info("log_text: {}".format(args.log_text))
     logger.info("model type: {}".format(args.model_type))
     
-    train_dataset, dev_dataset, test_dataset, const_nums = loadMathQA(args.data_path, head=args.head)
-    
-    cfg = MathConfig(**json.loads(args.cfg))
-    cfg.dataset_name = args.dataset_name
-    cfg.debug = args.debug
-    cfg.const_quant_size = len(const_nums)
-    cfg.ext_tokens = ['^']
-    
-    logger.info("len(const_quant_size): {}".format(len(const_nums)))
-    logger.info("const_quants: {}".format(const_nums))
+    for fold in reversed(range(5)):
+        train_dataset, test_dataset, const_nums = loadMath23K_5fold(args.data_path, fold, head=args.head)
+        
+        logger.info("fold: {}".format(fold))
+        logger.info("train dataset size: {}".format(len(train_dataset)))
+        logger.info("test dataset size: {}".format(len(test_dataset)))
+        
+        cfg = MathConfig(**json.loads(args.cfg))
+        cfg.dataset_name = args.dataset_name
+        cfg.debug = args.debug
+        cfg.const_quant_size = len(const_nums)
+        cfg.ext_tokens = ['^']
+        
+        logger.info("len(const_quant_size): {}".format(len(const_nums)))
+        logger.info("const_quants: {}".format(const_nums))
 
-    solver_dict = {
-        "re": MathSolverRE,
-        "re_abl0": MathSolverRE_Abl0,
-        "rnn": MathSolverRNN,
-    }
-    if args.model_type in solver_dict:
-        solver: torch.nn.Module = solver_dict[args.model_type](cfg)
-    else:
-        raise ValueError(args.model_type)
+        # solver = MathSolver(cfg, const_nums)
+        solver_dict = {
+            "re": MathSolverRE,
+            "rnn": MathSolverRNN,
+        }
+        if args.model_type in solver_dict:
+            solver = solver_dict[args.model_type](cfg)
+        else:
+            raise ValueError(args.model_type)
+                
+        train_solver(args, train_dataset, test_dataset, fold, cfg, solver)
 
-    model_name = "final-mathqa-{}".format(args.model_type)
-    model_path = os.path.join(args.load_model_dir, f"model_{model_name}.pth")
-    solver.load_state_dict(torch.load(model_path))
-    
-    test_solver(args, train_dataset, dev_dataset, test_dataset, cfg, solver)
+    fold_mAcc = sum(fold_Acc) / len(fold_Acc)
+    logger.info("5-fold mAcc: {}".format(fold_mAcc))
 
 
 if __name__ == '__main__':

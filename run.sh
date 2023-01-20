@@ -170,6 +170,21 @@ then
         --debug
 fi
 
+if [[ ${mod} == "train_math23k_5fold" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python train_math23k_5fold.py \
+        --model_type 're' \
+        --dataset_name 'math23k' \
+        --log_text ${log} \
+        --data_path '../data/Math23K-5fold' \
+        --load_model_dir '../models' \
+        --save_model_dir '../models' \
+        --save_model \
+        --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","num_epochs":200,"lr":2e-5,"lr_alpha":1.0}'
+
+fi
+
 if [[ ${mod} == "train_math23k_raw" ]];
 then
 
@@ -186,21 +201,6 @@ then
 
 fi
 
-# debug
-if [[ ${mod} == "debug_math23k_raw" ]];
-then
-    CUDA_VISIBLE_DEVICES=${device} python train_math23k_raw.py \
-        --model_type 're' \
-        --dataset_name 'math23k' \
-        --log_text '(debug)' \
-        --data_path '../data/Math23K-raw' \
-        --load_model_dir 'models_test' \
-        --save_model_dir 'models_test' \
-        --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","num_epochs":200,"lr":2e-5}' \
-        --head 1000 \
-        --expr_mode v3 \
-        --debug
-fi
 
 if [[ ${mod} == "train_template" ]];
 then
@@ -286,6 +286,15 @@ then
         --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}' \
         --head 100 \
         --debug
+
+fi
+
+if [[ ${mod} == "compute_params" ]];
+then
+
+    CUDA_VISIBLE_DEVICES=${device} python compute_params.py \
+        --model_type 're' \
+        --cfg '{"model_name":"roberta-base"}' \
 
 fi
 

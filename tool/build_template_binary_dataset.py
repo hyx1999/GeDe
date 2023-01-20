@@ -252,7 +252,7 @@ def genDataInstance(data_id: int):
         if x.right:
             o.extend(genExpr(x.right))
         return o
-    expr = genExpr(trees[-1])[:256]
+    expr = genExpr(trees[-1])
     avg_len.append(len(expr))
     
     return {
@@ -279,8 +279,8 @@ if __name__ == '__main__':
 
     for path, num in zip([train_path, dev_path, test_path], [1000, 100, 100]):
         data = [genDataInstance(str(_)) for _ in tqdm(range(num), total=num)]
-        with open(path, "w") as f:
-            f.write(json.dumps(data, ensure_ascii=False))
+    #     with open(path, "w") as f:
+    #         f.write(json.dumps(data, ensure_ascii=False))
 
     print(sum(avg_len) / len(avg_len))
     print(max(avg_len))
