@@ -1,10 +1,10 @@
 # File Structure
 
-├── data
+├── data (Unzip the data file)
 
-├── log
+├── log (Initially an empty folder)
 
-├── models
+├── models (Initially an empty folder)
 
 ├── src
 
