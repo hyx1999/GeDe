@@ -31,6 +31,7 @@ model_dict = {
         "bert-large-uncased": BertModel,
         "bert-base-chinese": BertModel,
         "roberta-base": RobertaModel,
+        "roberta-large": RobertaModel,
         "hfl/chinese-roberta-wwm-ext": BertModel,
     },
     "tokenizer": {
@@ -38,6 +39,7 @@ model_dict = {
         "bert-large-uncased": BertTokenizer,
         "bert-base-chinese": BertTokenizer,
         "roberta-base": RobertaTokenizer,
+        "roberta-large": RobertaTokenizer,
         "hfl/chinese-roberta-wwm-ext": BertTokenizer,
     }
 }

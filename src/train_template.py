@@ -1,6 +1,6 @@
 from dataset import loadTemplate
-from solver import MathSolverRETemplate
-from trainer import MathTrainerRETemplate
+from solver import MathSolverRETemplate, MathSolverBART
+from trainer import MathTrainerRETemplate, MathTrainerBART
 from cfg import MathConfig
 
 import datetime
@@ -39,6 +39,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--model_type", type=str, default="re")
     parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
@@ -57,20 +58,27 @@ def train_solver(
     dev_dataset: List[Dict],
     test_dataset: List[Dict],
     cfg: MathConfig,
-    solver: MathSolverRETemplate,
+    solver: Union[
+        MathSolverBART, MathSolverRETemplate
+    ],
 ):
-    trainer = MathTrainerRETemplate(cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
+    trainer_dict = {
+        "re": MathTrainerRETemplate,
+        "bart": MathTrainerBART,
+    }
+    trainer = trainer_dict[args.model_type](cfg, train_dataset, test_dataset, dev_dataset=dev_dataset)
 
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-cmwpa")
+        solver.save_model(args.save_model_dir, "final-cmwpa-{}".format(args.model_type))
     logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
 
 
 def main(args: argparse.Namespace):
     # if not args.debug:
-    setup_logger()
+    if not args.debug:
+        setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     
@@ -83,8 +91,12 @@ def main(args: argparse.Namespace):
     cfg.ext_tokens = []
     
     logger.info("len(const_quant_size): {}".format(0))
-
-    solver = MathSolverRETemplate(cfg)
+    
+    solver_dict = {
+        "re": MathSolverRETemplate,
+        "bart": MathSolverBART,
+    }
+    solver = solver_dict[args.model_type](cfg)
     
     if args.save_model:
         solver.save_model(args.save_model_dir, "test")

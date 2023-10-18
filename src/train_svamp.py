@@ -75,14 +75,14 @@ def train_solver(
 
 
 def main(args: argparse.Namespace):
-    if not args.debug:
-        setup_logger()
+    # if not args.debug:
+    #     setup_logger()
     setup_seed()
     logger.info("log_text: {}".format(args.log_text))
     logger.info("model type: {}".format(args.model_type))
     
     train_dataset, test_dataset, const_nums = loadSVAMP(args.data_path, head=args.head)
-    
+
     cfg = MathConfig(**json.loads(args.cfg))
     cfg.dataset_name = args.dataset_name
     cfg.debug = args.debug

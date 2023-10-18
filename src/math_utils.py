@@ -62,13 +62,15 @@ class MathDataInstance:
         input_text = " ".join(input_text)
         return input_text
 
-    def parse_output(self, bos_token: str, eos_token: str) -> str:
+    def parse_output(self, bos_token: str, eos_token: str, erase_end: bool = False) -> str:
         output_text = []
         for expr in self.target:
             output_text.extend(expr.expr_toks)
             output_text.append(bos_token)
         if self.end:
             output_text[-1] = eos_token
+        if erase_end:
+            output_text = output_text[:-1]
         output_text = " ".join(output_text)
         return output_text
 
@@ -103,16 +105,31 @@ class TemplateDataInstance:
         input_text = " ".join(input_text)
         return input_text
 
-    def parse_output(self, bos_token: str, eos_token: str) -> str:
+    def parse_output(self, bos_token: str, eos_token: str, erase_end: bool = False) -> str:
         output_text = []
         for expr in self.target:
             output_text.extend(expr.expr_toks)
             output_text.append(bos_token)
         if self.end:
             output_text[-1] = eos_token
+        if erase_end:
+            output_text = output_text[:-1]
         output_text = " ".join(output_text)
         return output_text
 
+    def parse_output_bart(self, bos_token: str, eos_token: str, erase_end: bool = False) -> str:
+        output_text = []
+        for expr in self.target:
+            output_text.extend(expr.expr_toks)
+            output_text.extend(["[->]"])
+            output_text.extend([f'[num{i}]' for i in expr.args])
+            output_text.append(bos_token)
+        if self.end:
+            output_text[-1] = eos_token
+        if erase_end:
+            output_text = output_text[:-1]
+        output_text = " ".join(output_text)
+        return output_text
 
 def convert_const_nums(seg_expr: List[Tok], const_nums: List[str]) -> int:
     new_seg_expr: List[str] = []
@@ -507,7 +524,7 @@ def compute_MultiExpr_list(MultiExpr_list: List[MultiExpr], nums: List[str], con
             for i, index in enumerate(expr.args):
                 nums_table[index] = results[i]
     except:
-        logger.warning("decimal.Error: {}".format(MultiExpr_list))
+        logger.warning("Error: {}".format(MultiExpr_list))
         return None
     return nums_table[MultiExpr_list[-1].args[-1]] if len(MultiExpr_list) > 0 else None
 

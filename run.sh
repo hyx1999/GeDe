@@ -87,9 +87,11 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200,"save_result":true}'
+        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}'
 
 fi
+
+#  --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":true,"num_epochs":200}'
 
 if [[ ${mod} == "test_mathqa" ]];
 then
@@ -106,6 +108,7 @@ then
 
 fi
 
+# --cfg '{"model_name":"roberta-base","beam_size":4}'
 
 if [[ ${mod} == "debug_mathqa" ]];
 then
@@ -117,11 +120,13 @@ then
         --data_path '../data/MathQA' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
-        --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}' \
+        --cfg '{"model_name":"roberta-base","lr":5e-6,"save_result":false,"num_epochs":200}' \
         --head 100 \
         --debug
 
 fi
+
+# --cfg '{"model_name":"roberta-base","lr":2e-5,"save_result":false,"num_epochs":200}' \
 
 if [[ ${mod} == "train_math23k" ]];
 then
@@ -138,6 +143,7 @@ then
 
 fi
 
+# --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","num_epochs":200,"lr":2e-5,"lr_alpha":1.0,"save_result":true}'
 
 if [[ ${mod} == "test_math23k" ]];
 then
@@ -150,7 +156,7 @@ then
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","beam_size":4}'
+        --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext-large","beam_size":4}'
 
 fi
 
@@ -169,6 +175,8 @@ then
         --head 1000 \
         --debug
 fi
+
+# --cfg '{"model_name":"hfl/chinese-roberta-wwm-ext","num_epochs":200,"lr":2e-5,"lr_alpha":1.0}'
 
 if [[ ${mod} == "train_math23k_5fold" ]];
 then
@@ -206,29 +214,37 @@ if [[ ${mod} == "train_template" ]];
 then
 
     CUDA_VISIBLE_DEVICES=${device} python train_template.py \
+        --model_type 're' \
         --dataset_name 'template' \
         --log_text ${log} \
         --data_path '../data/MathTemplate' \
         --load_model_dir '../models' \
         --save_model_dir '../models' \
         --save_model \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}'
+        --cfg '{"model_name":"roberta-large","num_epochs":200,"lr":5e-6,"quant_size":100,"save_result":false}'
 
 fi
+
+# --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}'
+
 
 # debug
 if [[ ${mod} == "debug_template" ]];
 then
     CUDA_VISIBLE_DEVICES=${device} python train_template.py \
+        --model_type 're' \
         --dataset_name 'template' \
         --log_text '(debug)' \
         --data_path '../data/MathTemplate' \
         --load_model_dir 'models' \
         --save_model_dir 'models' \
-        --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}' \
+        --cfg '{"model_name":"roberta-large","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}' \
         --head 100 \
         --debug
 fi
+
+# --cfg '{"model_name":"roberta-base","num_epochs":200,"lr":2e-5,"quant_size":100,"save_result":false}' \
+
 
 if [[ ${mod} == "train_template_binary" ]];
 then

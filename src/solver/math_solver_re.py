@@ -30,14 +30,18 @@ model_dict = {
         "bert-large-uncased": BertModel,
         "bert-base-chinese": BertModel,
         "roberta-base": RobertaModel,
+        "roberta-large": RobertaModel,
         "hfl/chinese-roberta-wwm-ext": BertModel,
+        "hfl/chinese-roberta-wwm-ext-large": BertModel,
     },
     "tokenizer": {
         "bert-base-uncased": BertTokenizer,
         "bert-large-uncased": BertTokenizer,
         "bert-base-chinese": BertTokenizer,
         "roberta-base": RobertaTokenizer,
+        "roberta-large": RobertaTokenizer,
         "hfl/chinese-roberta-wwm-ext": BertTokenizer,
+        "hfl/chinese-roberta-wwm-ext-large": BertTokenizer,
     }
 }
 
@@ -108,7 +112,7 @@ class ExprTokenizer:
             return [self.token_id[x] for x in tokens]
 
 
-class AttentionOutput(nn.Module):
+class FFNLayer(nn.Module):
     
     def __init__(self,
         hidden_dim: int
@@ -128,34 +132,48 @@ class AttentionOutput(nn.Module):
 class Attention(nn.Module):
 
     def __init__(self,
-        hidden_dim: int
+        hidden_dim: int,
+        num_heads: int = 1
     ) -> None:
         super().__init__()
+        self.num_heads = num_heads
+        self.head_dim = hidden_dim // num_heads
         self.query = nn.Linear(hidden_dim, hidden_dim)
         self.key = nn.Linear(hidden_dim, hidden_dim)
         self.value = nn.Linear(hidden_dim, hidden_dim)
-        self.scale = (hidden_dim ** 0.5)
+        self.scale = (self.head_dim ** 0.5)
         self.dense = nn.Linear(hidden_dim, hidden_dim)
         self.norm = nn.LayerNorm(hidden_dim)        
-        self.output = AttentionOutput(hidden_dim)
+        self.output = FFNLayer(hidden_dim)
+    
+    def reshape(self, x: torch.Tensor) -> torch.Tensor:
+        return x.reshape(*(x.shape[:2] + (self.num_heads, self.head_dim))).permute(0, 2, 1, 3)
+    
+    def unreshape(self, x: torch.Tensor) -> torch.Tensor:  # [B, H, L, D]
+        return x.permute(0, 2, 1, 3).flatten(2)
 
     def forward(self, 
         input_states: Tensor,
         memory_states: Tensor,
         attn_mask: Optional[Tensor] = None
     ) -> Tensor:
-        q = self.query(input_states)   # [N, L1, H]
-        k = self.key(memory_states)    # [N, L2, H]
-        v = self.value(memory_states)  # [N, L2, H]
+        q = self.query(input_states)   # [N, L1, D]
+        k = self.key(memory_states)    # [N, L2, D]
+        v = self.value(memory_states)  # [N, L2, D]
+        
+        q = self.reshape(q) 
+        k = self.reshape(k)
+        v = self.reshape(v)
 
-        attn_weight = torch.einsum('bik,bjk->bij', q, k)  # [N, L1, L2]
+        attn_weight = torch.einsum('bhik,bhjk->bhij', q, k)  # [N, L1, L2]
         attn_weight = attn_weight / self.scale  # [QK^T/sqrt(d_k)]
         if attn_mask is not None:
             attn_mask = (1.0 - attn_mask.unsqueeze(1).float()) * torch.finfo(torch.float).min
             attn_weight = attn_weight + attn_mask
         
         attn_weight = torch.softmax(attn_weight, dim=-1)
-        attn_output = torch.einsum('bij,bjk->bik', attn_weight, v)
+        attn_output = torch.einsum('bhij,bhjk->bhik', attn_weight, v)
+        attn_output = self.unreshape(attn_output)
 
         attn_output = self.norm(self.dense(attn_output) + input_states)
         
@@ -257,7 +275,8 @@ class MathSolverRE(nn.Module):
         super().__init__()
         self.cfg = cfg
         model_name = self.cfg.model_name
-                  
+        
+        print("model_name:", model_name)
         self.lang_tok = model_dict["tokenizer"][model_name].from_pretrained(
             self.cfg.model_name,
             cache_dir="../cache/model"

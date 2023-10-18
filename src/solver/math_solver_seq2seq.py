@@ -432,7 +432,7 @@ class MathSolverSeq2Seq(nn.Module):
             filtered_beams = []
             for beam in next_beams:
                 tokens = self.expr_tok.convert_ids_to_tokens(beam.predict_ids)
-                if not grammar_test(tokens, 20, self.expr_tok.bos_token, self.expr_tok.eos_token):   # DEBUG: 256 -> 20
+                if not grammar_test(tokens, 120, self.expr_tok.bos_token, self.expr_tok.eos_token):   # DEBUG: 256 -> 20
                     continue
                 if not beam.end and tokens[-1] in [self.expr_tok.bos_token, self.expr_tok.eos_token]:
                     beam.end = True
@@ -471,23 +471,24 @@ class ExprBeam:
 def grammar_test(tokens: List[Tok], max_length: int, bos_token: str, eos_token: str) -> bool:
     if len(tokens) >= max_length and tokens[-1] not in [bos_token, eos_token]:
         return False
-    end = tokens[-1] in [bos_token, eos_token]
-    if end:
-        tokens = tokens[:-1]
-    pat = re.compile("\[num\d+\]|\[c\d+\]")
-    n_stk = []
-    o_stk = []
-    try:
-        for i, tok in enumerate(tokens):
-            if pat.match(tok):
-                n_stk.append('n')
-                if len(n_stk) >= 2:
-                    o_stk.pop()
-                    n_stk.pop()
-            elif tok in '+-*/^':
-                o_stk.append(tok)
-        if end and not (len(n_stk) == 1 and len(o_stk) == 0):
-            return False
-    except:
-        return False 
     return True
+    # end = tokens[-1] in [bos_token, eos_token]
+    # if end:
+    #     tokens = tokens[:-1]
+    # pat = re.compile("\[num\d+\]|\[c\d+\]")
+    # n_stk = []
+    # o_stk = []
+    # try:
+    #     for i, tok in enumerate(tokens):
+    #         if pat.match(tok):
+    #             n_stk.append('n')
+    #             if len(n_stk) >= 2:
+    #                 o_stk.pop()
+    #                 n_stk.pop()
+    #         elif tok in '+-*/^':
+    #             o_stk.append(tok)
+    #     if end and not (len(n_stk) == 1 and len(o_stk) == 0):
+    #         return False
+    # except:
+    #     return False 
+    # return True

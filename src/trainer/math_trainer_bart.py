@@ -1,13 +1,14 @@
 import json
 import os
+import re
 import math
 import random
-from solver import MathSolverRETemplate
+from solver import MathSolverBART
 from scheduler import GradualWarmupScheduler
-from math_utils import TemplateDataInstance, MathDataset, compute_MultiExpr_list
+from math_utils import MathDataset, compute_Expr_list, compute_MultiExpr_list
 from cfg import MathConfig
-from math_utils import TemplateDataInstance
-from transformers import get_linear_schedule_with_warmup
+from math_utils import MathDataInstance, TemplateDataInstance, Expr, MultiExpr
+from transformers import get_linear_schedule_with_warmup, GenerationConfig
 
 import numpy as np
 import torch
@@ -23,7 +24,7 @@ from copy import deepcopy
 from tqdm import tqdm
 
 
-class MathTrainerRETemplate:
+class MathTrainerBART:
 
     def __init__(
         self, 
@@ -47,7 +48,7 @@ class MathTrainerRETemplate:
         self.train_dataset = self.convert_dataset(self.raw_dataset["train"])
         self.best_dev_acc = None
         self.best_test_acc = None
-        
+
     def split_data(self):
         raw_train_dataset = self.raw_dataset["train"]
         val_ids = set(np.random.choice(len(raw_train_dataset), size=100, replace=False).tolist())
@@ -61,23 +62,22 @@ class MathTrainerRETemplate:
         self.raw_dataset["train"] = train_dataset
         self.raw_dataset["dev"] = dev_dataset
 
-    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[TemplateDataInstance]:
+    def convert_dataset(self, dataset: List[Dict[AnyStr, Any]]) -> List[MathDataInstance]:
         new_dataset = []
         for obj in dataset:
             question = " ".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
             expr_list = obj["Expr_list"]
-            for i in range(len(expr_list)):
-                new_dataset.append(TemplateDataInstance(
-                    question=question,
-                    nums=nums,
-                    const_nums=const_nums,
-                    expr_list=expr_list[:i],
-                    target=[expr_list[i]],
-                    id=obj["sample_id"],
-                    end=(i + 1 == len(expr_list))
-                ))
+            new_dataset.append(TemplateDataInstance(
+                question=question,
+                nums=nums,
+                const_nums=const_nums,
+                expr_list=[],
+                target=expr_list,
+                id=obj["sample_id"],
+                end=True
+            ))
         return new_dataset
 
     def collate_fn(
@@ -86,43 +86,42 @@ class MathTrainerRETemplate:
     ) -> List[Dict[AnyStr, Any]]:
         return batch   
 
-    def train(self, solver: MathSolverRETemplate):
+    def train(self, solver: MathSolverBART):
         solver.to(self.cfg.device)
         
         dataset = MathDataset(self.train_dataset)
-        shuffle_flag = not self.cfg.debug
-        loader = DataLoader(dataset, batch_size=self.cfg.batch_size, shuffle=shuffle_flag, collate_fn=self.collate_fn)
+        shuffle = not self.cfg.debug
+        loader = DataLoader(
+            dataset, 
+            batch_size=self.cfg.batch_size, 
+            shuffle=shuffle, 
+            collate_fn=self.collate_fn
+        )
 
         param_dict = {
-            "encoder": [],
-            "decoder": [],
-            "encoder_no_decay": [],
-            "decoder_no_decay": [],
+            "decay": [],
+            "no_decay": [],
         }
-        # no_decay = ["bias", "LayerNorm.weight", "LayerNorm.bias"]
         no_decay = ["LayerNorm"]
         for name, p in solver.named_parameters():
-            if "encoder" in name:
-                if any(nd in name for nd in no_decay):
-                    param_dict["encoder_no_decay"].append(p)
-                else:
-                    param_dict["encoder"].append(p)
-            elif "decoder" in name:
-                if any(nd in name for nd in no_decay):
-                    param_dict["decoder_no_decay"].append(p)
-                else:
-                    param_dict["decoder"].append(p)
+            if any(nd in name for nd in no_decay):
+                param_dict["no_decay"].append(p)
             else:
-                print("name: {}".format(name))
-                raise ValueError
+                param_dict["decay"].append(p)
 
         alpha = self.cfg.lr_alpha
         optim = AdamW(
             [
-                {'params': param_dict["encoder"] , 'lr': self.cfg.lr        , 'weight_decay': self.cfg.weight_decay},
-                {'params': param_dict["decoder"] , 'lr': self.cfg.lr * alpha, 'weight_decay': self.cfg.weight_decay},
-                {'params': param_dict["encoder_no_decay"], 'lr': self.cfg.lr        , 'weight_decay': 0.0},
-                {'params': param_dict["decoder_no_decay"], 'lr': self.cfg.lr * alpha, 'weight_decay': 0.0},
+                {
+                    'params': param_dict["decay"] , 
+                    'lr': self.cfg.lr, 
+                    'weight_decay': self.cfg.weight_decay
+                },
+                {
+                    'params': param_dict["no_decay"], 
+                    'lr': self.cfg.lr, 
+                    'weight_decay': 0.0
+                },            
             ],
         )
 
@@ -137,7 +136,8 @@ class MathTrainerRETemplate:
         for epoch in range(self.cfg.num_epochs):                
             self.train_one_epoch(epoch, solver, optim, scheduler, loader)
             
-            if epoch % 5 == 0 and epoch > 50 or epoch > self.cfg.num_epochs - 5:
+            if (epoch > self.cfg.num_epochs // 2 and epoch % 5 == 0 or epoch > self.cfg.num_epochs - 5) \
+                or (epoch == 0):
                 if not self.cfg.debug:
                     if self.use_dev:
                         logger.info("[evaluate dev-data]")
@@ -153,12 +153,13 @@ class MathTrainerRETemplate:
                         self.best_test_acc = test_acc
                 else:
                     logger.info("[evaluate train-data]")
-                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:5])
+                    self.evaluate("train", epoch, solver, self.raw_dataset["train"][:100])
+
 
     def train_one_epoch(
         self,
         epoch: int,
-        solver: MathSolverRETemplate,
+        solver: MathSolverBART,
         optim: Union[Adam, AdamW],
         scheduler: LambdaLR,
         loader: DataLoader
@@ -174,11 +175,11 @@ class MathTrainerRETemplate:
                 for x in [
                     I.parse_input("#") \
                     + " ---> " \
-                    + I.parse_output(solver.expr_tok.bos_token, solver.expr_tok.eos_token) for I in batch
+                    + I.parse_output_bart(solver.tok.bos_token, solver.tok.eos_token) for I in batch
                 ]:
                     print(x)
-
-            loss, Acc = solver(batch)
+            
+            loss, acc_score = solver(batch)
 
             optim.zero_grad()
             loss.backward()
@@ -186,7 +187,7 @@ class MathTrainerRETemplate:
             scheduler.step()
 
             loss_total += loss.item()
-            mAcc += Acc.item()
+            mAcc += acc_score.item()
             pbar.set_postfix_str("loss: {:.5f}".format(loss.item()))
 
         loss_ave = loss_total / len(loader)
@@ -195,12 +196,43 @@ class MathTrainerRETemplate:
 
 # --------------------------------------------- evaluate ------------------------------------------------------
 
+    def parse_num(self, x: str) -> int:
+        mt = re.match("\[num(\d+)\]", x)
+        if mt is None:
+            raise SyntaxError
+        return int(mt.group(1))
+    
+    def parse_expr_list(self, 
+        solver: MathSolverBART,
+        output: torch.LongTensor,
+    ) -> List[MultiExpr]:
+
+        exprs = solver.tok.decode(output)\
+            .replace(solver.tok.eos_token, "")\
+            .strip()\
+            .split(solver.tok.bos_token)
+        
+        expr_list = []
+        for i, expr_stat in enumerate(exprs):
+            if expr_stat.strip() == "":
+                continue
+            if "[->]" in expr_stat and expr_stat.count("[->]") == 1:
+                expr_str, args_str = expr_stat.split("[->]")
+                args = [self.parse_num(x) for x in args_str.strip().split(" ") if x.strip() != ""]
+                expr_toks = expr_str.strip().split(" ")
+                expr_list.append(MultiExpr(args=args, expr_toks=expr_toks, expr_str=expr_str.strip()))
+            else:
+                raise SyntaxError
+
+        return expr_list
+
+    
     @torch.no_grad()
     def evaluate(
         self,
         dataset_type: str,
         epoch: int,
-        solver: MathSolverRETemplate,
+        solver: MathSolverBART,
         test_data: List[Dict]
     ) -> float:
         solver.eval()
@@ -208,70 +240,54 @@ class MathTrainerRETemplate:
         Acc  = []
 
         test_dataset = MathDataset(test_data)
+        g_config = GenerationConfig(max_new_tokens=100 if epoch > 1 else 20)
         
-        if self.cfg.save_result:
-            os.makedirs("../cache/mwp", exist_ok=True)
-            f = open("../cache/mwp/{}_{}_{}_{}.txt".format(self.cfg.dataset_name, dataset_type, epoch, solver._get_name()), "w")
-        
-        count_dict = {}
-        acc_dict   = {}
-        for key in range(10):
-            acc_dict[key] = 0
-            count_dict[key] = 0
-
         for i in tqdm(range(len(test_dataset)), desc="evaluate", total=len(test_dataset)):
             obj = test_dataset[i]
             input_text = " ".join(obj["seg_text"])
             nums = obj["nums"]
             const_nums = obj["const_nums"]
+
+            inputs = solver.tok(input_text, return_tensors="pt")\
+                .input_ids.to(self.cfg.device)
             
-            output_Expr_list = solver.beam_search(input_text, nums, const_nums, beam_size=self.cfg.beam_size)
-            target_Expr_list = obj["Expr_list"]
+            output = solver\
+                .model\
+                .generate(inputs, g_config)\
+                .squeeze(0)
+            
+            try:
+                output_Expr_list = self.parse_expr_list(solver, output)
+            except SyntaxError:
+                output_Expr_list = None
 
             try:
                 output_value = compute_MultiExpr_list(output_Expr_list, nums, const_nums, self.cfg.quant_size)
-                target_value = compute_MultiExpr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
             except SyntaxError:
                 output_value = None
+            except IndexError:
+                output_value = None                
+
+            target_Expr_list = obj["Expr_list"]
+            try:
+                target_value = compute_MultiExpr_list(target_Expr_list, nums, const_nums, self.cfg.quant_size)
+            except SyntaxError:
                 target_value = None
+            except IndexError:
+                target_value = None                
+            
+            if target_value is None:
+                continue
+
             eps = 1e-5
 
-            if (output_value is not None and target_value is not None and abs(output_value - target_value) < eps):
-                count_dict[len(target_Expr_list)] += 1
-                acc_dict[len(target_Expr_list)] += 1
+            if (output_value is not None and abs(output_value - target_value) < eps):
                 Acc.append(1)
             else:
-                count_dict[len(target_Expr_list)] += 1
-                acc_dict[len(target_Expr_list)] += 0
                 Acc.append(0)
 
-            expr_list0 = [" ".join(x.expr_toks) for x in output_Expr_list] if output_Expr_list is not None else None
-            expr_list1 = [" ".join(x.expr_toks) for x in target_Expr_list] if target_Expr_list is not None else None
-            
-            # if expr_list0 is not None and expr_list1 is not None and " ".join(expr_list0) == " ".join(expr_list1):
-            #     Acc.append(1)
-            # else:
-            #     Acc.append(0)
-            
-            if self.cfg.save_result:
-                f.write("id: {}\n".format(i))
-                f.write("input={}\n".format(input_text))
-                f.write("nums={}\n".format(nums))
-                f.write("output={}\n".format(expr_list0))
-                f.write("target={}\n".format(expr_list1))
-                f.write("output value={}\n".format(output_value))
-                f.write("target value={}\n".format(target_value))
-                f.write("correct={}\n".format("True" if Acc[-1] == 1 else "False"))
-
-        if self.cfg.save_result:
-            f.close()
-
-        logger.info("count_dict: {}".format(count_dict))
-        logger.info("acc_dict: {}".format(acc_dict))
-
-        answer_mAcc = sum(Acc) / len(Acc)
+        answer_mAcc = sum(Acc) / (len(Acc) + 1e-5)
         msg = "epoch: {} answer-mAcc: {}".format(epoch, answer_mAcc)
         logger.info(msg)
 
         return answer_mAcc
-

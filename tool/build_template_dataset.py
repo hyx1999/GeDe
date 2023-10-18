@@ -181,7 +181,8 @@ def genDataInstance(data_id: int):
     
     segText = segText + extSegText + " Output the value of [q{}] .".format(N_Q - 1).split()
     
-    avg_len.append(sum(len(x["expr_toks"]) for x in exprList))
+    # avg_len.append(sum(len(x["expr_toks"]) for x in exprList))
+    avg_len.append(len(exprList))
     
     return {
         "sample_id": data_id,
@@ -205,5 +206,6 @@ if __name__ == '__main__':
         # with open(path, "w") as f:
         #     f.write(json.dumps(data, ensure_ascii=False))
 
+    print(len([x for x in avg_len if x >= 4]))
     print(sum(avg_len) / len(avg_len))
     print(max(avg_len))

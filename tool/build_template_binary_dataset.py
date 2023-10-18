@@ -282,5 +282,6 @@ if __name__ == '__main__':
     #     with open(path, "w") as f:
     #         f.write(json.dumps(data, ensure_ascii=False))
 
+    print(avg_len)
     print(sum(avg_len) / len(avg_len))
     print(max(avg_len))

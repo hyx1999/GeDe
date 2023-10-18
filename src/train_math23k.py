@@ -15,9 +15,9 @@ import random
 import torch
 import numpy as np
 
+format_time = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
 def setup_logger():
-    format_time = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     format="[{time}]-[{level}] {file}-{function}-{line}: {message}"
     logger.remove(None)
     logger.add(
@@ -39,7 +39,7 @@ def setup_seed():
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_type", type=str, default="test")
+    parser.add_argument("--model_type", type=str, default="re")
     parser.add_argument("--dataset_name", type=str, default="")
     parser.add_argument("--log_text", type=str, default="")
     parser.add_argument("--data_path", type=str, required=True)
@@ -70,7 +70,7 @@ def train_solver(
 
     trainer.train(solver)
     if args.save_model:
-        solver.save_model(args.save_model_dir, "final-math23k-{}".format(args.model_type))
+        solver.save_model(args.save_model_dir, "final-math23k-{}-{}".format(args.model_type, format_time))
     logger.info("[finish train solver]")
     logger.info("best test acc: {}".format(trainer.best_test_acc))
 

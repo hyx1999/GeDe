@@ -3,3 +3,4 @@ from .math_trainer_re import MathTrainerRE
 from .math_trainer_re_abl0 import MathTrainerRE_Abl0
 from .math_trainer_re_template import MathTrainerRETemplate
 from .math_trainer_seq2seq import MathTrainerSeq2Seq
+from .math_trainer_bart import MathTrainerBART
